@@ -7,6 +7,7 @@ MPF scraper v4 - scrapes mpp_list.jsp directly
 4. Save to public/data/funds.json
 """
 
+import argparse
 import json
 import hashlib
 import logging
@@ -124,6 +125,68 @@ def parse_float(text: str) -> Optional[float]:
 # Step 1: Parse the main list page
 # ---------------------------------------------------------------------------
 
+def dump_page_structure(html: str, out_path: str) -> None:
+    """Write a human-readable page structure analysis to a text file for debugging."""
+    soup = BeautifulSoup(html, "lxml")
+    lines = []
+
+    def w(s=""):
+        lines.append(str(s))
+
+    w(f"=== MPFA PAGE STRUCTURE DUMP ===")
+    w(f"URL: {LIST_URL}")
+    w(f"Title: {soup.title.string.strip() if soup.title else 'N/A'}")
+    w(f"HTML length: {len(html):,} chars")
+    w()
+
+    # Forms
+    w(f"=== FORMS ({len(soup.find_all('form'))}) ===")
+    for fi, form in enumerate(soup.find_all("form")):
+        w(f"Form[{fi}]: action={form.get('action')!r}  method={form.get('method')!r}")
+        for inp in form.find_all(["input", "select", "textarea"])[:15]:
+            w(f"  {inp.name}: name={inp.get('name')!r}  value={inp.get('value','')!r}")
+
+    w()
+
+    # Tables - all of them
+    all_tables = soup.find_all("table")
+    w(f"=== TABLES ({len(all_tables)}) ===")
+    for ti, tbl in enumerate(all_tables):
+        rows = tbl.find_all("tr")
+        w(f"Table[{ti}]: {len(rows)} rows  class={tbl.get('class')}  id={tbl.get('id')}")
+        for ri, row in enumerate(rows[:8]):
+            cells = row.find_all(["td", "th"])
+            texts = [c.get_text(strip=True)[:40] for c in cells[:10]]
+            w(f"  row[{ri}]: {texts}")
+
+    w()
+
+    # Links that look fund-related
+    w("=== FUND-RELATED LINKS (sample) ===")
+    for a in soup.find_all("a", href=True)[:80]:
+        href = a["href"]
+        text = a.get_text(strip=True)[:50]
+        if any(k in href.lower() for k in ["fund", "mpp", "perf", "return", ".do"]):
+            w(f"  {href!r:60s} | {text!r}")
+
+    w()
+
+    # Script data (might contain JSON fund data)
+    w("=== SCRIPT TAGS WITH DATA ===")
+    for si, sc in enumerate(soup.find_all("script")):
+        txt = sc.get_text()
+        if len(txt) > 100 and any(k in txt.lower() for k in ["fund", "return", "data", "json"]):
+            w(f"Script[{si}] ({len(txt)} chars):")
+            w(txt[:600])
+            w("...")
+            w()
+
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines))
+    log.info("Page structure dump saved to %s", out_path)
+
+
 def parse_list_page(html: str) -> list:
     """
     Parse mpp_list.jsp.
@@ -140,125 +203,143 @@ def parse_list_page(html: str) -> list:
     all_tables = soup.find_all("table")
     log.info("Tables on page: %d", len(all_tables))
 
-    # Dump first few tables for debugging
-    for ti, tbl in enumerate(all_tables[:4]):
-        rows = tbl.find_all("tr")
-        log.info("  table[%d]: %d rows", ti, len(rows))
-        for row in rows[:3]:
-            cells = row.find_all(["th", "td"])
-            log.info("    row: %s", [c.get_text(strip=True)[:25] for c in cells[:8]])
-
     funds = []
+
+    # Score each table: prefer ones with most data rows AND year columns
+    best_table = None
+    best_score = 0
+    best_header_idx = None
+    best_header_texts = []
 
     for tbl_idx, tbl in enumerate(all_tables):
         rows = tbl.find_all("tr")
         if len(rows) < 3:
             continue
 
-        # Find the header row (must mention "fund" or a year like "2024")
-        header_idx = None
-        header_texts = []
-        for ri, row in enumerate(rows[:5]):
+        # Scan all rows for a header that has year columns or fund-related keywords
+        for ri, row in enumerate(rows[:10]):
             cells = row.find_all(["th", "td"])
             texts = [c.get_text(strip=True).lower() for c in cells]
             joined = " ".join(texts)
-            if "fund" in joined or "constituent" in joined or "2024" in joined:
-                header_idx = ri
-                header_texts = texts
-                break
 
-        if header_idx is None:
+            has_year   = bool(re.search(r"20(2[0-9])", joined))
+            has_fund   = "constituent" in joined or "trustee" in joined
+            has_name   = "fund" in joined or "name" in joined
+
+            if not (has_year or has_fund):
+                continue
+
+            # Score: rows in table + bonus for year columns + bonus for fund keywords
+            data_rows = len(rows) - ri - 1
+            score = data_rows
+            if has_year:
+                score += 50
+            if has_fund:
+                score += 30
+            if has_name:
+                score += 10
+
+            log.info("  table[%d] row[%d]: score=%d, rows=%d, has_year=%s, has_fund=%s | %s",
+                     tbl_idx, ri, score, data_rows, has_year, has_fund, texts[:8])
+
+            if score > best_score:
+                best_score         = score
+                best_table         = tbl
+                best_header_idx    = ri
+                best_header_texts  = texts
+            break  # only check until first matching header in this table
+
+    if best_table is None:
+        log.error("No suitable fund table found on page")
+        return []
+
+    log.info("Best table: score=%d, header_row=%d, header=%s",
+             best_score, best_header_idx, best_header_texts[:12])
+
+    rows = best_table.find_all("tr")
+
+    # Build column index map from best header
+    col: dict = {}
+    for ci, h in enumerate(best_header_texts):
+        h = h.strip()
+        if "constituent" in h:
+            col.setdefault("name", ci)
+        elif "fund" in h and "type" not in h and "size" not in h and "name" not in col:
+            col.setdefault("name", ci)
+        elif "trustee" in h:
+            col["trustee"] = ci
+        elif "type" in h:
+            col["type"] = ci
+        elif "risk" in h:
+            col["risk"] = ci
+        elif "size" in h:
+            col["size"] = ci
+        elif "fer" in h:
+            col["fer"] = ci
+        elif "scheme" in h and "name" not in h:
+            col.setdefault("scheme", ci)
+        elif re.fullmatch(r"20\d\d", h):
+            col[h] = ci
+
+    log.info("Column map: %s", col)
+
+    if "name" not in col:
+        # Fallback: assume column 1 is the fund name (col 0 might be scheme/row number)
+        log.warning("No 'name' column detected; falling back to col index 1")
+        col["name"] = 1
+
+    # Parse data rows
+    for row in rows[best_header_idx + 1:]:
+        cells = row.find_all("td")
+        if len(cells) < 2:
             continue
 
-        log.info("Using table[%d] with %d rows, header at row %d",
-                 tbl_idx, len(rows), header_idx)
-        log.info("Header cells: %s", header_texts[:12])
+        def cell(key, default=""):
+            idx = col.get(key)
+            if idx is None or idx >= len(cells):
+                return default
+            return cells[idx].get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
 
-        # Build column index map
-        col = {}
-        for ci, h in enumerate(header_texts):
-            h = h.strip()
-            if "constituent" in h:
-                col.setdefault("name", ci)
-            elif "fund" in h and "name" not in col and "type" not in h:
-                col.setdefault("name", ci)
-            elif "trustee" in h:
-                col["trustee"] = ci
-            elif "type" in h:
-                col["type"] = ci
-            elif "risk" in h:
-                col["risk"] = ci
-            elif "size" in h:
-                col["size"] = ci
-            elif "fer" in h:
-                col["fer"] = ci
-            elif "scheme" in h:
-                col.setdefault("scheme", ci)
-            elif re.fullmatch(r"20\d\d", h):
-                col[h] = ci
-
-        log.info("Column map: %s", col)
-
-        if "name" not in col:
-            log.info("No 'name' column found in table[%d], skipping", tbl_idx)
+        name = cell("name")
+        if not name or len(name) < 2:
+            continue
+        # Skip sub-header rows
+        if name.lower() in ("constituent fund", "fund name", "name", "fund"):
             continue
 
-        # Parse data rows
-        for row in rows[header_idx + 1:]:
-            cells = row.find_all("td")
-            if len(cells) < 2:
-                continue
+        # Find detail link: last <a> in the row with a real href
+        detail_url = None
+        for c in reversed(cells):
+            a_tag = c.find("a", href=True)
+            if a_tag:
+                href = a_tag["href"].strip()
+                if href and href != "#" and "javascript" not in href.lower():
+                    detail_url = urljoin(LIST_URL, href)
+                    break
 
-            def cell(key, default=""):
-                idx = col.get(key)
-                if idx is None or idx >= len(cells):
-                    return default
-                return cells[idx].get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
+        annual: dict = {}
+        for col_key, ci in col.items():
+            if re.fullmatch(r"20\d\d", col_key):
+                val = parse_float(cell(col_key))
+                if val is not None:
+                    annual[col_key] = val
 
-            name = cell("name")
-            if not name or len(name) < 2:
-                continue
+        raw_category = cell("type")
+        category = CATEGORY_MAP.get(raw_category.lower(), raw_category)
 
-            # Skip rows that look like sub-headers
-            if name.lower() in ("constituent fund", "fund name", "name"):
-                continue
+        fund = {
+            "name":       name,
+            "provider":   cell("trustee"),
+            "scheme":     cell("scheme"),
+            "category":   category or "股票基金",
+            "risk_raw":   cell("risk"),
+            "fundSize":   parse_float(cell("size")),
+            "detail_url": detail_url,
+            "annual":     annual,
+        }
+        funds.append(fund)
 
-            # Find detail link: last <a> in the row, or any link in a "Details" cell
-            detail_url = None
-            for c in reversed(cells):
-                a_tag = c.find("a", href=True)
-                if a_tag:
-                    href = a_tag["href"].strip()
-                    if href and href != "#" and "javascript" not in href.lower():
-                        detail_url = urljoin(LIST_URL, href)
-                        break
-
-            annual = {}
-            for col_key, ci in col.items():
-                if re.fullmatch(r"20\d\d", col_key):
-                    val = parse_float(cell(col_key))
-                    if val is not None:
-                        annual[col_key] = val
-
-            raw_category = cell("type")
-            category = CATEGORY_MAP.get(raw_category.lower(), raw_category)
-
-            fund = {
-                "name":       name,
-                "provider":   cell("trustee"),
-                "scheme":     cell("scheme"),
-                "category":   category or "股票基金",
-                "risk_raw":   cell("risk"),
-                "fundSize":   parse_float(cell("size")),
-                "detail_url": detail_url,
-                "annual":     annual,
-            }
-            funds.append(fund)
-
-        if funds:
-            log.info("Parsed %d funds from table[%d]", len(funds), tbl_idx)
-            break  # Use first table that yielded funds
-
+    log.info("Parsed %d funds from best table", len(funds))
     return funds
 
 
@@ -467,6 +548,11 @@ def save(funds: list, source: str, note: str) -> None:
 # ---------------------------------------------------------------------------
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--debug-html", metavar="PATH",
+                        help="Write page structure analysis to this file")
+    args = parser.parse_args()
+
     log.info("=" * 60)
     log.info("MPF scraper v4  -  %s", LIST_URL)
     log.info("Output: %s", DATA_FILE)
@@ -485,6 +571,13 @@ def main():
         sys.exit(1)
 
     r.encoding = r.apparent_encoding or "utf-8"
+
+    if args.debug_html:
+        try:
+            dump_page_structure(r.text, args.debug_html)
+        except Exception as exc:
+            log.warning("debug dump failed: %s", exc)
+
     raw_funds = parse_list_page(r.text)
 
     if not raw_funds:

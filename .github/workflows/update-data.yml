@@ -34,10 +34,10 @@ jobs:
             -w "HTTP status: %{http_code} | Size: %{size_download} bytes | Time: %{time_total}s\n" \
             --max-time 20 \
             --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36" \
-            "https://mfp.mpfa.org.hk/eng/information/fund/prices_and_performances.jsp" \
+            "https://mfp.mpfa.org.hk/eng/mpp_list.jsp" \
             || echo "curl exit code: $?"
-          echo "=== First 300 chars of response ==="
-          head -c 300 /tmp/mpfa_test.html || echo "(no response)"
+          echo "=== First 500 chars of response ==="
+          head -c 500 /tmp/mpfa_test.html || echo "(no response)"
 
       - name: Fetch MPFA data
         run: python3 scripts/fetch_mpfa.py

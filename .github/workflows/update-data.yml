@@ -27,17 +27,53 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Test MPFA URL accessibility
+      - name: Analyse MPFA page structure
         run: |
-          for url in \
+          UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
+
+          echo "========================================"
+          echo "1) cf_detail.jsp?cf_id=1 — full content"
+          echo "========================================"
+          curl -s -A "$UA" --max-time 20 \
+            "https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=1" \
+            -o /tmp/cf_detail_1.html
+          echo "Size: $(wc -c < /tmp/cf_detail_1.html) bytes"
+          echo "--- First 3000 chars ---"
+          head -c 3000 /tmp/cf_detail_1.html
+          echo ""
+          echo "--- All <table> header rows ---"
+          python3 -c "
+          from bs4 import BeautifulSoup
+          html = open('/tmp/cf_detail_1.html').read()
+          soup = BeautifulSoup(html, 'lxml')
+          for i,t in enumerate(soup.find_all('table')):
+              rows = t.find_all('tr')
+              if rows:
+                  hdrs = [c.get_text(strip=True) for c in rows[0].find_all(['th','td'])]
+                  print(f'table[{i}] {len(rows)} rows: {hdrs[:10]}')
+                  for row in rows[1:4]:
+                      cells = [c.get_text(strip=True) for c in row.find_all(['td','th'])]
+                      print(f'  sample row: {cells[:10]}')
+          "
+
+          echo ""
+          echo "========================================"
+          echo "2) mpp_list.jsp — search for cf_id in HTML"
+          echo "========================================"
+          curl -s -A "$UA" --max-time 30 \
             "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
-            "https://mfp.mpfa.org.hk/tch/fund_price.jsp" \
-            "https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=1"; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" \
-              -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36" \
-              --max-time 15 "$url")
-            echo "HTTP $status  $url"
-          done
+            -o /tmp/mpp_list.html
+          echo "Size: $(wc -c < /tmp/mpp_list.html) bytes"
+          echo "--- cf_id occurrences (first 20) ---"
+          grep -oi "cf_id[^'\"&, )]*" /tmp/mpp_list.html | head -20 || echo "(none)"
+          echo "--- Any numeric args in JS function calls (first 20) ---"
+          grep -oP "(?:openWin|open|goDetail|showDetail|fundDetail)\s*\(['\"]?(\d+)" \
+            /tmp/mpp_list.html | head -20 || echo "(none)"
+          echo "--- onclick / href snippets containing digits (first 10) ---"
+          grep -oP '(?:onclick|href)="[^"]{0,80}\d{3,6}[^"]{0,30}"' \
+            /tmp/mpp_list.html | head -10 || echo "(none)"
+          echo "--- data-* attributes with numbers (first 10) ---"
+          grep -oP 'data-[a-z\-]+="[0-9]+"' /tmp/mpp_list.html | head -10 || echo "(none)"
 
       - name: Fetch MPFA fund list (1Y / 3Y / 5Y + proxy short-period)
         run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt

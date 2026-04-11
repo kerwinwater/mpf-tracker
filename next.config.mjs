@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 讓 Next.js 可以讀取 data/ 目錄中的 JSON 檔案
-  images: {
-    unoptimized: true,
-  },
+  // 使用標準 Next.js 構建（Vercel 原生支援）
+  // 移除 output: 'export'，讓 Vercel 自動生成 routes-manifest.json
+  trailingSlash: true,
 };
 
 export default nextConfig;

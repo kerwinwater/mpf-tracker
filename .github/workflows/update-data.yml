@@ -27,8 +27,43 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Test MPFA connectivity
+        run: |
+          echo "=== Testing MPFA connectivity ==="
+          curl -s -o /tmp/mpfa_test.html \
+            -w "HTTP status: %{http_code} | Size: %{size_download} bytes | Time: %{time_total}s\n" \
+            --max-time 20 \
+            --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36" \
+            "https://mfp.mpfa.org.hk/eng/information/fund/prices_and_performances.jsp" \
+            || echo "curl exit code: $?"
+          echo "=== First 300 chars of response ==="
+          head -c 300 /tmp/mpfa_test.html || echo "(no response)"
+
       - name: Fetch MPFA data
         run: python3 scripts/fetch_mpfa.py
+
+      - name: Show result
+        run: |
+          python3 -c "
+          import json
+          with open('public/data/funds.json') as f:
+              d = json.load(f)
+          src = d.get('dataSource', 'unknown')
+          print('=== Scraper Result ===')
+          print('dataSource :', src)
+          print('totalFunds :', d.get('totalFunds', 0))
+          print('lastUpdated:', d.get('lastUpdatedHKT', d.get('lastUpdated', 'N/A')))
+          if src == 'fallback':
+              print()
+              print('WARNING: MPFA fetch failed - still using demo/cached data')
+              print('Check the fetch step above for the actual error')
+          elif 'mpfa' in src:
+              print()
+              print('SUCCESS: Real MPFA data fetched!')
+              print('Top 3 funds by 1-year return:')
+              for f in d['funds'][:3]:
+                  print(f'  {f[\"name\"]} | 1Y: {f[\"returns\"][\"oneYear\"]}%')
+          "
 
       - name: Commit and push if data changed
         run: |

@@ -29,7 +29,10 @@ export default function CategoryFilter({
   return (
     <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
       <div className="flex gap-2 pb-1 w-max">
-        {FUND_CATEGORIES.map((category) => {
+        {FUND_CATEGORIES.filter((category) => {
+          // Always show "全部類別"; hide other categories if they have no funds
+          return category === "全部類別" || (counts[category] ?? 0) > 0;
+        }).map((category) => {
           const isActive = activeCategory === category;
           const count = counts[category] ?? 0;
 

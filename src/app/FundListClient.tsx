@@ -274,7 +274,10 @@ export default function FundListClient() {
             <div className="flex items-center justify-between pt-1">
               <h2 className="font-bold text-white text-sm">
                 {activeCategory === "全部類別" ? "全部基金" : activeCategory}
-                <span className="ml-2 font-normal" style={{ color: "#666" }}>
+                <span
+                  className="ml-2 font-semibold text-xs px-1.5 py-0.5 rounded-full tabular-nums"
+                  style={{ backgroundColor: "rgba(74,222,128,0.15)", color: "#4ade80" }}
+                >
                   {filteredAndSorted.length} 隻
                 </span>
               </h2>
@@ -292,7 +295,7 @@ export default function FundListClient() {
               <div className="space-y-2">
                 {filteredAndSorted.map((fund, idx) => (
                   <div
-                    key={fund.id}
+                    key={`${fund.id}-${activeCategory}`}
                     className="animate-fade-in"
                     style={{ animationDelay: `${Math.min(idx * 20, 300)}ms` }}
                   >

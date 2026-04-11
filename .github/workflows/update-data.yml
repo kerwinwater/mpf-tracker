@@ -27,17 +27,59 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Test MPFA connectivity
+      - name: Inspect MPFA page structure
         run: |
-          echo "=== Testing MPFA connectivity ==="
+          echo "=== Fetching mpp_list.jsp ==="
           curl -s -o /tmp/mpfa_test.html \
             -w "HTTP status: %{http_code} | Size: %{size_download} bytes | Time: %{time_total}s\n" \
-            --max-time 20 \
+            --max-time 30 \
+            -L \
             --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36" \
+            -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+            -H "Accept-Language: en-US,en;q=0.9" \
             "https://mfp.mpfa.org.hk/eng/mpp_list.jsp" \
             || echo "curl exit code: $?"
-          echo "=== First 500 chars of response ==="
-          head -c 500 /tmp/mpfa_test.html || echo "(no response)"
+          echo "=== Page size ==="
+          wc -c /tmp/mpfa_test.html || echo "(no file)"
+          echo "=== First 1000 chars ==="
+          head -c 1000 /tmp/mpfa_test.html || echo "(no response)"
+          echo ""
+          echo "=== Table analysis ==="
+          python3 - <<'PYEOF'
+          from bs4 import BeautifulSoup
+          import re
+          try:
+              with open('/tmp/mpfa_test.html', encoding='utf-8', errors='replace') as f:
+                  html = f.read()
+              soup = BeautifulSoup(html, 'lxml')
+              print(f"Title: {soup.title.string.strip() if soup.title else 'N/A'}")
+              print(f"Forms: {len(soup.find_all('form'))}")
+              print(f"Tables: {len(soup.find_all('table'))}")
+              print(f"Script tags: {len(soup.find_all('script'))}")
+              # Check for JSON data in scripts
+              for sc in soup.find_all('script'):
+                  txt = sc.get_text()
+                  if 'fund' in txt.lower() and len(txt) > 200:
+                      print(f"Script with 'fund' data ({len(txt)} chars): {txt[:300]}")
+              # Dump all forms
+              for i, form in enumerate(soup.find_all('form')):
+                  print(f"Form[{i}]: action={form.get('action')!r} method={form.get('method')!r}")
+                  for inp in form.find_all(['input','select']):
+                      print(f"  {inp.name} name={inp.get('name')!r} value={inp.get('value')!r}")
+              # Dump all tables
+              for ti, tbl in enumerate(soup.find_all('table')):
+                  rows = tbl.find_all('tr')
+                  print(f"Table[{ti}]: {len(rows)} rows, class={tbl.get('class')}, id={tbl.get('id')}")
+                  for ri, row in enumerate(rows[:5]):
+                      cells = row.find_all(['td','th'])
+                      print(f"  row[{ri}]: {[c.get_text(strip=True)[:30] for c in cells[:8]]}")
+              # Check for links to detail pages
+              links = soup.find_all('a', href=True)
+              fund_links = [a['href'] for a in links if 'fund' in a['href'].lower() or 'mpp' in a['href'].lower()]
+              print(f"Fund-related links ({len(fund_links)}): {fund_links[:10]}")
+          except Exception as e:
+              print(f"Analysis error: {e}")
+          PYEOF
 
       - name: Fetch MPFA data
         run: python3 scripts/fetch_mpfa.py

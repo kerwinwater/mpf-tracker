@@ -1,17 +1,3 @@
-/**
- * FundListClient 組件（客戶端互動層）
- *
- * 這個組件負責所有客戶端互動：
- * - 時段切換（useState）
- * - 搜索篩選（useMemo）
- * - 類別篩選（useMemo）
- * - 排序邏輯（useMemo）
- *
- * 為什麼分離成獨立檔案？
- * 因為 Next.js App Router 中，只有標記 "use client" 的組件才能使用
- * useState/useEffect 等 React hooks。服務器組件不能使用 hooks。
- */
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -28,17 +14,11 @@ interface FundListClientProps {
 }
 
 export default function FundListClient({ funds }: FundListClientProps) {
-  // ─── 狀態管理 ────────────────────────────────────────────────────────────
-  // 當前選中的時段（預設：1年）
   const [activePeriod, setActivePeriod] = useState<SortPeriod>("oneYear");
-  // 當前類別篩選
   const [activeCategory, setActiveCategory] = useState<Category>("全部類別");
-  // 搜索關鍵字
   const [searchQuery, setSearchQuery] = useState("");
-  // 排序方向（預設：降序 = 最高回報在最前）
   const [sortAsc, setSortAsc] = useState(false);
 
-  // ─── 計算各類別的基金數量（供 CategoryFilter 顯示） ─────────────────────
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { "全部類別": funds.length };
     for (const fund of funds) {
@@ -47,16 +27,13 @@ export default function FundListClient({ funds }: FundListClientProps) {
     return counts;
   }, [funds]);
 
-  // ─── 篩選 + 排序邏輯 ─────────────────────────────────────────────────────
   const filteredAndSorted = useMemo(() => {
     let result = [...funds];
 
-    // 1. 類別篩選
     if (activeCategory !== "全部類別") {
       result = result.filter((f) => f.category === activeCategory);
     }
 
-    // 2. 關鍵字搜索（搜索基金名稱或受託人）
     const query = searchQuery.trim().toLowerCase();
     if (query) {
       result = result.filter(
@@ -67,7 +44,6 @@ export default function FundListClient({ funds }: FundListClientProps) {
       );
     }
 
-    // 3. 按回報排序
     result.sort((a, b) => {
       const diff = a.returns[activePeriod] - b.returns[activePeriod];
       return sortAsc ? diff : -diff;
@@ -76,20 +52,42 @@ export default function FundListClient({ funds }: FundListClientProps) {
     return result;
   }, [funds, activePeriod, activeCategory, searchQuery, sortAsc]);
 
-  // 當前選中類別和時段的統計數據（供 StatsBar 用）
-  const statsData = useMemo(() => {
-    return [...filteredAndSorted].sort(
-      (a, b) => b.returns[activePeriod] - a.returns[activePeriod]
+  // Max absolute return in current view — used to scale racing bars
+  const maxAbsReturn = useMemo(() => {
+    if (filteredAndSorted.length === 0) return 1;
+    return (
+      Math.max(...filteredAndSorted.map((f) => Math.abs(f.returns[activePeriod]))) || 1
     );
   }, [filteredAndSorted, activePeriod]);
 
+  // Stats use the same list (already sorted descending by default)
+  const statsData = useMemo(() => {
+    if (sortAsc) {
+      return [...filteredAndSorted].sort(
+        (a, b) => b.returns[activePeriod] - a.returns[activePeriod]
+      );
+    }
+    return filteredAndSorted;
+  }, [filteredAndSorted, activePeriod, sortAsc]);
+
   return (
-    <div className="space-y-5">
-      {/* ─── 搜索欄 ──────────────────────────────────────────────── */}
+    <div className="space-y-4">
+      {/* ─── 搜索欄 ──────────────────────────────────────────── */}
       <div className="relative">
         <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none">
-          <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            className="w-4 h-4"
+            style={{ color: "#555" }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </div>
         <input
@@ -101,61 +99,63 @@ export default function FundListClient({ funds }: FundListClientProps) {
         />
       </div>
 
-      {/* ─── 時段選擇標籤 ──────────────────────────────────────── */}
+      {/* ─── 時段選擇標籤 ─────────────────────────────────── */}
       <PeriodTabs activePeriod={activePeriod} onChange={setActivePeriod} />
 
-      {/* ─── 類別篩選 ─────────────────────────────────────────── */}
+      {/* ─── 類別篩選 ──────────────────────────────────────── */}
       <CategoryFilter
         activeCategory={activeCategory}
         onChange={setActiveCategory}
         counts={categoryCounts}
       />
 
-      {/* ─── 市場統計摘要 ─────────────────────────────────────── */}
+      {/* ─── 統計摘要 ──────────────────────────────────────── */}
       {statsData.length > 0 && (
         <StatsBar funds={statsData} period={activePeriod} />
       )}
 
-      {/* ─── 排行榜標題欄 ─────────────────────────────────────── */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-bold text-gray-800">
+      {/* ─── 排行榜標題 ────────────────────────────────────── */}
+      <div className="flex items-center justify-between pt-1">
+        <h2 className="font-bold text-white text-sm">
           {activeCategory === "全部類別" ? "全部基金" : activeCategory}
-          <span className="ml-2 text-sm font-normal text-gray-400">
-            {filteredAndSorted.length} 個
+          <span className="ml-2 font-normal" style={{ color: "#666" }}>
+            {filteredAndSorted.length} 隻
           </span>
         </h2>
-        {/* 切換排序方向按鈕 */}
         <button
           onClick={() => setSortAsc((prev) => !prev)}
-          className="flex items-center gap-1 text-sm text-blue-600 font-medium"
+          className="flex items-center gap-1 text-sm font-medium transition-colors"
+          style={{ color: "#4ade80" }}
         >
-          <span>{sortAsc ? "⬆️ 升序" : "⬇️ 降序"}</span>
+          {sortAsc ? "↑ 升序" : "↓ 降序"}
         </button>
       </div>
 
-      {/* ─── 基金卡片列表 ─────────────────────────────────────── */}
+      {/* ─── 賽馬排行榜 ────────────────────────────────────── */}
       {filteredAndSorted.length > 0 ? (
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {filteredAndSorted.map((fund, index) => (
             <div
               key={fund.id}
               className="animate-fade-in"
-              style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}
+              style={{ animationDelay: `${Math.min(index * 25, 400)}ms` }}
             >
               <FundCard
                 fund={fund}
                 rank={index + 1}
                 activePeriod={activePeriod}
+                maxAbsReturn={maxAbsReturn}
               />
             </div>
           ))}
         </div>
       ) : (
-        /* 搜索無結果 */
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16">
           <div className="text-4xl mb-3">🔍</div>
-          <p className="font-medium">找不到相關基金</p>
-          <p className="text-sm mt-1">試試其他關鍵字</p>
+          <p className="font-medium text-white">找不到相關基金</p>
+          <p className="text-sm mt-1" style={{ color: "#888" }}>
+            試試其他關鍵字
+          </p>
         </div>
       )}
     </div>

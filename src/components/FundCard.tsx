@@ -1,125 +1,142 @@
-/**
- * FundCard 組件
- *
- * 以 App Store 卡片風格顯示單個 MPF 基金的資訊。
- * 包含：排名、基金名稱、類別、回報數據、風險等級。
- *
- * 設計參考 App Store 的排行榜卡片：
- * - 左側排名號碼
- * - 中間基金名稱和類別
- * - 右側主要回報數字（大字）
- * - 底部多時段迷你回報列
- */
-
 "use client";
 
-import { Fund, RISK_LABELS, RISK_COLORS, SortPeriod, PERIOD_LABELS } from "@/types/fund";
-import RankBadge from "./RankBadge";
-import ReturnBadge from "./ReturnBadge";
+import { useEffect, useState } from "react";
+import { Fund, SortPeriod, PERIOD_LABELS } from "@/types/fund";
 
 interface FundCardProps {
   fund: Fund;
   rank: number;
   activePeriod: SortPeriod;
+  maxAbsReturn: number;
 }
 
-// 類別圖示對照表
-const CATEGORY_ICONS: Record<string, string> = {
-  "股票基金": "📈",
-  "混合資產基金": "⚖️",
-  "債券基金": "🏦",
-  "保本基金": "🛡️",
-  "貨幣市場基金": "💵",
-  "保證基金": "✅",
-  "強積金保守基金": "🔒",
-};
+const MEDALS = ["🥇", "🥈", "🥉"];
 
-// 受託人縮寫對照表
-const PROVIDER_SHORT: Record<string, string> = {
-  "宏利強積金": "宏利",
-  "匯豐強積金": "匯豐",
-  "中銀保誠": "中銀",
-  "友邦強積金": "友邦",
-  "富達強積金": "富達",
-  "東亞強積金": "東亞",
-  "信安強積金": "信安",
-  "永明強積金": "永明",
-  "BCT 強積金": "BCT",
-  "交通銀行強積金": "交銀",
-};
+// Always show these 3 periods in the mini-stats row
+const MINI_PERIODS: SortPeriod[] = ["oneWeek", "oneMonth", "oneYear"];
 
-export default function FundCard({ fund, rank, activePeriod }: FundCardProps) {
-  // 取得當前排序時段的回報值
+function getRankStyle(rank: number): { bg: string; color: string } {
+  if (rank === 1) return { bg: "#fbbf24", color: "#000" };
+  if (rank === 2) return { bg: "#9ca3af", color: "#000" };
+  if (rank === 3) return { bg: "#b45309", color: "#fff" };
+  return { bg: "rgba(255,255,255,0.08)", color: "#888" };
+}
+
+export default function FundCard({
+  fund,
+  rank,
+  activePeriod,
+  maxAbsReturn,
+}: FundCardProps) {
   const mainReturn = fund.returns[activePeriod];
+  const isPositive = mainReturn >= 0;
 
-  // 其他時段（底部迷你顯示）
-  const otherPeriods: SortPeriod[] = ["oneWeek", "oneMonth", "threeMonths", "oneYear"];
-  const displayPeriods = otherPeriods.filter((p) => p !== activePeriod);
+  const barPct =
+    maxAbsReturn > 0
+      ? Math.min((Math.abs(mainReturn) / maxAbsReturn) * 100, 100)
+      : 0;
 
-  const categoryIcon = CATEGORY_ICONS[fund.category] || "📊";
-  const providerShort = PROVIDER_SHORT[fund.provider] || fund.provider.slice(0, 2);
+  // Animate bar on mount
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setTimeout(() => setRevealed(true), rank * 30);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [rank]);
+
+  const rankStyle = getRankStyle(rank);
+  const medal = rank <= 3 ? MEDALS[rank - 1] : null;
+
+  const returnColor = isPositive ? "#4ade80" : "#f87171";
+  const barGradient = isPositive
+    ? "linear-gradient(90deg, rgba(74,222,128,0.5), #4ade80)"
+    : "linear-gradient(90deg, rgba(248,113,113,0.5), #f87171)";
 
   return (
-    <div className="card p-4 group cursor-pointer">
-      {/* 主要內容行 */}
+    <div className="racing-card">
+      {/* ─── Row 1: rank · name · return ─── */}
       <div className="flex items-center gap-3">
-        {/* 左側：排名徽章 */}
-        <RankBadge rank={rank} />
-
-        {/* 中間：基金圖示 + 名稱 */}
+        {/* Rank circle */}
         <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-          style={{
-            background: `hsl(${(rank * 47) % 360}, 65%, 90%)`,
-          }}
+          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+          style={{ backgroundColor: rankStyle.bg, color: rankStyle.color }}
         >
-          {categoryIcon}
+          {rank}
         </div>
 
+        {/* Name + provider */}
         <div className="flex-1 min-w-0">
-          {/* 基金名稱（截短防溢出） */}
-          <h3 className="font-semibold text-gray-900 text-sm leading-snug truncate">
-            {fund.name}
-          </h3>
-          {/* 類別 + 受託人 */}
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-xs text-gray-400">{fund.category}</span>
-            <span className="text-gray-200">·</span>
-            <span className="text-xs text-gray-400">{providerShort}</span>
+          <div className="flex items-center gap-1.5 leading-snug">
+            {medal && (
+              <span className="text-base leading-none flex-shrink-0">{medal}</span>
+            )}
+            <h3 className="text-sm font-semibold text-white truncate">
+              {fund.name}
+            </h3>
           </div>
+          <p className="text-xs truncate mt-0.5" style={{ color: "#888" }}>
+            {fund.provider}
+          </p>
         </div>
 
-        {/* 右側：主回報（大字） */}
-        <div className="text-right flex-shrink-0">
-          <div className="text-xl font-bold leading-none">
-            <ReturnBadge value={mainReturn} size="lg" />
+        {/* Main return (big) */}
+        <div className="flex-shrink-0 text-right">
+          <div
+            className="text-xl font-bold tabular-nums leading-none"
+            style={{ color: returnColor }}
+          >
+            {isPositive ? "+" : ""}
+            {mainReturn.toFixed(2)}%
           </div>
-          <div className="text-xs text-gray-400 mt-1">
+          <div className="text-[11px] mt-1" style={{ color: "#666" }}>
             {PERIOD_LABELS[activePeriod]}
           </div>
         </div>
       </div>
 
-      {/* 分隔線 + 底部數據欄 */}
-      <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between">
-        {/* 風險等級 */}
-        <span
-          className={`text-xs px-2 py-0.5 rounded-full font-medium ${RISK_COLORS[fund.riskLevel]}`}
-        >
-          {RISK_LABELS[fund.riskLevel]}
-        </span>
+      {/* ─── Row 2: racing bar ─── */}
+      <div
+        className="mt-3 h-2 rounded-full overflow-hidden"
+        style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+      >
+        <div
+          className="h-full rounded-full"
+          style={{
+            width: `${barPct}%`,
+            background: barGradient,
+            transition: revealed ? "width 0.8s cubic-bezier(0.25,1,0.5,1)" : "none",
+          }}
+        />
+      </div>
 
-        {/* 其他時段迷你回報 */}
-        <div className="flex items-center gap-3">
-          {displayPeriods.slice(0, 3).map((period) => (
-            <div key={period} className="text-center">
-              <div className="text-xs text-gray-400 leading-none mb-0.5">
-                {PERIOD_LABELS[period]}
-              </div>
-              <ReturnBadge value={fund.returns[period]} size="sm" />
+      {/* ─── Row 3: mini stats (1週 / 1月 / 1年) ─── */}
+      <div className="mt-2 flex items-center gap-4 flex-wrap">
+        {MINI_PERIODS.map((p) => {
+          const val = fund.returns[p];
+          const pos = val >= 0;
+          const isActive = p === activePeriod;
+          return (
+            <div key={p} className="flex items-center gap-1">
+              <span
+                className="text-[11px]"
+                style={{ color: isActive ? "#aaa" : "#555" }}
+              >
+                {PERIOD_LABELS[p]}
+              </span>
+              <span
+                className="text-[11px] font-medium tabular-nums"
+                style={{
+                  color: pos ? "#4ade80" : "#f87171",
+                  opacity: isActive ? 1 : 0.85,
+                }}
+              >
+                {pos ? "+" : ""}
+                {val.toFixed(1)}%
+              </span>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );

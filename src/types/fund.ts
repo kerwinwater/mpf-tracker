@@ -23,8 +23,8 @@ export interface Fund {
   riskLevel: number;     // 風險等級 1-5（1=最低，5=最高）
   nav: number;           // 最新資產淨值
   currency: string;      // 貨幣（HKD）
-  fundSize: number;      // 基金規模（億港元）
-  launchYear: number;    // 成立年份
+  fundSize?: number;     // 基金規模（億港元，選用）
+  launchYear?: number;   // 成立年份（選用）
   returns: FundReturns;
 }
 

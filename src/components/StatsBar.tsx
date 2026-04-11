@@ -8,7 +8,7 @@ interface StatsBarProps {
 export default function StatsBar({ funds, period }: StatsBarProps) {
   if (funds.length === 0) return null;
 
-  const returns = funds.map((f) => f.returns[period]);
+  const returns = funds.map((f) => f.returns[period] ?? 0);
   const avgReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
   const rising = returns.filter((r) => r > 0).length;
   const falling = returns.filter((r) => r < 0).length;
@@ -32,7 +32,7 @@ export default function StatsBar({ funds, period }: StatsBarProps) {
           {periodLabel}最高
         </div>
         <div className="text-base font-bold tabular-nums" style={{ color: "#4ade80" }}>
-          +{topFund.returns[period].toFixed(2)}%
+          +{(topFund.returns[period] ?? 0).toFixed(2)}%
         </div>
         <div className="text-xs truncate mt-0.5" style={{ color: "#666" }}>
           {topFund.name.length > 8 ? topFund.name.slice(0, 8) + "…" : topFund.name}

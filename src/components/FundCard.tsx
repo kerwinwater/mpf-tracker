@@ -28,7 +28,7 @@ export default function FundCard({
   activePeriod,
   maxAbsReturn,
 }: FundCardProps) {
-  const mainReturn = fund.returns[activePeriod];
+  const mainReturn = fund.returns[activePeriod] ?? 0;
   const isPositive = mainReturn >= 0;
 
   const barPct =

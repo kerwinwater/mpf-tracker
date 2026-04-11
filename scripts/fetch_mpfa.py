@@ -405,7 +405,7 @@ def main():
         sys.exit(1)
 
     source = "mpfa"
-    note   = (f"mfp.mpfa.org.hk/eng/mpp_list.jsp | "
+    note   = (f"mfp.mpfa.org.hk/tch/mpp_list.jsp | "
               f"{len(funds)} funds | "
               f"1Y/5Y real; 3Y from calendar years; 6M/3M/1M/1W derived")
     save(funds, source, note)

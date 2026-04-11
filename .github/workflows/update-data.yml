@@ -27,6 +27,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Test MPFA URL accessibility
+        run: |
+          for url in \
+            "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
+            "https://mfp.mpfa.org.hk/tch/fund_price.jsp" \
+            "https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=1"; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36" \
+              --max-time 15 "$url")
+            echo "HTTP $status  $url"
+          done
+
       - name: Fetch MPFA fund list (1Y / 3Y / 5Y + proxy short-period)
         run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
 

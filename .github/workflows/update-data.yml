@@ -27,6 +27,106 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Analyse MPFA app API endpoints
+        run: |
+          UA="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+          UA_DESKTOP="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
+
+          echo "============================================"
+          echo "1) Probe known API-style endpoint patterns"
+          echo "============================================"
+          for url in \
+            "https://mfp.mpfa.org.hk/api/funds" \
+            "https://mfp.mpfa.org.hk/api/v1/funds" \
+            "https://mfp.mpfa.org.hk/api/v1/fundlist" \
+            "https://mfp.mpfa.org.hk/api/v1/performance" \
+            "https://mfp.mpfa.org.hk/app/api/funds" \
+            "https://mfp.mpfa.org.hk/mobile/api" \
+            "https://mfp.mpfa.org.hk/tch/api/funds.json" \
+            "https://mfp.mpfa.org.hk/eng/api/funds" \
+            "https://api.mpfa.org.hk/mfp/funds" \
+            "https://api.mpfa.org.hk/v1/funds" \
+            "https://mfp.mpfa.org.hk/tch/getSchemeInfo.do" \
+            "https://mfp.mpfa.org.hk/tch/getFundInfo.do" \
+            "https://mfp.mpfa.org.hk/tch/getFundPerformance.do" \
+            "https://mfp.mpfa.org.hk/tch/mpp_fund_list.do" \
+            "https://mfp.mpfa.org.hk/tch/fund_performance.do" \
+            "https://mfp.mpfa.org.hk/tch/mfp_api.do"; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" -A "$UA_DESKTOP" --max-time 10 "$url")
+            echo "HTTP $status  $url"
+          done
+
+          echo ""
+          echo "============================================"
+          echo "2) Extract JS bundle URLs from mpp_list.jsp"
+          echo "============================================"
+          curl -s -A "$UA_DESKTOP" --max-time 20 \
+            "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
+            -o /tmp/mpp_list.html
+          echo "--- <script src> tags ---"
+          grep -oP 'src="[^"]*\.js[^"]*"' /tmp/mpp_list.html | head -20 || echo "(none)"
+          echo "--- XHR / fetch / ajax calls in inline JS ---"
+          grep -oP '(?:fetch|XMLHttpRequest|ajax|axios|get|post)\s*\(\s*['"'"'"][^'"'"'"]{5,80}['"'"'"]' \
+            /tmp/mpp_list.html | head -20 || echo "(none)"
+          echo "--- URLs containing api / json / data in inline script ---"
+          grep -oP '['"'"'"][^'"'"'"]*(?:api|\.json|/data/|/service/)[^'"'"'"]*['"'"'"]' \
+            /tmp/mpp_list.html | head -20 || echo "(none)"
+
+          echo ""
+          echo "============================================"
+          echo "3) Fetch & grep JS bundles for API patterns"
+          echo "============================================"
+          python3 - <<'PYEOF'
+          import subprocess, re, urllib.request
+          # Get JS script URLs from the page
+          with open('/tmp/mpp_list.html') as f:
+              html = f.read()
+          js_urls = re.findall(r'src=["\']([^"\']*\.js[^"\']*)["\']', html)
+          base = "https://mfp.mpfa.org.hk"
+          found_apis = set()
+          for js_url in js_urls[:10]:
+              if not js_url.startswith('http'):
+                  js_url = base + ('/' if not js_url.startswith('/') else '') + js_url
+              print(f"Fetching JS: {js_url}")
+              try:
+                  req = urllib.request.Request(js_url, headers={
+                      'User-Agent': 'Mozilla/5.0 Chrome/122.0.0.0 Safari/537.36'
+                  })
+                  js = urllib.request.urlopen(req, timeout=10).read().decode('utf-8', errors='ignore')
+                  # Find API-like strings
+                  apis = re.findall(
+                      r'["\']/((?:api|tch|eng)/[^"\'<>\s]{3,80})["\']', js
+                  )
+                  for a in apis:
+                      found_apis.add(a)
+                  # Find fetch/axios/$.ajax calls
+                  calls = re.findall(
+                      r'(?:fetch|axios\.get|axios\.post|\$\.ajax|XMLHttpRequest)[^;]{0,200}', js
+                  )
+                  for c in calls[:5]:
+                      print(f"  XHR call: {c[:120]}")
+              except Exception as e:
+                  print(f"  Error: {e}")
+          print("\n--- All API-like paths found in JS ---")
+          for a in sorted(found_apis):
+              print(f"  /{a}")
+          PYEOF
+
+          echo ""
+          echo "============================================"
+          echo "4) Try with mobile User-Agent (App headers)"
+          echo "============================================"
+          for url in \
+            "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
+            "https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=100"; do
+            echo "--- $url ---"
+            curl -s -A "$UA" \
+              -H "Accept: application/json, text/plain, */*" \
+              -H "X-Requested-With: XMLHttpRequest" \
+              --max-time 15 "$url" | head -c 500
+            echo ""
+          done
+
       - name: Fetch MPFA fund data
         run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
 

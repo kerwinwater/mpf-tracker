@@ -1,41 +1,33 @@
 #!/usr/bin/env python3
 """
-Daily NAV fetcher  —  fetch_nav.py  v3
+fetch_nav.py  v4
 =====================================================================
-Fetches today's unit prices (NAV) for all MPF funds from the MPFA
-daily price page, accumulates a rolling history, then computes real
-period returns from the actual price data.
+Two-phase strategy to get real short-period MPF returns:
 
-Data source
------------
-  https://mfp.mpfa.org.hk/tch/fund_price.jsp   (static HTML, no JS)
+Phase 1 — cfId discovery  (runs only when cf_id_map.json is missing
+          or has fewer than 200 entries)
+  Scan cf_detail.jsp?cf_id=1..CF_ID_MAX concurrently.
+  For each HTTP-200 response, extract the fund name.
+  Save to public/data/cf_id_map.json  {cf_id: fund_name}.
 
-Expected table columns (Traditional Chinese):
-  計劃名稱 | 成分基金名稱 | 基金類別 | 單位價格 | 貨幣 | 價格日期
-  Scheme   | Fund Name   | Type    | NAV     | CCY  | Date
+Phase 2 — period return fetch  (every run)
+  For each cf_id in cf_id_map, fetch cf_detail.jsp and parse the
+  return table (週/月 rows).  Match by name to funds.json.
+  Overwrite the short-period returns in funds.json.
 
-nav_history.json layout
------------------------
-{
-  "lastUpdated": "2026-04-11",
-  "dates":  ["2026-04-11", "2026-04-10", ...],   ← most-recent first
-  "navs": {
-    "fund-xxxx": [12.34, 12.30, ...]              ← aligned to dates[]
-  }
-}
+cf_detail.jsp URL
+-----------------
+  https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=<N>
 
-Period return formulas (index 0 = today, index N = N trading days ago)
-----------------------------------------------------------------------
-  oneWeek     ≈ index where date ≤ today − 7 cal days
-  oneMonth    ≈ index where date ≤ today − 30 cal days
-  threeMonths ≈ index where date ≤ today − 90 cal days
-  sixMonths   ≈ index where date ≤ today − 180 cal days
-  oneYear     ≈ index where date ≤ today − 365 cal days
-  threeYears  ≈ index where date ≤ today − 1095 cal days
-  fiveYears   ≈ index where date ≤ today − 1825 cal days
+Expected HTML structure of the return table (Traditional Chinese):
+  <table>
+    <tr><td>回報</td><td>%</td>…</tr>
+    <tr><td>1週</td><td>+1.23</td>…</tr>
+    <tr><td>1個月</td><td>+2.34</td>…</tr>
+    …
+  </table>
 
-Falls back to cyr_25 proxy values from funds.json for any period that
-lacks sufficient history.
+(Actual column layout is discovered dynamically.)
 """
 
 import argparse
@@ -44,7 +36,8 @@ import logging
 import re
 import sys
 import time
-from datetime import date, datetime, timedelta, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -58,17 +51,18 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-ROOT_DIR   = Path(__file__).parent.parent
-FUNDS_FILE = ROOT_DIR / "public" / "data" / "funds.json"
-NAV_FILE   = ROOT_DIR / "public" / "data" / "nav_history.json"
-MAX_DAYS   = 2000   # keep ~8 years
+ROOT_DIR     = Path(__file__).parent.parent
+FUNDS_FILE   = ROOT_DIR / "public" / "data" / "funds.json"
+CF_MAP_FILE  = ROOT_DIR / "public" / "data" / "cf_id_map.json"
 
-BASE_URL   = "https://mfp.mpfa.org.hk"
+BASE_URL     = "https://mfp.mpfa.org.hk"
+DETAIL_URL   = f"{BASE_URL}/tch/cf_detail.jsp"
 
-PRICE_URLS = [
-    f"{BASE_URL}/tch/fund_price.jsp",
-    f"{BASE_URL}/eng/fund_price.jsp",
-]
+CF_ID_MIN    = 1
+CF_ID_MAX    = 2000
+SCAN_WORKERS = 8          # concurrent scan workers
+MAP_MIN_SIZE = 200        # re-scan if map has fewer entries than this
+FETCH_DELAY  = 0.3        # seconds between phase-2 fetches
 
 HEADERS = {
     "User-Agent": (
@@ -83,20 +77,27 @@ HEADERS = {
     "Referer":         BASE_URL + "/tch/",
 }
 
-# Number of calendar days for each period
-PERIOD_DAYS = {
-    "oneWeek":     7,
-    "oneMonth":    30,
-    "threeMonths": 90,
-    "sixMonths":   180,
-    "oneYear":     365,
-    "threeYears":  1095,
-    "fiveYears":   1825,
+# Period label → returns dict key
+PERIOD_MAP = {
+    "1週":   "oneWeek",   "1星期": "oneWeek",   "一週":  "oneWeek",
+    "1week": "oneWeek",   "1 week": "oneWeek",
+    "1個月": "oneMonth",  "一個月": "oneMonth",  "1month": "oneMonth",
+    "1 month": "oneMonth",
+    "3個月": "threeMonths", "三個月": "threeMonths",
+    "3months": "threeMonths", "3 months": "threeMonths",
+    "6個月": "sixMonths",  "六個月": "sixMonths",
+    "6months": "sixMonths",  "6 months": "sixMonths",
+    "1年":   "oneYear",   "一年":  "oneYear",   "1year": "oneYear",
+    "1 year": "oneYear",
+    "3年":   "threeYears", "三年": "threeYears",
+    "5年":   "fiveYears",  "五年": "fiveYears",
 }
+
+SHORT_PERIODS = {"oneWeek", "oneMonth", "threeMonths", "sixMonths"}
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# HTTP
+# HTTP helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
 def make_session() -> requests.Session:
@@ -105,228 +106,157 @@ def make_session() -> requests.Session:
     return s
 
 
-def safe_get(sess, url, retries=2, **kwargs) -> Optional[requests.Response]:
-    kwargs.setdefault("timeout", 30)
-    for attempt in range(retries + 1):
-        try:
-            r = sess.get(url, **kwargs)
-            log.debug("GET %s -> %d (%d bytes)", url, r.status_code, len(r.content))
-            return r
-        except requests.RequestException as e:
-            log.warning("GET %d/%d %s: %s", attempt + 1, retries + 1, url, e)
-            if attempt < retries:
-                time.sleep(2 ** attempt)
+def _get(sess, cf_id: int, timeout=15) -> Optional[requests.Response]:
+    url = f"{DETAIL_URL}?cf_id={cf_id}"
+    try:
+        r = sess.get(url, timeout=timeout)
+        return r
+    except requests.RequestException:
+        return None
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# HTML parsing
+# ──────────────────────────────────────────────────────────────────────────────
+
+def _norm(s: str) -> str:
+    return re.sub(r"[\s\u00a0\u3000]+", " ", s).strip()
+
+
+def extract_fund_name(html: str) -> Optional[str]:
+    """Extract the fund name from a cf_detail.jsp page."""
+    soup = BeautifulSoup(html, "lxml")
+
+    # Strategy 1: look for <title> or <h1>/<h2> containing fund keywords
+    for tag in soup.find_all(["title", "h1", "h2", "h3"]):
+        t = _norm(tag.get_text())
+        if len(t) > 4 and any(k in t for k in ["基金", "Fund", "fund"]):
+            # strip site name suffix
+            t = re.split(r"[-–|]", t)[0].strip()
+            if len(t) > 4:
+                return t
+
+    # Strategy 2: first <td> or <th> in the first table that looks like a name
+    for tbl in soup.find_all("table"):
+        for row in tbl.find_all("tr")[:3]:
+            for cell in row.find_all(["td", "th"]):
+                t = _norm(cell.get_text())
+                if 5 < len(t) < 80 and any(k in t for k in ["基金", "Fund"]):
+                    return t
+
     return None
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Page parser
-# ──────────────────────────────────────────────────────────────────────────────
-
-def _parse_price(text: str) -> Optional[float]:
-    t = text.replace(",", "").strip()
+def parse_float(text: str) -> Optional[float]:
+    t = text.replace("%", "").replace(",", "").replace("+", "").strip()
+    if t in ("N/A", "NA", "n.a.", "n/a", "-", "--", ""):
+        return None
     try:
-        v = float(t)
-        return v if 0.0001 < v < 1_000_000 else None
+        return float(t)
     except ValueError:
         return None
 
 
-def _parse_date(text: str) -> Optional[str]:
-    """Return YYYY-MM-DD from various date formats."""
-    text = text.strip()
-    # DD/MM/YYYY  or  DD-MM-YYYY
-    m = re.match(r"(\d{1,2})[/-](\d{1,2})[/-](\d{4})", text)
-    if m:
-        d, mo, y = m.group(1), m.group(2), m.group(3)
-        return f"{y}-{int(mo):02d}-{int(d):02d}"
-    # YYYY-MM-DD  or  YYYY/MM/DD
-    m = re.match(r"(\d{4})[/-](\d{1,2})[/-](\d{1,2})", text)
-    if m:
-        y, mo, d = m.group(1), m.group(2), m.group(3)
-        return f"{y}-{int(mo):02d}-{int(d):02d}"
-    # DD MMM YYYY  e.g. "11 Apr 2026"
-    m = re.match(r"(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})", text)
-    if m:
-        months = {"jan":1,"feb":2,"mar":3,"apr":4,"may":5,"jun":6,
-                  "jul":7,"aug":8,"sep":9,"oct":10,"nov":11,"dec":12}
-        mo = months.get(m.group(2).lower())
-        if mo:
-            return f"{m.group(3)}-{mo:02d}-{int(m.group(1)):02d}"
-    return None
-
-
-# Column-header keywords → semantic role
-_NAME_KEYS = ["fund name", "constituent fund", "成分基金", "基金名稱", "fund"]
-_PRICE_KEYS = ["unit price", "nav", "單位價格", "price"]
-_DATE_KEYS  = ["price date", "date", "日期", "價格日期"]
-_SCHEME_KEYS = ["scheme", "計劃", "計劃名稱"]
-
-
-def _col_role(header: str) -> str:
-    h = header.lower()
-    for k in _NAME_KEYS:
-        if k in h:
-            return "name"
-    for k in _PRICE_KEYS:
-        if k in h:
-            return "price"
-    for k in _DATE_KEYS:
-        if k in h:
-            return "date"
-    for k in _SCHEME_KEYS:
-        if k in h:
-            return "scheme"
-    return "other"
-
-
-def parse_price_page(html: str) -> tuple[str, dict[str, float]]:
+def parse_returns(html: str) -> dict[str, float]:
     """
-    Returns (price_date_str, {raw_fund_name: nav_price}).
-    price_date_str is 'YYYY-MM-DD' (today's date if not found in page).
+    Parse period returns from a cf_detail.jsp page.
+
+    Looks for a table whose rows have (period_label, return_pct) pattern.
+    Returns {period_key: float_pct}.
     """
     soup = BeautifulSoup(html, "lxml")
-    page_date: Optional[str] = None
     results: dict[str, float] = {}
 
-    # Search for the date anywhere in visible text first
-    for tag in soup.find_all(string=re.compile(r"\d{1,2}[/-]\d{1,2}[/-]\d{4}")):
-        d = _parse_date(tag.strip())
-        if d:
-            page_date = d
-            break
-
-    # Try each table
     for tbl in soup.find_all("table"):
-        rows = tbl.find_all("tr")
-        if len(rows) < 2:
-            continue
-
-        # Detect header row
-        header_cells = rows[0].find_all(["th", "td"])
-        headers = [c.get_text(strip=True) for c in header_cells]
-        roles   = [_col_role(h) for h in headers]
-
-        if "name" not in roles:
-            continue  # not a fund table
-
-        name_col  = roles.index("name")
-        price_col = roles.index("price") if "price" in roles else None
-        date_col  = roles.index("date")  if "date"  in roles else None
-
-        # If no price column found, try last numeric column
-        if price_col is None:
-            price_col = len(roles) - 1
-
-        row_count = 0
-        for row in rows[1:]:
+        tbl_results: dict[str, float] = {}
+        for row in tbl.find_all("tr"):
             cells = row.find_all(["td", "th"])
-            if len(cells) <= name_col:
+            if len(cells) < 2:
                 continue
-            name = cells[name_col].get_text(strip=True)
-            if not name or len(name) < 3:
+            label = _norm(cells[0].get_text()).lower()
+            # Match against known period labels (try both cols 1 and last)
+            period_key = None
+            for raw_label, key in PERIOD_MAP.items():
+                if raw_label.lower() in label:
+                    period_key = key
+                    break
+            if period_key is None:
                 continue
+            # Try col 1, then last col
+            for col_idx in (1, len(cells) - 1):
+                val = parse_float(cells[col_idx].get_text())
+                if val is not None:
+                    tbl_results[period_key] = val
+                    break
 
-            if price_col < len(cells):
-                price = _parse_price(cells[price_col].get_text(strip=True))
-                if price:
-                    results[name] = price
-                    row_count += 1
+        if len(tbl_results) >= 2:
+            results.update(tbl_results)
 
-            if date_col is not None and date_col < len(cells) and page_date is None:
-                d = _parse_date(cells[date_col].get_text(strip=True))
-                if d:
-                    page_date = d
+    return results
 
-        if row_count > 10:
-            log.info("Parsed %d NAV rows (name_col=%d price_col=%d)",
-                     row_count, name_col, price_col)
-            break  # correct table found
 
-    if page_date is None:
-        page_date = date.today().isoformat()
+# ──────────────────────────────────────────────────────────────────────────────
+# Phase 1 — cfId discovery
+# ──────────────────────────────────────────────────────────────────────────────
 
-    return page_date, results
+def scan_cf_ids(cf_id_range: range, workers: int = SCAN_WORKERS) -> dict[str, str]:
+    """
+    Concurrently probe cf_id values.
+    Returns {cf_id_str: fund_name} for valid (HTTP 200) pages.
+    """
+    found: dict[str, str] = {}
+
+    def probe(cf_id: int) -> tuple[int, Optional[str]]:
+        sess = make_session()
+        r = _get(sess, cf_id)
+        if r is None or r.status_code != 200:
+            return cf_id, None
+        r.encoding = r.apparent_encoding or "utf-8"
+        name = extract_fund_name(r.text)
+        return cf_id, name
+
+    total = len(cf_id_range)
+    done  = 0
+    log.info("Scanning cf_id %d–%d with %d workers …",
+             cf_id_range.start, cf_id_range.stop - 1, workers)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {pool.submit(probe, i): i for i in cf_id_range}
+        for fut in as_completed(futures):
+            done += 1
+            cf_id, name = fut.result()
+            if name:
+                found[str(cf_id)] = name
+                log.info("  cfId=%-5d  %s", cf_id, name[:60])
+            if done % 200 == 0:
+                log.info("  Progress: %d/%d  found=%d", done, total, len(found))
+
+    log.info("Scan complete: %d valid cfIds found out of %d probed",
+             len(found), total)
+    return found
 
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Name matching
 # ──────────────────────────────────────────────────────────────────────────────
 
-def _norm(s: str) -> str:
-    return re.sub(r"[\s\u3000\u00a0]+", " ", s).strip().lower()
+def _norm_match(s: str) -> str:
+    return re.sub(r"[^a-z0-9\u4e00-\u9fff]", "", s.lower())
 
 
-def build_price_lookup(raw: dict[str, float]) -> dict[str, float]:
-    """Return {normalised_name: price}."""
-    return {_norm(k): v for k, v in raw.items()}
+def build_fund_index(funds: list) -> dict[str, dict]:
+    return {_norm_match(f["name"]): f for f in funds}
 
 
-def match_fund(fund_name: str, lookup: dict[str, float]) -> Optional[float]:
-    norm = _norm(fund_name)
-    if norm in lookup:
-        return lookup[norm]
-    # Substring match
-    for k, v in lookup.items():
-        if k in norm or norm in k:
-            return v
+def match_to_fund(api_name: str, index: dict[str, dict]) -> Optional[dict]:
+    key = _norm_match(api_name)
+    if key in index:
+        return index[key]
+    # Substring
+    for k, f in index.items():
+        if k in key or key in k:
+            return f
     return None
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# NAV history I/O
-# ──────────────────────────────────────────────────────────────────────────────
-
-def load_history() -> dict:
-    if NAV_FILE.exists():
-        try:
-            with open(NAV_FILE, encoding="utf-8") as fh:
-                return json.load(fh)
-        except Exception:
-            pass
-    return {"lastUpdated": "", "dates": [], "navs": {}}
-
-
-def save_history(hist: dict) -> None:
-    NAV_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(NAV_FILE, "w", encoding="utf-8") as fh:
-        json.dump(hist, fh, ensure_ascii=False, separators=(",", ":"))
-    log.info("nav_history.json saved (%d dates, %d funds)",
-             len(hist["dates"]), len(hist["navs"]))
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Period return calculation
-# ──────────────────────────────────────────────────────────────────────────────
-
-def compute_returns(fund_id: str, hist: dict, fallback: dict) -> dict:
-    """Compute period returns from history; fall back to existing values."""
-    dates = hist["dates"]  # list of "YYYY-MM-DD", most-recent first
-    navs  = hist["navs"].get(fund_id, [])
-
-    if not navs or navs[0] is None:
-        return fallback
-
-    today_nav = navs[0]
-    today_str = dates[0]
-    today_dt  = date.fromisoformat(today_str)
-
-    def _pct(days: int) -> Optional[float]:
-        target = today_dt - timedelta(days=days)
-        # Find latest date ≤ target
-        for i, d_str in enumerate(dates):
-            if date.fromisoformat(d_str) <= target:
-                if i < len(navs) and navs[i] is not None and navs[i] > 0:
-                    return round((today_nav / navs[i] - 1) * 100, 4)
-                break
-        return None
-
-    result = {}
-    for key, days in PERIOD_DAYS.items():
-        v = _pct(days)
-        result[key] = v if v is not None else fallback.get(key, 0.0)
-
-    return result
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -334,134 +264,107 @@ def compute_returns(fund_id: str, hist: dict, fallback: dict) -> dict:
 # ──────────────────────────────────────────────────────────────────────────────
 
 def main():
-    ap = argparse.ArgumentParser(description="Fetch MPFA daily NAV and compute returns")
-    ap.add_argument("--save-html", metavar="PATH",
-                    help="Save raw HTML of price page for diagnosis")
-    ap.add_argument("--dry-run", action="store_true",
-                    help="Parse but do not write output files")
+    ap = argparse.ArgumentParser(description="fetch_nav.py v4 — cfId scan + detail fetch")
+    ap.add_argument("--force-scan", action="store_true",
+                    help="Force re-scan even if cf_id_map.json already has data")
+    ap.add_argument("--max-cf-id",  type=int, default=CF_ID_MAX)
+    ap.add_argument("--workers",    type=int, default=SCAN_WORKERS)
+    ap.add_argument("--delay",      type=float, default=FETCH_DELAY)
+    ap.add_argument("--dry-run",    action="store_true")
     args = ap.parse_args()
 
     log.info("=" * 60)
-    log.info("fetch_nav.py v3  —  MPFA daily NAV  %s", PRICE_URLS[0])
+    log.info("fetch_nav.py v4  —  cfId scan + period return fetch")
     log.info("=" * 60)
 
-    # ── Load fund list ─────────────────────────────────────────────────────────
-    if not FUNDS_FILE.exists():
-        log.error("funds.json not found"); sys.exit(1)
-
+    # ── Load funds ─────────────────────────────────────────────────────────────
     with open(FUNDS_FILE, encoding="utf-8") as fh:
         funds_data = json.load(fh)
-    funds = funds_data.get("funds", [])
-    log.info("Loaded %d funds from funds.json", len(funds))
+    funds = funds_data["funds"]
+    fund_index = build_fund_index(funds)
+    log.info("Loaded %d funds", len(funds))
 
-    # ── Fetch price page ───────────────────────────────────────────────────────
-    sess = make_session()
-    html = None
-    used_url = None
+    # ── Load / build cfId map ──────────────────────────────────────────────────
+    cf_map: dict[str, str] = {}
+    if CF_MAP_FILE.exists() and not args.force_scan:
+        try:
+            cf_map = json.loads(CF_MAP_FILE.read_text(encoding="utf-8"))
+            log.info("Loaded cf_id_map.json: %d entries", len(cf_map))
+        except Exception:
+            cf_map = {}
 
-    for url in PRICE_URLS:
-        r = safe_get(sess, url)
-        if r and r.status_code == 200:
-            r.encoding = r.apparent_encoding or "utf-8"
-            html = r.text
-            used_url = url
-            log.info("Fetched %d bytes from %s", len(html), url)
-            break
-        else:
-            log.warning("GET %s -> %s", url,
-                        r.status_code if r else "connection error")
-
-    if html is None:
-        log.error("Could not fetch any NAV price page")
-        sys.exit(1)
-
-    if args.save_html:
-        Path(args.save_html).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.save_html).write_text(html[:200_000], encoding="utf-8")
-        log.info("Saved HTML snippet -> %s", args.save_html)
-
-    # ── Parse today's prices ───────────────────────────────────────────────────
-    price_date, raw_prices = parse_price_page(html)
-    log.info("Price date: %s  |  raw rows: %d", price_date, len(raw_prices))
-
-    if len(raw_prices) < 10:
-        # Diagnostic: print page structure hints
-        soup = BeautifulSoup(html, "lxml")
-        tables = soup.find_all("table")
-        log.warning("Only %d price rows parsed — page has %d tables",
-                    len(raw_prices), len(tables))
-        for i, t in enumerate(tables[:5]):
-            rows = t.find_all("tr")
-            if rows:
-                hdrs = [c.get_text(strip=True) for c in rows[0].find_all(["th","td"])]
-                log.warning("  table[%d]: %d rows, headers=%s", i, len(rows), hdrs[:8])
-        log.error("Insufficient data — aborting")
-        sys.exit(1)
-
-    lookup = build_price_lookup(raw_prices)
-
-    # ── Load existing history ──────────────────────────────────────────────────
-    hist = load_history()
-    dates: list = hist.get("dates", [])
-    nav_store: dict = hist.get("navs", {})
-
-    # Insert today's prices (skip if date already present)
-    if price_date in dates:
-        log.info("Date %s already in history — updating prices only", price_date)
-        idx = dates.index(price_date)
+    if len(cf_map) < MAP_MIN_SIZE or args.force_scan:
+        log.info("Running Phase 1: cfId discovery (1–%d)", args.max_cf_id)
+        new_map = scan_cf_ids(range(CF_ID_MIN, args.max_cf_id + 1), args.workers)
+        cf_map.update(new_map)
+        if not args.dry_run:
+            CF_MAP_FILE.parent.mkdir(parents=True, exist_ok=True)
+            CF_MAP_FILE.write_text(
+                json.dumps(cf_map, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            log.info("cf_id_map.json saved: %d entries", len(cf_map))
     else:
-        dates.insert(0, price_date)
-        idx = 0
-        # Extend every fund's array by 1 at the front
-        for fid in nav_store:
-            nav_store[fid].insert(0, None)
+        log.info("Phase 1 skipped (map has %d entries)", len(cf_map))
 
-    # Trim to MAX_DAYS
-    if len(dates) > MAX_DAYS:
-        dates = dates[:MAX_DAYS]
-        nav_store = {k: v[:MAX_DAYS] for k, v in nav_store.items()}
+    if not cf_map:
+        log.error("cf_id map is empty — cannot fetch returns"); sys.exit(1)
 
-    matched = 0
-    for fund in funds:
-        fid   = fund["id"]
-        price = match_fund(fund["name"], lookup)
-        if price is None:
+    # ── Phase 2: fetch period returns ─────────────────────────────────────────
+    log.info("Phase 2: fetching period returns for %d funds", len(cf_map))
+    sess     = make_session()
+    matched  = 0
+    enriched = 0
+    no_data  = 0
+
+    for i, (cf_id_str, map_name) in enumerate(cf_map.items()):
+        r = _get(sess, int(cf_id_str))
+        if r is None or r.status_code != 200:
+            log.debug("SKIP cfId=%s (%s)", cf_id_str, map_name[:30])
+            no_data += 1
+            if args.delay:
+                time.sleep(args.delay)
             continue
-        matched += 1
 
-        if fid not in nav_store:
-            nav_store[fid] = [None] * len(dates)
-        if idx < len(nav_store[fid]):
-            nav_store[fid][idx] = price
+        r.encoding = r.apparent_encoding or "utf-8"
+        returns = parse_returns(r.text)
+
+        # Try to match to a fund
+        fund = match_to_fund(map_name, fund_index)
+        if fund is None:
+            # Also try name extracted fresh from this page
+            fresh_name = extract_fund_name(r.text)
+            if fresh_name:
+                fund = match_to_fund(fresh_name, fund_index)
+
+        if fund is None:
+            log.debug("No fund match for cfId=%s name=%s", cf_id_str, map_name[:40])
+            no_data += 1
         else:
-            # Pad and set
-            nav_store[fid] += [None] * (idx - len(nav_store[fid]) + 1)
-            nav_store[fid][idx] = price
+            matched += 1
+            short = {k: v for k, v in returns.items() if k in SHORT_PERIODS}
+            if short:
+                fund["returns"].update(short)
+                enriched += 1
+                if enriched <= 5:
+                    log.info("  cfId=%-5s  %-40s  1W=%.2f%%  1M=%.2f%%",
+                             cf_id_str, fund["name"][:40],
+                             fund["returns"].get("oneWeek", 0),
+                             fund["returns"].get("oneMonth", 0))
 
-    log.info("Matched %d / %d funds to today's prices", matched, len(funds))
+        if i % 100 == 99:
+            log.info("Phase 2 progress: %d/%d  matched=%d  enriched=%d",
+                     i + 1, len(cf_map), matched, enriched)
 
-    hist_out = {
-        "lastUpdated": price_date,
-        "dates":       dates,
-        "navs":        nav_store,
-    }
+        if args.delay:
+            time.sleep(args.delay)
 
-    if not args.dry_run:
-        save_history(hist_out)
+    log.info("Phase 2 done: matched=%d  enriched=%d  no_data=%d",
+             matched, enriched, no_data)
 
-    # ── Compute returns & update funds.json ────────────────────────────────────
-    updated = 0
-    for fund in funds:
-        fid = fund["id"]
-        if fid not in nav_store:
-            continue
-        new_ret = compute_returns(fid, hist_out, fund.get("returns", {}))
-        fund["returns"] = new_ret
-        fund["nav"]     = nav_store[fid][0] if nav_store[fid] else fund.get("nav", 10.0)
-        updated += 1
+    if enriched == 0:
+        log.warning("0 funds enriched — short-period returns unchanged (proxy values kept)")
 
-    log.info("Updated returns for %d funds", updated)
-
+    # ── Save funds.json ────────────────────────────────────────────────────────
     if not args.dry_run:
         hkt = timezone(timedelta(hours=8))
         now_hkt = datetime.now(hkt)
@@ -469,19 +372,16 @@ def main():
         funds_data["lastUpdatedHKT"] = now_hkt.strftime("%Y-%m-%d %H:%M HKT")
         funds_data["note"] = (
             f"mfp.mpfa.org.hk | {len(funds)} funds | "
-            f"NAV from fund_price.jsp ({price_date}) | "
-            f"history: {len(dates)} days | "
-            f"returns computed from daily prices"
+            f"short-period from cf_detail.jsp ({enriched} enriched); "
+            f"1Y/3Y/5Y from list page"
         )
         funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
         funds_data["funds"] = funds
-
         with open(FUNDS_FILE, "w", encoding="utf-8") as fh:
             json.dump(funds_data, fh, ensure_ascii=False, indent=2)
         log.info("funds.json saved")
 
-    log.info("Done. matched=%d updated=%d history_days=%d",
-             matched, updated, len(dates))
+    log.info("Done.")
 
 
 if __name__ == "__main__":

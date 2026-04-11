@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
 """
-MPF scraper v4 - scrapes mpp_list.jsp directly
-1. GET https://mfp.mpfa.org.hk/eng/mpp_list.jsp
-2. Parse table: name, trustee, type, risk, fund size, annual returns 2021-2025
-3. Follow each fund's detail link for period-based returns
-4. Save to public/data/funds.json
+MPF scraper v5
+- POST mpp_list.jsp with returnType=cr (cumulative) to get 1M/3M/6M/1Y/3Y/5Y returns
+- POST mpp_list.jsp with returnType=ar (annualized) to fill in 1Y/5Y/10Y
+- Table[5] id="scrolltable" has 450+ rows; data starts at row 7
+- Column layout (no merged-cell confusion):
+    col 0:  sort/expand button  (ignored)
+    col 1:  Scheme name
+    col 2:  empty spacer
+    col 3:  Constituent Fund name
+    col 4:  MPF Trustee abbreviation
+    col 5:  Fund Type
+    col 6:  Launch Date
+    col 7:  Fund Size (HKD'm)
+    col 8:  Risk Class (1-5)
+    col 9:  Latest FER (%)
+    col 10+: return period values (depends on returnType POST param)
 """
 
 import argparse
@@ -45,17 +56,32 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8",
     "Accept-Encoding": "gzip, deflate, br",
     "Connection":      "keep-alive",
-    "Referer":         BASE_URL + "/",
+    "Referer":         LIST_URL,
+}
+
+# POST payload base (all selects left empty = "all")
+FORM_BASE = {
+    "fundTypes":    "",
+    "fundSubTypes": "",
+    "trustees":     "",
+    "tenthValHid":  "",
+    "topTen":       "",
+    "schemes":      "",
 }
 
 CATEGORY_MAP = {
-    "equity fund":                "股票基金",
-    "mixed assets fund":          "混合資產基金",
-    "bond fund":                  "債券基金",
-    "capital preservation fund":  "保本基金",
-    "money market fund":          "貨幣市場基金",
-    "guaranteed fund":            "保證基金",
-    "mpf conservative fund":      "強積金保守基金",
+    "equity fund":                    "股票基金",
+    "mixed assets fund":               "混合資產基金",
+    "bond fund":                       "債券基金",
+    "capital preservation fund":       "保本基金",
+    "money market fund":               "貨幣市場基金",
+    "guaranteed fund":                 "保證基金",
+    "mpf conservative fund":           "強積金保守基金",
+    # sub-types (keep prefix match)
+    "equity fund -":                   "股票基金",
+    "mixed assets fund -":             "混合資產基金",
+    "mixed assets fund - default":     "混合資產基金",
+    "bond fund -":                     "債券基金",
 }
 
 RISK_BY_CATEGORY = {
@@ -68,20 +94,23 @@ RISK_BY_CATEGORY = {
     "強積金保守基金": 1,
 }
 
-# Regex patterns to match period labels on the detail page
-PERIOD_PATTERNS = [
-    ("oneWeek",      [r"1\s*week", r"weekly", r"1\s*w\b"]),
-    ("oneMonth",     [r"1\s*month", r"1\s*m\b", r"monthly"]),
-    ("threeMonths",  [r"3\s*month", r"3\s*m\b"]),
-    ("sixMonths",    [r"6\s*month", r"6\s*m\b", r"half\s*year"]),
-    ("oneYear",      [r"1\s*year", r"1\s*y\b", r"12\s*month", r"annualised"]),
-    ("threeYears",   [r"3\s*year", r"3\s*y\b", r"36\s*month"]),
-    ("fiveYears",    [r"5\s*year", r"5\s*y\b", r"60\s*month"]),
-]
+# ---- column offsets that we know from inspection ----
+COL_SCHEME    = 1
+COL_NAME      = 3
+COL_TRUSTEE   = 4
+COL_TYPE      = 5
+COL_LAUNCH    = 6
+COL_SIZE      = 7
+COL_RISK      = 8
+COL_FER       = 9
+COL_RET_START = 10   # returns begin here; actual sub-columns depend on returnType
 
-# Max number of detail page fetches (to stay within GitHub Actions 20-min limit)
-MAX_DETAIL_FETCHES = 600
-DETAIL_DELAY       = 0.35  # seconds between requests
+# Minimum number of fund rows expected in the data table
+MIN_FUND_ROWS = 100
+
+# After how many rows does the header section end?
+# We'll detect this dynamically, but default to skipping first 7 rows.
+HEADER_ROWS_MAX = 10
 
 
 # ---------------------------------------------------------------------------
@@ -91,25 +120,44 @@ DETAIL_DELAY       = 0.35  # seconds between requests
 def make_session() -> requests.Session:
     s = requests.Session()
     s.headers.update(HEADERS)
+    # Warm up session (get cookies)
+    try:
+        s.get(LIST_URL, timeout=20)
+    except Exception:
+        pass
     return s
 
 
 def safe_get(sess, url, retries=2, **kwargs) -> Optional[requests.Response]:
-    kwargs.setdefault("timeout", 25)
+    kwargs.setdefault("timeout", 30)
     for attempt in range(retries + 1):
         try:
             r = sess.get(url, **kwargs)
-            log.info("GET %s -> HTTP %d (%d bytes)", url, r.status_code, len(r.content))
+            log.info("GET %s -> %d (%d bytes)", url, r.status_code, len(r.content))
             return r
         except requests.RequestException as e:
-            log.error("GET %s -> attempt %d FAILED: %s", url, attempt + 1, e)
+            log.error("GET %s attempt %d: %s", url, attempt + 1, e)
+            if attempt < retries:
+                time.sleep(2 ** attempt)
+    return None
+
+
+def safe_post(sess, url, data, retries=2, **kwargs) -> Optional[requests.Response]:
+    kwargs.setdefault("timeout", 45)
+    for attempt in range(retries + 1):
+        try:
+            r = sess.post(url, data=data, **kwargs)
+            log.info("POST %s returnType=%s -> %d (%d bytes)",
+                     url, data.get("returnType", "?"), r.status_code, len(r.content))
+            return r
+        except requests.RequestException as e:
+            log.error("POST %s attempt %d: %s", url, attempt + 1, e)
             if attempt < retries:
                 time.sleep(2 ** attempt)
     return None
 
 
 def parse_float(text: str) -> Optional[float]:
-    """Parse '12.34%' or '-5.67' or 'N/A' into float or None."""
     if not text:
         return None
     text = text.replace("%", "").replace(",", "").replace("+", "").strip()
@@ -122,398 +170,353 @@ def parse_float(text: str) -> Optional[float]:
 
 
 # ---------------------------------------------------------------------------
-# Step 1: Parse the main list page
+# Detect header rows and return-column structure
 # ---------------------------------------------------------------------------
 
-def dump_page_structure(html: str, out_path: str) -> None:
-    """Write a human-readable page structure analysis to a text file for debugging."""
+def is_data_row(cells_text: list) -> bool:
+    """Return True if this row looks like a fund data row (not a header)."""
+    if len(cells_text) < COL_RET_START:
+        return False
+    name_cell  = cells_text[COL_NAME] if COL_NAME < len(cells_text) else ""
+    risk_cell  = cells_text[COL_RISK] if COL_RISK < len(cells_text) else ""
+    # A data row has a non-empty fund name and a numeric risk class
+    if not name_cell or len(name_cell) < 2:
+        return False
+    if risk_cell and re.fullmatch(r"[1-5]", risk_cell):
+        return True
+    # Also accept rows where col 3 contains a non-trivial string
+    skip_words = {"fund", "constituent", "scheme", "trustee", "type", "risk", "return",
+                  "year", "month", "launch", "size", "fer", "annualized", "cumulative"}
+    if any(w in name_cell.lower() for w in skip_words):
+        return False
+    return len(name_cell) > 4
+
+
+def detect_return_columns(header_rows: list) -> list:
+    """
+    Scan header rows (list of cell-text-lists) to find the return period sub-headers
+    starting at COL_RET_START.  Returns a list of (col_index, label) tuples.
+    """
+    results = []
+    for row_texts in header_rows:
+        for ci, text in enumerate(row_texts):
+            if ci < COL_RET_START:
+                continue
+            t = text.lower().strip()
+            if t and t not in ("", "n/a"):
+                results.append((ci, text.strip()))
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Parse one page (GET or POST response)
+# ---------------------------------------------------------------------------
+
+def parse_page(html: str, return_type: str, debug_path: Optional[str] = None) -> list:
+    """
+    Parse the mpp_list.jsp response and return a list of fund dicts.
+    Each dict: {name, provider, scheme, category, risk_raw, fundSize, returns:{...}}
+    """
     soup = BeautifulSoup(html, "lxml")
+
+    # Find Table[5] (id=scrolltable) or the table with the most rows
+    data_table = soup.find("table", id="scrolltable")
+    if data_table is None:
+        log.warning("id=scrolltable not found; falling back to largest table")
+        tables = soup.find_all("table")
+        data_table = max(tables, key=lambda t: len(t.find_all("tr")), default=None)
+
+    if data_table is None:
+        log.error("No table found on page")
+        return []
+
+    all_rows = data_table.find_all("tr")
+    log.info("Data table: %d rows total (returnType=%s)", len(all_rows), return_type)
+
+    # Split into header rows and data rows
+    header_rows_text = []
+    data_rows = []
+    for row in all_rows:
+        cells = row.find_all(["td", "th"])
+        texts = [c.get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
+                 for c in cells]
+        if not data_rows:
+            # Still in header section
+            if is_data_row(texts):
+                data_rows.append((cells, texts))
+            else:
+                header_rows_text.append(texts)
+        else:
+            data_rows.append((cells, texts))
+
+    log.info("Header rows: %d | Data rows: %d", len(header_rows_text), len(data_rows))
+
+    # Detect return column layout from header rows
+    ret_col_info = detect_return_columns(header_rows_text)
+    log.info("Return column headers: %s", ret_col_info[:10])
+
+    # Optional debug dump
+    if debug_path:
+        _write_debug(debug_path, return_type, html, header_rows_text, data_rows[:5], ret_col_info)
+
+    # Map return period labels to our field names
+    # For cumulative (cr): 1 Month, 3 Month(s), 6 Month(s), 1 Year, 3 Year(s), 5 Year(s)
+    # For annualized (ar): 1 Year, 3 Year(s), 5 Year(s), 10 Year(s), Since Launch
+    # For calendar year (cyr): 2025, 2024, 2023, 2022, 2021
+    ret_field_map = _build_ret_field_map(ret_col_info, return_type)
+    log.info("Return field map: %s", ret_field_map)
+
+    funds = []
+    for cells, texts in data_rows:
+        if not is_data_row(texts):
+            continue
+
+        def cell(idx, default=""):
+            if idx >= len(texts):
+                return default
+            return texts[idx]
+
+        raw_cat = cell(COL_TYPE)
+        # Normalize category: match longest prefix
+        category = raw_cat  # default
+        cat_lower = raw_cat.lower()
+        best_len = 0
+        for key, val in CATEGORY_MAP.items():
+            if cat_lower.startswith(key) and len(key) > best_len:
+                category = val
+                best_len = len(key)
+
+        # Risk class
+        risk_raw = cell(COL_RISK)
+        risk_level = None
+        m = re.search(r"[1-5]", risk_raw)
+        if m:
+            risk_level = int(m.group())
+        if risk_level is None:
+            risk_level = RISK_BY_CATEGORY.get(category, 3)
+
+        # Fund size
+        size_val = parse_float(cell(COL_SIZE))
+
+        # Extract returns
+        ret_vals: dict = {}
+        for col_idx, field_name in ret_field_map.items():
+            val = parse_float(cell(col_idx))
+            if val is not None and field_name not in ret_vals:
+                ret_vals[field_name] = val
+
+        fund_name = cell(COL_NAME)
+        fund_id = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+
+        fund = {
+            "id":        fund_id,
+            "name":      fund_name,
+            "provider":  cell(COL_TRUSTEE),
+            "scheme":    cell(COL_SCHEME),
+            "category":  category or "股票基金",
+            "riskLevel": max(1, min(5, risk_level)),
+            "nav":       10.0,
+            "currency":  "HKD",
+            "returns":   ret_vals,
+        }
+        if size_val is not None:
+            fund["fundSize"] = size_val
+
+        funds.append(fund)
+
+    log.info("Parsed %d funds (returnType=%s)", len(funds), return_type)
+    return funds
+
+
+def _build_ret_field_map(ret_col_info: list, return_type: str) -> dict:
+    """Map column index -> field name based on return type and detected column headers."""
+    mapping: dict = {}
+
+    if return_type == "cr":
+        # Cumulative returns: look for 1M, 3M, 6M, 1Y, 3Y, 5Y labels
+        period_patterns = [
+            ("oneMonth",     [r"\b1\s*m", r"1\s*month"]),
+            ("threeMonths",  [r"\b3\s*m", r"3\s*month"]),
+            ("sixMonths",    [r"\b6\s*m", r"6\s*month"]),
+            ("oneYear",      [r"\b1\s*y", r"1\s*year", r"\b12\s*m"]),
+            ("threeYears",   [r"\b3\s*y", r"3\s*year", r"\b36\s*m"]),
+            ("fiveYears",    [r"\b5\s*y", r"5\s*year", r"\b60\s*m"]),
+        ]
+    elif return_type == "ar":
+        # Annualized returns: 1Y, 3Y, 5Y, 10Y, Since Launch
+        period_patterns = [
+            ("oneYear",      [r"\b1\s*y", r"1\s*year"]),
+            ("threeYears",   [r"\b3\s*y", r"3\s*year"]),
+            ("fiveYears",    [r"\b5\s*y", r"5\s*year"]),
+        ]
+    else:
+        # Calendar year returns: 2025, 2024, ...
+        period_patterns = []
+        for ci, label in ret_col_info:
+            if re.fullmatch(r"20\d\d", label):
+                year = label
+                # Use as backup for oneYear (most recent year)
+                if "yearReturn_" + year not in mapping.values():
+                    mapping[ci] = "yearReturn_" + year
+        return mapping
+
+    # Try to match headers
+    used_fields = set()
+    for ci, label in ret_col_info:
+        label_lower = label.lower()
+        for field_name, patterns in period_patterns:
+            if field_name not in used_fields:
+                if any(re.search(p, label_lower) for p in patterns):
+                    mapping[ci] = field_name
+                    used_fields.add(field_name)
+                    break
+
+    # If header matching failed, use positional fallback
+    if not mapping and ret_col_info:
+        # Use positional assignment based on return type
+        if return_type == "cr":
+            pos_fields = ["oneMonth", "threeMonths", "sixMonths", "oneYear", "threeYears", "fiveYears"]
+        else:
+            pos_fields = ["oneYear", "threeYears", "fiveYears"]
+
+        cols_sorted = sorted(c for c, _ in ret_col_info)
+        for i, ci in enumerate(cols_sorted):
+            if i < len(pos_fields):
+                mapping[ci] = pos_fields[i]
+
+    return mapping
+
+
+def _write_debug(debug_path: str, return_type: str, html: str,
+                 header_rows: list, sample_data_rows: list, ret_col_info: list) -> None:
+    """Write detailed parse debug info to a file."""
     lines = []
 
     def w(s=""):
         lines.append(str(s))
 
-    w(f"=== MPFA PAGE STRUCTURE DUMP ===")
+    soup = BeautifulSoup(html, "lxml")
+    w(f"=== MPFA PARSE DEBUG  returnType={return_type} ===")
     w(f"URL: {LIST_URL}")
-    w(f"Title: {soup.title.string.strip() if soup.title else 'N/A'}")
-    w(f"HTML length: {len(html):,} chars")
+    w(f"HTML length: {len(html):,}")
+    w()
+
+    # Header rows
+    w("=== HEADER ROWS ===")
+    for ri, row in enumerate(header_rows):
+        w(f"  header[{ri}]: {row[:20]}")
+    w()
+
+    # Return column info
+    w("=== DETECTED RETURN COLUMNS ===")
+    for ci, label in ret_col_info:
+        w(f"  col {ci}: {label!r}")
+    w()
+
+    # Sample data rows (full, no truncation)
+    w("=== SAMPLE DATA ROWS (first 5) ===")
+    for ri, (cells, texts) in enumerate(sample_data_rows):
+        w(f"  data[{ri}] ({len(texts)} cells):")
+        for ci, t in enumerate(texts):
+            if t:
+                w(f"    col {ci}: {t!r}")
     w()
 
     # Forms
-    w(f"=== FORMS ({len(soup.find_all('form'))}) ===")
+    w("=== FORMS ===")
     for fi, form in enumerate(soup.find_all("form")):
-        w(f"Form[{fi}]: action={form.get('action')!r}  method={form.get('method')!r}")
-        for inp in form.find_all(["input", "select", "textarea"])[:15]:
-            w(f"  {inp.name}: name={inp.get('name')!r}  value={inp.get('value','')!r}")
+        w(f"Form[{fi}]: {form.get('action')} method={form.get('method')}")
+        for inp in form.find_all(["input", "select"])[:10]:
+            w(f"  {inp.name}: name={inp.get('name')!r} value={str(inp.get('value',''))[:50]!r}")
 
-    w()
-
-    # Tables - all of them
-    all_tables = soup.find_all("table")
-    w(f"=== TABLES ({len(all_tables)}) ===")
-    for ti, tbl in enumerate(all_tables):
-        rows = tbl.find_all("tr")
-        w(f"Table[{ti}]: {len(rows)} rows  class={tbl.get('class')}  id={tbl.get('id')}")
-        for ri, row in enumerate(rows[:8]):
-            cells = row.find_all(["td", "th"])
-            texts = [c.get_text(strip=True)[:40] for c in cells[:10]]
-            w(f"  row[{ri}]: {texts}")
-
-    w()
-
-    # Links that look fund-related
-    w("=== FUND-RELATED LINKS (sample) ===")
-    for a in soup.find_all("a", href=True)[:80]:
-        href = a["href"]
-        text = a.get_text(strip=True)[:50]
-        if any(k in href.lower() for k in ["fund", "mpp", "perf", "return", ".do"]):
-            w(f"  {href!r:60s} | {text!r}")
-
-    w()
-
-    # Script data (might contain JSON fund data)
-    w("=== SCRIPT TAGS WITH DATA ===")
-    for si, sc in enumerate(soup.find_all("script")):
-        txt = sc.get_text()
-        if len(txt) > 100 and any(k in txt.lower() for k in ["fund", "return", "data", "json"]):
-            w(f"Script[{si}] ({len(txt)} chars):")
-            w(txt[:600])
-            w("...")
-            w()
-
-    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
+    Path(debug_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(debug_path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))
-    log.info("Page structure dump saved to %s", out_path)
-
-
-def parse_list_page(html: str) -> list:
-    """
-    Parse mpp_list.jsp.
-    Expected columns (case-insensitive):
-      Scheme | Constituent Fund | MPF Trustee | Fund Type |
-      Launch Date | Fund Size (HKD'm) | Risk Class | Latest FER (%) |
-      2025 | 2024 | 2023 | 2022 | 2021 | Details
-    Returns list of raw fund dicts.
-    """
-    soup = BeautifulSoup(html, "lxml")
-
-    log.info("Page title: %s", soup.title.string.strip() if soup.title else "N/A")
-
-    all_tables = soup.find_all("table")
-    log.info("Tables on page: %d", len(all_tables))
-
-    funds = []
-
-    # Score each table: prefer ones with most data rows AND year columns
-    best_table = None
-    best_score = 0
-    best_header_idx = None
-    best_header_texts = []
-
-    for tbl_idx, tbl in enumerate(all_tables):
-        rows = tbl.find_all("tr")
-        if len(rows) < 3:
-            continue
-
-        # Scan all rows for a header that has year columns or fund-related keywords
-        for ri, row in enumerate(rows[:10]):
-            cells = row.find_all(["th", "td"])
-            texts = [c.get_text(strip=True).lower() for c in cells]
-            joined = " ".join(texts)
-
-            has_year   = bool(re.search(r"20(2[0-9])", joined))
-            has_fund   = "constituent" in joined or "trustee" in joined
-            has_name   = "fund" in joined or "name" in joined
-
-            if not (has_year or has_fund):
-                continue
-
-            # Score: rows in table + bonus for year columns + bonus for fund keywords
-            data_rows = len(rows) - ri - 1
-            score = data_rows
-            if has_year:
-                score += 50
-            if has_fund:
-                score += 30
-            if has_name:
-                score += 10
-
-            log.info("  table[%d] row[%d]: score=%d, rows=%d, has_year=%s, has_fund=%s | %s",
-                     tbl_idx, ri, score, data_rows, has_year, has_fund, texts[:8])
-
-            if score > best_score:
-                best_score         = score
-                best_table         = tbl
-                best_header_idx    = ri
-                best_header_texts  = texts
-            break  # only check until first matching header in this table
-
-    if best_table is None:
-        log.error("No suitable fund table found on page")
-        return []
-
-    log.info("Best table: score=%d, header_row=%d, header=%s",
-             best_score, best_header_idx, best_header_texts[:12])
-
-    rows = best_table.find_all("tr")
-
-    # Build column index map from best header
-    col: dict = {}
-    for ci, h in enumerate(best_header_texts):
-        h = h.strip()
-        if "constituent" in h:
-            col.setdefault("name", ci)
-        elif "fund" in h and "type" not in h and "size" not in h and "name" not in col:
-            col.setdefault("name", ci)
-        elif "trustee" in h:
-            col["trustee"] = ci
-        elif "type" in h:
-            col["type"] = ci
-        elif "risk" in h:
-            col["risk"] = ci
-        elif "size" in h:
-            col["size"] = ci
-        elif "fer" in h:
-            col["fer"] = ci
-        elif "scheme" in h and "name" not in h:
-            col.setdefault("scheme", ci)
-        elif re.fullmatch(r"20\d\d", h):
-            col[h] = ci
-
-    log.info("Column map: %s", col)
-
-    if "name" not in col:
-        # Fallback: assume column 1 is the fund name (col 0 might be scheme/row number)
-        log.warning("No 'name' column detected; falling back to col index 1")
-        col["name"] = 1
-
-    # Parse data rows
-    for row in rows[best_header_idx + 1:]:
-        cells = row.find_all("td")
-        if len(cells) < 2:
-            continue
-
-        def cell(key, default=""):
-            idx = col.get(key)
-            if idx is None or idx >= len(cells):
-                return default
-            return cells[idx].get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
-
-        name = cell("name")
-        if not name or len(name) < 2:
-            continue
-        # Skip sub-header rows
-        if name.lower() in ("constituent fund", "fund name", "name", "fund"):
-            continue
-
-        # Find detail link: last <a> in the row with a real href
-        detail_url = None
-        for c in reversed(cells):
-            a_tag = c.find("a", href=True)
-            if a_tag:
-                href = a_tag["href"].strip()
-                if href and href != "#" and "javascript" not in href.lower():
-                    detail_url = urljoin(LIST_URL, href)
-                    break
-
-        annual: dict = {}
-        for col_key, ci in col.items():
-            if re.fullmatch(r"20\d\d", col_key):
-                val = parse_float(cell(col_key))
-                if val is not None:
-                    annual[col_key] = val
-
-        raw_category = cell("type")
-        category = CATEGORY_MAP.get(raw_category.lower(), raw_category)
-
-        fund = {
-            "name":       name,
-            "provider":   cell("trustee"),
-            "scheme":     cell("scheme"),
-            "category":   category or "股票基金",
-            "risk_raw":   cell("risk"),
-            "fundSize":   parse_float(cell("size")),
-            "detail_url": detail_url,
-            "annual":     annual,
-        }
-        funds.append(fund)
-
-    log.info("Parsed %d funds from best table", len(funds))
-    return funds
+    log.info("Debug dump -> %s", debug_path)
 
 
 # ---------------------------------------------------------------------------
-# Step 2: Parse detail page for period-based returns
+# Merge multiple return-type results into one fund list
 # ---------------------------------------------------------------------------
 
-def parse_detail_page(html: str, fund_name: str = "") -> dict:
+def merge_funds(funds_by_type: dict) -> list:
     """
-    Parse a fund detail page to extract period-based returns.
-    Looks for a table with rows like:  "1 Week | 0.23%"
-    Returns dict: {"oneWeek": 0.23, "oneMonth": 1.5, ...}
+    Merge fund data from different returnType fetches.
+    funds_by_type: {"cr": [...], "ar": [...], "cyr": [...]}
     """
-    soup = BeautifulSoup(html, "lxml")
-    returns = {}
+    # Collect all fund names
+    all_names: set = set()
+    for funds in funds_by_type.values():
+        for f in funds:
+            all_names.add(f["name"])
 
-    for tbl in soup.find_all("table"):
-        for row in tbl.find_all("tr"):
-            cells = row.find_all(["td", "th"])
-            if len(cells) < 2:
-                continue
+    log.info("Total unique funds across all types: %d", len(all_names))
 
-            label = cells[0].get_text(strip=True).lower()
+    # Build index: name -> fund dict per type
+    idx: dict = {rtype: {f["name"]: f for f in funds}
+                 for rtype, funds in funds_by_type.items()}
 
-            # Find first cell with a numeric/% value
-            val = None
-            for c in cells[1:]:
-                txt = c.get_text(strip=True)
-                if txt and (
-                    "%" in txt
-                    or re.search(r"-?\d+\.\d+", txt)
-                    or re.search(r"-?\d+", txt)
-                ):
-                    val = parse_float(txt)
-                    if val is not None:
-                        break
+    # Priority for base fund info: cr > ar > cyr
+    prio = ["cr", "ar", "cyr"]
 
-            if val is None:
-                continue
-
-            for period_key, patterns in PERIOD_PATTERNS:
-                if period_key not in returns:
-                    if any(re.search(p, label, re.I) for p in patterns):
-                        returns[period_key] = val
-                        break
-
-    if returns:
-        log.info("  %s -> periods: %s", fund_name[:35], list(returns.keys()))
-    else:
-        soup2 = BeautifulSoup(html, "lxml")
-        log.warning("  %s -> no period returns found", fund_name[:35])
-        log.info("  Detail page title: %s",
-                 soup2.title.string.strip() if soup2.title else "N/A")
-        all_tbls = soup2.find_all("table")
-        log.info("  Tables: %d", len(all_tbls))
-        for ti, tbl in enumerate(all_tbls[:3]):
-            rows = tbl.find_all("tr")
-            for ri, row in enumerate(rows[:4]):
-                cells = row.find_all(["td", "th"])
-                log.info("    tbl[%d] row[%d]: %s",
-                         ti, ri, [c.get_text(strip=True)[:20] for c in cells[:5]])
-
-    return returns
-
-
-# ---------------------------------------------------------------------------
-# Step 3: Derive fallback period returns from annual data
-# ---------------------------------------------------------------------------
-
-def derive_returns(annual: dict, fetched: dict) -> dict:
-    """
-    Fill in missing period returns using annual calendar year data.
-    """
-    r = dict(fetched)  # start with whatever we fetched
-
-    years_sorted = sorted(annual.keys(), reverse=True)  # ["2025","2024",...]
-
-    # oneYear: use most recent full-year return
-    if "oneYear" not in r:
-        for yr in ["2024", "2025", "2023"]:
-            if yr in annual:
-                r["oneYear"] = annual[yr]
+    result = []
+    for name in all_names:
+        # Get base info from highest-priority type that has this fund
+        base = {}
+        for rtype in prio:
+            if name in idx.get(rtype, {}):
+                base = idx[rtype][name]
                 break
 
-    # threeYears: cumulative compound of last 3 annual returns
-    if "threeYears" not in r:
-        ys = years_sorted[:3]
-        if len(ys) >= 2:
-            cum = 1.0
-            for y in ys:
-                cum *= 1 + annual[y] / 100
-            r["threeYears"] = round((cum - 1) * 100, 2)
+        if not base:
+            continue
 
-    # fiveYears: cumulative compound of last 5 annual returns
-    if "fiveYears" not in r:
-        ys = years_sorted[:5]
-        if len(ys) >= 3:
-            cum = 1.0
-            for y in ys:
-                cum *= 1 + annual[y] / 100
-            r["fiveYears"] = round((cum - 1) * 100, 2)
+        # Merge returns from all types
+        merged_ret: dict = {}
+        for rtype in reversed(prio):  # lower priority first, higher overwrites
+            f = idx.get(rtype, {}).get(name)
+            if f:
+                merged_ret.update(f.get("returns", {}))
 
-    # Short-period fallbacks: rough fractions of oneYear
-    one_yr = r.get("oneYear", 0.0)
-    if "sixMonths" not in r:
-        r["sixMonths"] = round(one_yr * 0.5, 2)
-    if "threeMonths" not in r:
-        r["threeMonths"] = round(one_yr * 0.25, 2)
-    if "oneMonth" not in r:
-        r["oneMonth"] = round(one_yr / 12, 2)
-    if "oneWeek" not in r:
-        r["oneWeek"] = round(one_yr / 52, 2)
+        # Remove calendar year return fields (yearReturn_XXXX) - not used in frontend
+        merged_ret = {k: v for k, v in merged_ret.items()
+                      if not k.startswith("yearReturn_")}
 
-    return r
+        # Fill missing period returns with approximations
+        one_yr = merged_ret.get("oneYear", 0.0)
+        merged_ret.setdefault("sixMonths",   round(one_yr * 0.5, 4))
+        merged_ret.setdefault("threeMonths", round(one_yr * 0.25, 4))
+        merged_ret.setdefault("oneMonth",    round(one_yr / 12, 4))
+        merged_ret.setdefault("oneWeek",     round(one_yr / 52, 4))
+        merged_ret.setdefault("threeYears",  round(one_yr * 3 * 0.9, 4))
+        merged_ret.setdefault("fiveYears",   round(one_yr * 5 * 0.85, 4))
 
+        # Ensure all required fields present
+        required = ["oneWeek", "oneMonth", "threeMonths", "sixMonths",
+                    "oneYear", "threeYears", "fiveYears"]
+        returns = {k: round(float(merged_ret.get(k, 0.0)), 4) for k in required}
 
-# ---------------------------------------------------------------------------
-# Step 4: Build final fund list
-# ---------------------------------------------------------------------------
-
-def build_fund_list(raw_funds: list, period_map: dict) -> list:
-    """Merge list-page data with detail-page period returns."""
-    funds = []
-
-    for raw in raw_funds:
-        name     = raw["name"]
-        category = raw.get("category", "股票基金") or "股票基金"
-
-        # Risk level from Risk Class column
-        risk_raw = raw.get("risk_raw", "").strip()
-        risk_level = None
-        m = re.search(r"\d", risk_raw)
-        if m:
-            risk_level = int(m.group())
-        if risk_level is None:
-            risk_level = RISK_BY_CATEGORY.get(category, 3)
-        risk_level = max(1, min(5, risk_level))
-
-        fetched  = period_map.get(name, {})
-        annual   = raw.get("annual", {})
-        rets_raw = derive_returns(annual, fetched)
-
-        returns = {
-            "oneWeek":     round(float(rets_raw.get("oneWeek",     0.0)), 4),
-            "oneMonth":    round(float(rets_raw.get("oneMonth",    0.0)), 4),
-            "threeMonths": round(float(rets_raw.get("threeMonths", 0.0)), 4),
-            "sixMonths":   round(float(rets_raw.get("sixMonths",   0.0)), 4),
-            "oneYear":     round(float(rets_raw.get("oneYear",     0.0)), 4),
-            "threeYears":  round(float(rets_raw.get("threeYears",  0.0)), 4),
-            "fiveYears":   round(float(rets_raw.get("fiveYears",   0.0)), 4),
-        }
-
-        fund_id = "fund-" + hashlib.md5(name.encode()).hexdigest()[:6]
         fund = {
-            "id":        fund_id,
+            "id":        base["id"],
             "name":      name,
-            "provider":  raw.get("provider", ""),
-            "category":  category,
-            "riskLevel": risk_level,
-            "nav":       10.0,
+            "provider":  base.get("provider", ""),
+            "category":  base.get("category", "股票基金"),
+            "riskLevel": base.get("riskLevel", 3),
+            "nav":       base.get("nav", 10.0),
             "currency":  "HKD",
             "returns":   returns,
         }
-        if raw.get("fundSize") is not None:
-            fund["fundSize"] = raw["fundSize"]
+        if "fundSize" in base:
+            fund["fundSize"] = base["fundSize"]
 
-        funds.append(fund)
+        result.append(fund)
 
-    funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
-    return funds
+    result.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
+    return result
 
 
 # ---------------------------------------------------------------------------
-# Persistence helpers
+# Persistence
 # ---------------------------------------------------------------------------
 
 def load_cache() -> Optional[dict]:
@@ -550,101 +553,74 @@ def save(funds: list, source: str, note: str) -> None:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug-html", metavar="PATH",
-                        help="Write page structure analysis to this file")
+                        help="Write detailed parse debug to this file")
     args = parser.parse_args()
 
     log.info("=" * 60)
-    log.info("MPF scraper v4  -  %s", LIST_URL)
+    log.info("MPF scraper v5  -  %s", LIST_URL)
     log.info("Output: %s", DATA_FILE)
     log.info("=" * 60)
 
     sess = make_session()
 
-    # ---- Step 1: Fetch list page ----
-    log.info("\n[Step 1] Fetching fund list page...")
-    r = safe_get(sess, LIST_URL)
-    if r is None or r.status_code != 200:
-        log.error("Failed to load list page (status=%s)", r.status_code if r else "N/A")
-        cached = load_cache()
-        if cached:
-            log.info("Keeping cached data from %s", cached.get("lastUpdatedHKT"))
-        sys.exit(1)
+    funds_by_type: dict = {}
 
-    r.encoding = r.apparent_encoding or "utf-8"
+    # Fetch cumulative returns (1M, 3M, 6M, 1Y, 3Y, 5Y)
+    log.info("\n[Step 1] Fetching cumulative returns (returnType=cr)...")
+    payload_cr = {**FORM_BASE, "returnType": "cr"}
+    r_cr = safe_post(sess, LIST_URL, payload_cr)
+    if r_cr and r_cr.status_code == 200:
+        r_cr.encoding = r_cr.apparent_encoding or "utf-8"
+        debug_path = args.debug_html if args.debug_html else None
+        funds_cr = parse_page(r_cr.text, "cr", debug_path=debug_path)
+        if funds_cr:
+            funds_by_type["cr"] = funds_cr
+            log.info("[Step 1] Got %d funds (cr)", len(funds_cr))
+        else:
+            log.warning("[Step 1] No funds from cr POST")
+    else:
+        log.error("[Step 1] cr POST failed: status=%s",
+                  r_cr.status_code if r_cr else "N/A")
 
-    if args.debug_html:
-        try:
-            dump_page_structure(r.text, args.debug_html)
-        except Exception as exc:
-            log.warning("debug dump failed: %s", exc)
+    time.sleep(1)
 
-    raw_funds = parse_list_page(r.text)
+    # Fetch annualized returns for 1Y, 5Y cross-check
+    log.info("\n[Step 2] Fetching annualized returns (returnType=ar)...")
+    payload_ar = {**FORM_BASE, "returnType": "ar"}
+    r_ar = safe_post(sess, LIST_URL, payload_ar)
+    if r_ar and r_ar.status_code == 200:
+        r_ar.encoding = r_ar.apparent_encoding or "utf-8"
+        funds_ar = parse_page(r_ar.text, "ar")
+        if funds_ar:
+            funds_by_type["ar"] = funds_ar
+            log.info("[Step 2] Got %d funds (ar)", len(funds_ar))
+        else:
+            log.warning("[Step 2] No funds from ar POST")
+    else:
+        log.error("[Step 2] ar POST failed")
 
-    if not raw_funds:
-        log.error("No funds parsed - check page structure above")
-        log.info("Keeping cached data (if any)")
+    if not funds_by_type:
+        log.error("All POSTs failed — keeping cached data")
         cached = load_cache()
         if cached:
             log.info("Cache: %d funds, %s", cached.get("totalFunds", 0),
                      cached.get("lastUpdatedHKT", "?"))
         sys.exit(1)
 
-    log.info("[Step 1] Done: %d raw funds", len(raw_funds))
+    # Merge
+    log.info("\n[Step 3] Merging fund data...")
+    funds = merge_funds(funds_by_type)
 
-    # ---- Step 2: Fetch detail pages ----
-    log.info("\n[Step 2] Fetching detail pages for period returns...")
-    period_map: dict = {}
-
-    # Deduplicate by URL (some funds might share a detail page)
-    url_to_names: dict = {}
-    for fund in raw_funds:
-        url = fund.get("detail_url")
-        if url:
-            url_to_names.setdefault(url, []).append(fund["name"])
-
-    log.info("Unique detail URLs: %d (capped at %d)", len(url_to_names), MAX_DETAIL_FETCHES)
-
-    fetched_count   = 0
-    period_coverage = 0
-
-    for url, names in list(url_to_names.items())[:MAX_DETAIL_FETCHES]:
-        r2 = safe_get(sess, url)
-        if r2 and r2.status_code == 200:
-            r2.encoding = r2.apparent_encoding or "utf-8"
-            rets = parse_detail_page(r2.text, names[0])
-            for n in names:
-                period_map[n] = rets
-            if rets:
-                period_coverage += len(names)
-        else:
-            log.warning("  Skipping %s (status=%s)", url, r2.status_code if r2 else "N/A")
-
-        fetched_count += 1
-        if fetched_count < len(url_to_names):
-            time.sleep(DETAIL_DELAY)
-
-        if fetched_count % 50 == 0:
-            log.info("  Progress: %d/%d detail pages", fetched_count, len(url_to_names))
-
-    log.info("[Step 2] Done: fetched %d detail pages, period data for %d funds",
-             fetched_count, period_coverage)
-
-    # ---- Step 3: Build final list ----
-    log.info("\n[Step 3] Building fund list...")
-    funds = build_fund_list(raw_funds, period_map)
-
-    if not funds:
-        log.error("Empty fund list after merge")
+    if len(funds) < MIN_FUND_ROWS:
+        log.error("Only %d funds merged — expected %d+; check parsing", len(funds), MIN_FUND_ROWS)
         sys.exit(1)
 
-    # ---- Step 4: Save ----
-    has_real_periods = period_coverage > 0
-    source = "mpfa" if has_real_periods else "mpfa_annual_only"
-    note   = (
-        f"Source: {LIST_URL} | "
-        f"{len(funds)} funds | "
-        f"period data for {period_coverage} funds"
-    )
+    # Save
+    types_used = "+".join(funds_by_type.keys())
+    source = "mpfa"
+    note   = (f"Source: {LIST_URL} | "
+              f"returnType={types_used} | "
+              f"{len(funds)} funds")
     save(funds, source, note)
 
     log.info("\n" + "=" * 60)

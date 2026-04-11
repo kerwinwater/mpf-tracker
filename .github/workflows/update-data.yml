@@ -70,9 +70,13 @@ jobs:
               for ti, tbl in enumerate(soup.find_all('table')):
                   rows = tbl.find_all('tr')
                   print(f"Table[{ti}]: {len(rows)} rows, class={tbl.get('class')}, id={tbl.get('id')}")
-                  for ri, row in enumerate(rows[:5]):
+                  # For the data table (scrolltable or biggest), show full row data
+                  is_data = tbl.get('id') == 'scrolltable' or len(rows) > 200
+                  max_rows = 12 if is_data else 4
+                  for ri, row in enumerate(rows[:max_rows]):
                       cells = row.find_all(['td','th'])
-                      print(f"  row[{ri}]: {[c.get_text(strip=True)[:30] for c in cells[:8]]}")
+                      max_cols = 30 if is_data else 10
+                      print(f"  row[{ri}]: {[c.get_text(strip=True)[:30] for c in cells[:max_cols]]}")
               # Check for links to detail pages
               links = soup.find_all('a', href=True)
               fund_links = [a['href'] for a in links if 'fund' in a['href'].lower() or 'mpp' in a['href'].lower()]

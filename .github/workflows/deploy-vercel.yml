@@ -1,0 +1,35 @@
+# ─── Vercel 自動部署 ──────────────────────────────────────────────────────────
+#
+# 每次 push 到 main 分支時，自動部署到 Vercel Production。
+#
+# 需要在 GitHub Repo Settings > Secrets and variables > Actions 中設置：
+#   VERCEL_TOKEN      → 從 https://vercel.com/account/tokens 創建
+#   VERCEL_ORG_ID     → 從 Vercel 項目設置頁面底部獲取
+#   VERCEL_PROJECT_ID → 從 Vercel 項目設置頁面底部獲取
+
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 部署到 Vercel
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: 📥 取出最新程式碼
+        uses: actions/checkout@v4
+
+      - name: 🚀 部署到 Vercel Production
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+          working-directory: ./

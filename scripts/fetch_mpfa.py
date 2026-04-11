@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-MPF scraper v8 - with detail-page short-period returns
+MPF list scraper v9
 ============================================================
-Phase 1: parse mpp_list.jsp (scrolltable) for each fund's
-          1Y / 5Y / 3Y (calendar compound) / fund metadata.
-          Also capture the detail-page URL from the last cell.
+Scrapes mpp_list.jsp for fund metadata and MPFA-computed returns.
+Outputs public/data/funds.json with metadata + annual returns.
 
-Phase 2: for each fund, fetch its MPFA detail page and extract
-          real 1W / 1M / 3M / 6M returns.
-          Falls back to calendar-year proxy if fetch fails.
+The short-period returns (1W/1M/3M/6M) are initially set from
+calendar-year proxies. fetch_nav.py overwrites them with real
+values derived from the monthly NAV price history.
 
 Column layout of scrolltable data rows (29 cells, 0-indexed):
   col  0: expand widget
@@ -23,19 +22,17 @@ Column layout of scrolltable data rows (29 cells, 0-indexed):
   col  9: FER %
   col 10: Annualized 1-Year (% p.a.)          -> oneYear
   col 11: Annualized 5-Year (% p.a.)
-  col 12: Annualized 10-Year
-  col 13: Annualized Since-Launch
+  col 12-13: 10Y / Since-launch ann
   col 14: Cumulative 1-Year %
   col 15: Cumulative 5-Year %                 -> fiveYears
-  col 16: Cumulative 10-Year
-  col 17: Cumulative Since-Launch
-  col 18: Calendar Year 2025 %               -> sixMonths proxy / threeYears
-  col 19: Calendar Year 2024 %               -> threeYears
-  col 20: Calendar Year 2023 %               -> threeYears
+  col 16-17: 10Y / Since-launch cum
+  col 18: Calendar Year 2025 %               -> short-period proxy
+  col 19: Calendar Year 2024 %
+  col 20: Calendar Year 2023 %
   col 21: Calendar Year 2022 %
   col 22: Calendar Year 2021 %
   col 23-27: fees
-  col 28: detail page link                    -> _detail_url
+  col 28: detail page link  -> cfId extracted here
 """
 
 import argparse
@@ -78,7 +75,6 @@ HEADERS = {
     "Referer":         BASE_URL + "/tch/",
 }
 
-# Fixed column indices
 COL_SCHEME   = 1
 COL_NAME     = 3
 COL_TRUSTEE  = 4
@@ -91,8 +87,7 @@ COL_CUM_5Y   = 15
 COL_CYR_2025 = 18
 COL_CYR_2024 = 19
 COL_CYR_2023 = 20
-COL_CYR_2022 = 21
-COL_DETAIL   = 28   # last cell — contains the detail page link
+COL_DETAIL   = 28
 
 CATEGORY_MAP = {
     "股票基金":       "股票基金",
@@ -121,41 +116,11 @@ RISK_BY_CATEGORY = {
     "強積金保守基金": 1,
 }
 
-# Period labels on MPFA detail pages (Traditional Chinese + English)
-DETAIL_PERIOD_MAP: dict[str, str] = {
-    "1週":    "oneWeek",
-    "1星期":  "oneWeek",
-    "一週":   "oneWeek",
-    "1個月":  "oneMonth",
-    "1个月":  "oneMonth",
-    "一個月": "oneMonth",
-    "3個月":  "threeMonths",
-    "3个月":  "threeMonths",
-    "三個月": "threeMonths",
-    "6個月":  "sixMonths",
-    "6个月":  "sixMonths",
-    "六個月": "sixMonths",
-    "1年":    "oneYear",
-    "一年":   "oneYear",
-    "3年":    "threeYears",
-    "三年":   "threeYears",
-    "5年":    "fiveYears",
-    "五年":   "fiveYears",
-    # English
-    "1 week":    "oneWeek",
-    "1 month":   "oneMonth",
-    "3 months":  "threeMonths",
-    "6 months":  "sixMonths",
-    "1 year":    "oneYear",
-    "3 years":   "threeYears",
-    "5 years":   "fiveYears",
-}
-
 DATE_RE = re.compile(r"\d{2}-\d{2}-\d{4}")
 
 
 # ---------------------------------------------------------------------------
-# HTTP helpers
+# HTTP
 # ---------------------------------------------------------------------------
 
 def make_session() -> requests.Session:
@@ -203,188 +168,25 @@ def is_data_row(texts: list) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Detail URL extraction
+# cf_id extraction
 # ---------------------------------------------------------------------------
 
-def _extract_detail_url(cells: list) -> Optional[str]:
-    """
-    Look for an <a> tag in the last few cells of a data row.
-    Handles both direct href and JavaScript onclick patterns.
-    """
-    # Check the designated column first, then fall back to last 3 cells
-    candidates = []
-    if COL_DETAIL < len(cells):
-        candidates.append(cells[COL_DETAIL])
-    candidates.extend(cells[-3:])
-
-    for cell in candidates:
-        # Direct <a href>
+def _extract_cf_id(cells: list) -> Optional[str]:
+    """Extract the numeric cf_id from the detail link in col 28."""
+    check = cells[COL_DETAIL:COL_DETAIL + 1] + cells[-3:]
+    for cell in check:
         for a in cell.find_all("a"):
-            href = (a.get("href") or "").strip()
-            if href and href not in ("#", "") and "javascript" not in href.lower():
-                if href.startswith("http"):
-                    return href
-                # Relative path
-                sep = "" if href.startswith("/") else "/"
-                return f"{BASE_URL}{sep}{href}"
-
-            # onclick: parse URL from window.open / location.href / openWin etc.
-            onclick = (a.get("onclick") or "").strip()
-            if onclick:
-                url = _parse_onclick_url(onclick)
-                if url:
-                    return url
-
-        # onclick on the cell itself or any child element
-        for elem in cell.find_all(attrs={"onclick": True}):
-            url = _parse_onclick_url(elem.get("onclick", ""))
-            if url:
-                return url
-
-    return None
-
-
-def _parse_onclick_url(onclick: str) -> Optional[str]:
-    """Extract a URL from a JavaScript onclick string."""
-    patterns = [
-        r"window\.open\s*\(\s*['\"]([^'\"]+)['\"]",
-        r"location\.href\s*=\s*['\"]([^'\"]+)['\"]",
-        r"openWin\s*\(\s*['\"]([^'\"]+)['\"]",
-        r"openWindow\s*\(\s*['\"]([^'\"]+)['\"]",
-        r"['\"]([^'\"]*\.jsp[^'\"]*)['\"]",
-    ]
-    for pat in patterns:
-        m = re.search(pat, onclick, re.IGNORECASE)
-        if m:
-            url = m.group(1).strip()
-            if url.startswith("http"):
-                return url
-            if url.startswith("/"):
-                return BASE_URL + url
+            href    = a.get("href", "")
+            onclick = a.get("onclick", "")
+            for src in (href, onclick):
+                m = re.search(r"cf_id=(\d+)", src, re.IGNORECASE)
+                if m:
+                    return m.group(1)
     return None
 
 
 # ---------------------------------------------------------------------------
-# Detail page parser
-# ---------------------------------------------------------------------------
-
-def _parse_detail_returns(html: str) -> dict:
-    """
-    Parse a fund detail page and return a dict of period returns.
-    Looks for table rows where the first cell matches a period label.
-    """
-    soup = BeautifulSoup(html, "lxml")
-    returns: dict = {}
-
-    for row in soup.find_all("tr"):
-        cells = row.find_all(["td", "th"])
-        if len(cells) < 2:
-            continue
-
-        label = (
-            cells[0]
-            .get_text(separator=" ", strip=True)
-            .replace("\xa0", "")
-            .strip()
-        )
-        label_lower = label.lower()
-
-        for key, field in DETAIL_PERIOD_MAP.items():
-            if field in returns:          # already found
-                continue
-            if key.lower() == label_lower or key in label:
-                # Try each remaining cell for a numeric value
-                for c in cells[1:]:
-                    val = parse_float(c.get_text(strip=True))
-                    if val is not None:
-                        returns[field] = val
-                        break
-                break
-
-    return returns
-
-
-# ---------------------------------------------------------------------------
-# Detail page enrichment
-# ---------------------------------------------------------------------------
-
-SHORT_PERIODS = ("oneWeek", "oneMonth", "threeMonths", "sixMonths")
-
-
-def enrich_with_detail_pages(
-    sess: requests.Session,
-    funds: list,
-    delay: float = 0.7,
-    batch_size: int = 50,
-    batch_pause: float = 3.0,
-) -> int:
-    """
-    Fetch MPFA fund detail pages and update short-period returns in-place.
-    Funds without a _detail_url keep their calendar-year proxy values.
-    Returns the count of successfully enriched funds.
-    """
-    enriched  = 0
-    no_url    = 0
-    fetch_err = 0
-    no_data   = 0
-    total     = len(funds)
-
-    log.info("=" * 60)
-    log.info("Phase 2: fetching detail pages (%d funds, %.1fs delay)", total, delay)
-    log.info("=" * 60)
-
-    for idx, fund in enumerate(funds):
-        url = fund.pop("_detail_url", None)
-
-        if not url:
-            no_url += 1
-            continue
-
-        r = safe_get(sess, url, retries=1, timeout=20)
-        if r is None or r.status_code != 200:
-            fetch_err += 1
-            log.warning("Detail FAIL  [%d/%d] %s", idx + 1, total, fund["name"][:40])
-        else:
-            r.encoding = r.apparent_encoding or "utf-8"
-            detail = _parse_detail_returns(r.text)
-            got = {p: detail[p] for p in SHORT_PERIODS if p in detail}
-
-            if got:
-                fund["returns"].update(got)
-                enriched += 1
-                if enriched <= 5:
-                    log.info(
-                        "Detail OK    [%d/%d] %s  → 1W=%.2f 1M=%.2f 3M=%.2f 6M=%.2f",
-                        idx + 1, total, fund["name"][:30],
-                        got.get("oneWeek",     fund["returns"]["oneWeek"]),
-                        got.get("oneMonth",    fund["returns"]["oneMonth"]),
-                        got.get("threeMonths", fund["returns"]["threeMonths"]),
-                        got.get("sixMonths",   fund["returns"]["sixMonths"]),
-                    )
-            else:
-                no_data += 1
-                log.debug("Detail NODATA[%d/%d] %s  url=%s",
-                          idx + 1, total, fund["name"][:30], url[-60:])
-
-        # Progress report every batch
-        if (idx + 1) % batch_size == 0:
-            log.info(
-                "Progress %d/%d — enriched=%d no_url=%d err=%d no_data=%d",
-                idx + 1, total, enriched, no_url, fetch_err, no_data,
-            )
-            time.sleep(batch_pause)
-        else:
-            time.sleep(delay)
-
-    log.info(
-        "Detail enrichment done: enriched=%d / %d  (no_url=%d err=%d no_data=%d)",
-        enriched, total, no_url, fetch_err, no_data,
-    )
-    return enriched
-
-
-# ---------------------------------------------------------------------------
-# Main list parser
+# Main parser
 # ---------------------------------------------------------------------------
 
 def parse_page(html: str, debug_path: Optional[str] = None,
@@ -412,9 +214,8 @@ def parse_page(html: str, debug_path: Optional[str] = None,
     log.info("Scrolltable rows: %d", len(all_rows))
 
     funds: list = []
-    data_count   = 0
-    header_count = 0
-    url_found    = 0
+    data_count  = 0
+    cf_id_count = 0
 
     for row in all_rows:
         cells = row.find_all(["td", "th"])
@@ -424,8 +225,6 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         ]
 
         if not is_data_row(texts):
-            if not funds:
-                header_count += 1
             continue
 
         data_count += 1
@@ -446,7 +245,7 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         m          = re.search(r"[1-7]", risk_raw)
         risk_level = int(m.group()) if m else RISK_BY_CATEGORY.get(category, 4)
 
-        # Return values from fixed columns
+        # Annualised / cumulative returns from list page
         ann_1y = parse_float(cell(COL_ANN_1Y))
         cum_5y = parse_float(cell(COL_CUM_5Y))
         cyr_25 = parse_float(cell(COL_CYR_2025))
@@ -456,53 +255,48 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         one_year   = ann_1y if ann_1y is not None else 0.0
         five_years = cum_5y if cum_5y is not None else round(one_year * 5 * 0.85, 2)
 
-        # threeYears: compound of 2023 + 2024 + 2025 calendar years
+        # threeYears: compound 2023+2024+2025 calendar years
         if all(v is not None for v in [cyr_25, cyr_24, cyr_23]):
-            three_y_cum = (
+            three_y = (
                 (1 + cyr_25 / 100) * (1 + cyr_24 / 100) * (1 + cyr_23 / 100) - 1
             ) * 100
-            three_years = round(three_y_cum, 4)
+            three_years = round(three_y, 4)
         else:
             three_years = round(one_year * 3 * 0.9, 4)
 
-        # Short-period proxies from cyr_25 (independent from oneYear ranking).
-        # These will be overwritten by real data from the detail page in Phase 2.
+        # Short-period proxies (cyr_25-based, different ranking from 1Y).
+        # fetch_nav.py will overwrite these with real NAV-based values.
         base = cyr_25 if cyr_25 is not None else one_year
-        six_months   = round(base * 0.5,  4)
-        three_months = round(base * 0.25, 4)
-        one_month    = round(base / 12,   4)
-        one_week     = round(base / 52,   4)
-
         returns = {
-            "oneWeek":     one_week,
-            "oneMonth":    one_month,
-            "threeMonths": three_months,
-            "sixMonths":   six_months,
-            "oneYear":     round(one_year,   4),
+            "oneWeek":     round(base / 52,   4),
+            "oneMonth":    round(base / 12,   4),
+            "threeMonths": round(base * 0.25, 4),
+            "sixMonths":   round(base * 0.5,  4),
+            "oneYear":     round(one_year,    4),
             "threeYears":  three_years,
-            "fiveYears":   round(five_years, 4),
+            "fiveYears":   round(five_years,  4),
         }
 
-        fund_name  = cell(COL_NAME)
-        fund_id    = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+        fund_name = cell(COL_NAME)
+        fund_id   = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+        cf_id     = _extract_cf_id(cells)
+        if cf_id:
+            cf_id_count += 1
 
-        # Extract detail page URL from cell objects
-        detail_url = _extract_detail_url(cells)
-        if detail_url:
-            url_found += 1
-
-        fund = {
-            "id":           fund_id,
-            "name":         fund_name,
-            "provider":     cell(COL_TRUSTEE),
-            "scheme":       cell(COL_SCHEME),
-            "category":     category or "股票基金",
-            "riskLevel":    max(1, min(7, risk_level)),
-            "nav":          10.0,
-            "currency":     "HKD",
-            "returns":      returns,
-            "_detail_url":  detail_url,   # removed before save
+        fund: dict = {
+            "id":       fund_id,
+            "name":     fund_name,
+            "provider": cell(COL_TRUSTEE),
+            "scheme":   cell(COL_SCHEME),
+            "category": category or "股票基金",
+            "riskLevel": max(1, min(7, risk_level)),
+            "nav":      10.0,   # placeholder; fetch_nav.py fills real value
+            "currency": "HKD",
+            "returns":  returns,
         }
+        if cf_id:
+            fund["cfId"] = cf_id          # used by fetch_nav.py
+
         size = parse_float(cell(COL_SIZE))
         if size is not None:
             fund["fundSize"] = size
@@ -510,11 +304,10 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         funds.append(fund)
 
     log.info(
-        "Parsed %d fund rows (%d header rows skipped) — detail URLs found: %d/%d",
-        data_count, header_count, url_found, data_count,
+        "Parsed %d fund rows — cf_id found for %d/%d",
+        data_count, cf_id_count, data_count,
     )
 
-    # Sort by 1-year return descending
     funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
 
     if debug_path:
@@ -524,18 +317,12 @@ def parse_page(html: str, debug_path: Optional[str] = None,
 
 
 def _write_debug(debug_path: str, sample: list) -> None:
-    lines = ["=== PARSE DEBUG v8 ===", "Top 5 funds by 1Y:"]
+    lines = ["=== PARSE DEBUG v9 ===", "Top 5 funds by 1Y:"]
     for f in sample:
         r = f["returns"]
         lines.append(
-            f"  {f['name'][:35]:35s} | "
-            f"1W:{r['oneWeek']:6.2f}%  "
-            f"1M:{r['oneMonth']:6.2f}%  "
-            f"3M:{r['threeMonths']:6.2f}%  "
-            f"6M:{r['sixMonths']:6.2f}%  "
-            f"1Y:{r['oneYear']:7.2f}%  "
-            f"3Y:{r['threeYears']:7.2f}%  "
-            f"5Y:{r['fiveYears']:7.2f}%"
+            f"  {f['name'][:30]:30s} cfId={f.get('cfId','?'):>5s} | "
+            f"1Y:{r['oneYear']:7.2f}%  3Y:{r['threeYears']:7.2f}%  5Y:{r['fiveYears']:7.2f}%"
         )
     Path(debug_path).parent.mkdir(parents=True, exist_ok=True)
     with open(debug_path, "w", encoding="utf-8") as fh:
@@ -558,12 +345,6 @@ def load_cache() -> Optional[dict]:
 
 
 def save(funds: list, source: str, note: str) -> None:
-    # Strip internal keys before saving
-    clean = []
-    for f in funds:
-        fc = {k: v for k, v in f.items() if not k.startswith("_")}
-        clean.append(fc)
-
     hkt     = timezone(timedelta(hours=8))
     now_hkt = datetime.now(hkt)
     output  = {
@@ -571,13 +352,13 @@ def save(funds: list, source: str, note: str) -> None:
         "lastUpdatedHKT": now_hkt.strftime("%Y-%m-%d %H:%M HKT"),
         "dataSource":     source,
         "note":           note,
-        "totalFunds":     len(clean),
-        "funds":          clean,
+        "totalFunds":     len(funds),
+        "funds":          funds,
     }
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as fh:
         json.dump(output, fh, ensure_ascii=False, indent=2)
-    log.info("Saved %d funds -> %s", len(clean), DATA_FILE)
+    log.info("Saved %d funds -> %s", len(funds), DATA_FILE)
 
 
 # ---------------------------------------------------------------------------
@@ -585,65 +366,40 @@ def save(funds: list, source: str, note: str) -> None:
 # ---------------------------------------------------------------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Fetch MPFA fund data")
-    ap.add_argument("--debug-html",   metavar="PATH", help="Write parse debug to file")
-    ap.add_argument("--save-html",    metavar="PATH", help="Save raw list HTML to file")
-    ap.add_argument("--skip-detail",  action="store_true",
-                    help="Skip detail-page fetching (faster, short periods = proxy)")
-    ap.add_argument("--detail-delay", type=float, default=0.7,
-                    help="Seconds to wait between detail page requests (default: 0.7)")
+    ap = argparse.ArgumentParser(description="Fetch MPFA fund list")
+    ap.add_argument("--debug-html", metavar="PATH", help="Write parse debug summary")
+    ap.add_argument("--save-html",  metavar="PATH", help="Save raw HTML to file")
     args = ap.parse_args()
 
     log.info("=" * 60)
-    log.info("MPF scraper v8  -  %s", LIST_URL)
-    log.info("Output: %s", DATA_FILE)
+    log.info("MPF list scraper v9  -  %s", LIST_URL)
     log.info("=" * 60)
 
     sess = make_session()
-
-    # ── Phase 1: fetch and parse list page ───────────────────────────────────
-    log.info("Phase 1: fetching list page %s", LIST_URL)
     r = safe_get(sess, LIST_URL)
     if r is None or r.status_code != 200:
         log.error("GET failed (status=%s)", r.status_code if r else "N/A")
         cached = load_cache()
         if cached:
-            log.info("Keeping cache: %d funds, %s",
-                     cached.get("totalFunds", 0), cached.get("lastUpdatedHKT", "?"))
+            log.info("Keeping cache: %d funds", cached.get("totalFunds", 0))
         sys.exit(1)
 
     r.encoding = r.apparent_encoding or "utf-8"
     funds = parse_page(r.text, debug_path=args.debug_html, save_html=args.save_html)
 
     if len(funds) < 50:
-        log.error("Only %d funds parsed — page structure may have changed", len(funds))
+        log.error("Only %d funds — possible page structure change", len(funds))
         sys.exit(1)
 
-    # ── Phase 2: enrich with detail-page short-period returns ────────────────
-    detail_ok = 0
-    if args.skip_detail:
-        log.info("--skip-detail: keeping calendar-year proxy for 1W/1M/3M/6M")
-        for f in funds:
-            f.pop("_detail_url", None)
-        detail_note = "1W/1M/3M/6M=proxy(cyr2025)"
-    else:
-        detail_ok   = enrich_with_detail_pages(sess, funds, delay=args.detail_delay)
-        detail_note = f"1W/1M/3M/6M real({detail_ok}/{len(funds)})"
-
-    source = "mpfa"
-    note   = (
-        f"mfp.mpfa.org.hk/tch/mpp_list.jsp | "
-        f"{len(funds)} funds | "
-        f"1Y/5Y real; 3Y calendar-compound; {detail_note}"
+    note = (
+        f"mfp.mpfa.org.hk/tch/mpp_list.jsp | {len(funds)} funds | "
+        f"1Y/5Y real; 3Y calendar-compound; 1W-6M=proxy(cyr2025)"
     )
-    save(funds, source, note)
+    save(funds, "mpfa", note)
 
     nonzero = sum(1 for f in funds if abs(f["returns"]["oneYear"]) > 0.01)
-    log.info("=" * 60)
-    log.info("Done!  %d funds total, %d with non-zero 1Y return", len(funds), nonzero)
-    log.info("detail enriched: %d / %d", detail_ok, len(funds))
-    log.info("dataSource=%s", source)
-    log.info("=" * 60)
+    cf_ids  = sum(1 for f in funds if f.get("cfId"))
+    log.info("Done: %d funds, %d non-zero 1Y, %d with cfId", len(funds), nonzero, cf_ids)
 
 
 if __name__ == "__main__":

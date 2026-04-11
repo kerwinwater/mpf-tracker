@@ -8,7 +8,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     permissions:
       contents: write
 
@@ -28,7 +28,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Fetch MPFA data
-        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
+        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt --detail-delay 0.6
 
       - name: Show result
         run: |
@@ -45,10 +45,10 @@ jobs:
           if 'mpfa' in src:
               print()
               print('SUCCESS: Real MPFA data fetched!')
-              print('Top 5 funds by 1-year return:')
+              print('Top 5 funds — short period vs 1Y (should differ if detail pages worked):')
               for f in d['funds'][:5]:
                   r = f['returns']
-                  print(f'  {f[\"name\"][:40]:40s} | 1Y: {r[\"oneYear\"]:6.2f}%  5Y: {r[\"fiveYears\"]:7.2f}%')
+                  print(f'  {f[\"name\"][:35]:35s} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}%')
           else:
               print('WARNING: unexpected dataSource:', src)
           "

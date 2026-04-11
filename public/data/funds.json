@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-04-11T18:25:23.870556+00:00",
-  "lastUpdatedHKT": "2026-04-12 02:25 HKT",
+  "lastUpdated": "2026-04-11T19:43:27.499039+00:00",
+  "lastUpdatedHKT": "2026-04-12 03:43 HKT",
   "dataSource": "mpfa",
-  "note": "mfp.mpfa.org.hk/eng/mpp_list.jsp | 434 funds | 1Y/5Y real; 3Y from calendar years; 6M/3M/1M/1W derived",
+  "note": "mfp.mpfa.org.hk/tch/mpp_list.jsp | 434 funds | 1Y/5Y real; 3Y calendar-compound; 1W/1M/3M/6M real(0/434)",
   "totalFunds": 434,
   "funds": [
     {

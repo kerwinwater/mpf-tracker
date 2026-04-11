@@ -1,22 +1,43 @@
 #!/usr/bin/env python3
 """
-MPF scraper v6
-Strategy:
-  1. GET mpp_list.jsp  (default view = annualized returns: 1Y, 5Y, 10Y, Since Launch)
-  2. Optionally POST with returnType=cr for cumulative short-term returns
-  3. Parse Table id=scrolltable; data rows start after header rows (detected by date pattern)
-  4. Column layout is FIXED in data rows (independent of header colspan/rowspan):
-       col 0:  expand/sort widget
-       col 1:  Scheme
-       col 2:  (empty spacer)
-       col 3:  Constituent Fund (fund name)  <-- COL_NAME
-       col 4:  MPF Trustee code              <-- COL_TRUSTEE
-       col 5:  Fund Type                     <-- COL_TYPE
-       col 6:  Launch Date  (DD-MM-YYYY)     <-- used to detect data rows
-       col 7:  Fund Size (HKD'm)
-       col 8:  Risk Class (1-5)              <-- COL_RISK
-       col 9:  Latest FER (%)
-       col 10+: return period values         <-- detected dynamically
+MPF scraper v7 - direct column mapping
+============================================================
+From debug inspection, data rows in id=scrolltable have 29 cells:
+
+  col  0: expand/sort widget (always empty)
+  col  1: Scheme
+  col  2: empty spacer
+  col  3: Constituent Fund (fund name)        COL_NAME
+  col  4: MPF Trustee code                   COL_TRUSTEE
+  col  5: Fund Type                          COL_TYPE
+  col  6: Launch Date (DD-MM-YYYY)           COL_LAUNCH  <- used to detect data rows
+  col  7: Fund Size (HKD'm)
+  col  8: Risk Class (1-5)                   COL_RISK    <- also used to detect data rows
+  col  9: Latest FER (%)
+  col 10: Annualized 1-Year return (% p.a.)  -> oneYear
+  col 11: Annualized 5-Year return (% p.a.)  -> (used to verify)
+  col 12: Annualized 10-Year return          -> (unused)
+  col 13: Annualized Since-Launch return     -> (unused)
+  col 14: Cumulative 1-Year return (%)       -> (same as 1Y ann for 1yr)
+  col 15: Cumulative 5-Year return (%)       -> fiveYears
+  col 16: Cumulative 10-Year return          -> (unused)
+  col 17: Cumulative Since-Launch return     -> (unused)
+  col 18: Calendar Year 2025 return (%)      -> used for threeYears/sixMonths
+  col 19: Calendar Year 2024 return (%)      -> used for threeYears
+  col 20: Calendar Year 2023 return (%)      -> used for threeYears
+  col 21: Calendar Year 2022 return (%)      -> (unused)
+  col 22: Calendar Year 2021 return (%)      -> (unused)
+  col 23-27: management fees (ignored)
+  col 28: details link (ignored)
+
+Frontend field mapping:
+  oneYear      <- col 10
+  fiveYears    <- col 15  (5Y cumulative)
+  threeYears   <- compound of 2025 * 2024 * 2023 (cols 18*19*20)
+  sixMonths    <- col 18 * 0.5  (2025 full-year / 2 as rough proxy)
+  threeMonths  <- oneYear * 0.25
+  oneMonth     <- oneYear / 12
+  oneWeek      <- oneYear / 52
 """
 
 import argparse
@@ -29,7 +50,6 @@ import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,14 +80,24 @@ HEADERS = {
     "Referer":         BASE_URL + "/",
 }
 
-FORM_BASE = {
-    "fundTypes":    "",
-    "fundSubTypes": "",
-    "trustees":     "",
-    "tenthValHid":  "",
-    "topTen":       "",
-    "schemes":      "",
-}
+# Fixed column indices (verified from debug inspection)
+COL_SCHEME   = 1
+COL_NAME     = 3
+COL_TRUSTEE  = 4
+COL_TYPE     = 5
+COL_LAUNCH   = 6
+COL_SIZE     = 7
+COL_RISK     = 8
+COL_FER      = 9
+COL_ANN_1Y   = 10   # Annualized 1-year return (% p.a.)
+COL_ANN_5Y   = 11   # Annualized 5-year return (% p.a.)
+COL_CUM_1Y   = 14   # Cumulative 1-year return (%)
+COL_CUM_5Y   = 15   # Cumulative 5-year return (%)
+COL_CYR_2025 = 18   # Calendar year 2025 return (%)
+COL_CYR_2024 = 19   # Calendar year 2024 return (%)
+COL_CYR_2023 = 20   # Calendar year 2023 return (%)
+COL_CYR_2022 = 21   # Calendar year 2022 return (%)
+COL_CYR_2021 = 22   # Calendar year 2021 return (%)
 
 CATEGORY_MAP = {
     "equity fund":               "股票基金",
@@ -88,17 +118,6 @@ RISK_BY_CATEGORY = {
     "保證基金":       1,
     "強積金保守基金": 1,
 }
-
-# Fixed column offsets (true for GET and POST responses)
-COL_SCHEME   = 1
-COL_NAME     = 3
-COL_TRUSTEE  = 4
-COL_TYPE     = 5
-COL_LAUNCH   = 6
-COL_SIZE     = 7
-COL_RISK     = 8
-COL_FER      = 9
-COL_RET_BASE = 10   # return values start here
 
 DATE_RE = re.compile(r"\d{2}-\d{2}-\d{4}")
 
@@ -127,26 +146,11 @@ def safe_get(sess, url, retries=2, **kwargs) -> Optional[requests.Response]:
     return None
 
 
-def safe_post(sess, url, data, retries=2, **kwargs) -> Optional[requests.Response]:
-    kwargs.setdefault("timeout", 45)
-    for attempt in range(retries + 1):
-        try:
-            r = sess.post(url, data=data, **kwargs)
-            log.info("POST returnType=%s -> %d (%d bytes)",
-                     data.get("returnType", "?"), r.status_code, len(r.content))
-            return r
-        except requests.RequestException as e:
-            log.error("POST attempt %d: %s", attempt + 1, e)
-            if attempt < retries:
-                time.sleep(2 ** attempt)
-    return None
-
-
 def parse_float(text: str) -> Optional[float]:
     if not text:
         return None
     t = text.replace("%", "").replace(",", "").replace("+", "").strip()
-    if t in ("N/A", "NA", "-", "--", "n.a.", "n/a", ""):
+    if t in ("N/A", "NA", "n.a.", "n/a", "-", "--", ""):
         return None
     try:
         return float(t)
@@ -155,152 +159,69 @@ def parse_float(text: str) -> Optional[float]:
 
 
 # ---------------------------------------------------------------------------
-# Table parsing
+# Row detection
 # ---------------------------------------------------------------------------
-
-def get_scrolltable(soup: BeautifulSoup):
-    """Return the main data table (id=scrolltable or largest table)."""
-    tbl = soup.find("table", id="scrolltable")
-    if tbl:
-        return tbl
-    log.warning("id=scrolltable not found, using largest table")
-    tables = soup.find_all("table")
-    return max(tables, key=lambda t: len(t.find_all("tr")), default=None)
-
 
 def is_data_row(texts: list) -> bool:
     """
-    A data row has:
-      - col 6 (COL_LAUNCH): a date in DD-MM-YYYY format
-      - col 8 (COL_RISK):   a digit 1-5
+    True if this row is a real fund row (not a header/footer/spacer).
+    Criteria: col 6 has a date DD-MM-YYYY AND col 8 is a single digit 1-5.
     """
     if len(texts) <= COL_RISK:
         return False
-    return (
-        bool(DATE_RE.fullmatch(texts[COL_LAUNCH]))
-        and bool(re.fullmatch(r"[1-5]", texts[COL_RISK]))
-    )
+    launch = texts[COL_LAUNCH] if COL_LAUNCH < len(texts) else ""
+    risk   = texts[COL_RISK]   if COL_RISK   < len(texts) else ""
+    return bool(DATE_RE.fullmatch(launch)) and bool(re.fullmatch(r"[1-5]", risk))
 
 
-def detect_return_col_map(header_rows: list, return_type: str) -> dict:
-    """
-    Scan header rows for period labels at col 10+.
-    Returns {col_index: field_name} mapping.
-    """
-    # Period label -> field name
-    if return_type in ("ar", "default"):
-        patterns = [
-            ("oneYear",    [r"\b1\s*year", r"\b1\s*y\b"]),
-            ("threeYears", [r"\b3\s*year", r"\b3\s*y\b"]),
-            ("fiveYears",  [r"\b5\s*year", r"\b5\s*y\b"]),
-            ("tenYears",   [r"\b10\s*year", r"\b10\s*y\b"]),
-        ]
-    else:  # cr = cumulative
-        patterns = [
-            ("oneMonth",    [r"\b1\s*month", r"\b1\s*m\b"]),
-            ("threeMonths", [r"\b3\s*month", r"\b3\s*m\b"]),
-            ("sixMonths",   [r"\b6\s*month", r"\b6\s*m\b"]),
-            ("oneYear",     [r"\b1\s*year",  r"\b1\s*y\b", r"\b12\s*m"]),
-            ("threeYears",  [r"\b3\s*year",  r"\b3\s*y\b", r"\b36\s*m"]),
-            ("fiveYears",   [r"\b5\s*year",  r"\b5\s*y\b", r"\b60\s*m"]),
-        ]
+# ---------------------------------------------------------------------------
+# Main parser
+# ---------------------------------------------------------------------------
 
-    mapping: dict = {}
-    used: set = set()
-    for row_texts in header_rows:
-        for ci, text in enumerate(row_texts):
-            if ci < COL_RET_BASE or not text.strip():
-                continue
-            for field, pats in patterns:
-                if field in used:
-                    continue
-                if any(re.search(p, text, re.I) for p in pats):
-                    mapping[ci] = field
-                    used.add(field)
-                    break
+def parse_page(html: str, debug_path: Optional[str] = None,
+               save_html: Optional[str] = None) -> list:
+    """Parse mpp_list.jsp and return list of fund dicts."""
 
-    return mapping
-
-
-def parse_table(html: str, return_type: str = "default",
-                debug_path: Optional[str] = None,
-                save_html: Optional[str] = None) -> list:
-    """
-    Parse mpp_list.jsp HTML. return_type is 'default', 'ar', or 'cr'.
-    Returns list of fund dicts with {id, name, provider, category, riskLevel,
-    nav, currency, returns:{...}, fundSize?}.
-    """
     if save_html:
         Path(save_html).parent.mkdir(parents=True, exist_ok=True)
         with open(save_html, "w", encoding="utf-8") as fh:
             fh.write(html)
-        log.info("Raw HTML saved to %s (%d bytes)", save_html, len(html))
+        log.info("Raw HTML saved (%d bytes) -> %s", len(html), save_html)
 
     soup = BeautifulSoup(html, "lxml")
-    tbl  = get_scrolltable(soup)
+    tbl  = soup.find("table", id="scrolltable")
+    if tbl is None:
+        tables = soup.find_all("table")
+        log.warning("id=scrolltable not found; %d tables total", len(tables))
+        tbl = max(tables, key=lambda t: len(t.find_all("tr")), default=None)
+
     if tbl is None:
         log.error("No table found")
         return []
 
     all_rows = tbl.find_all("tr")
-    log.info("Table rows: %d (returnType=%s)", len(all_rows), return_type)
+    log.info("Scrolltable rows: %d", len(all_rows))
 
-    header_rows: list = []
-    data_cells:  list = []
+    funds: list = []
+    data_count   = 0
+    header_count = 0
 
     for row in all_rows:
         cells = row.find_all(["td", "th"])
         texts = [c.get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
                  for c in cells]
-        if is_data_row(texts):
-            data_cells.append((cells, texts))
-        elif not data_cells:
-            header_rows.append(texts)
 
-    log.info("Header rows: %d | Data rows: %d", len(header_rows), len(data_cells))
-
-    if not data_cells:
-        log.error("No data rows found (is_data_row never matched)")
-        # Log some rows for debugging
-        for ri, row in enumerate(all_rows[5:15]):
-            cells = row.find_all(["td", "th"])
-            texts = [c.get_text(strip=True)[:25] for c in cells]
-            log.info("  row[%d]: %s", ri + 5, texts)
-        return []
-
-    # Detect return column map
-    ret_map = detect_return_col_map(header_rows, return_type)
-    log.info("Return col map: %s", ret_map)
-
-    # If header-based detection failed, use positional fallback
-    if not ret_map:
-        log.warning("Header detection failed; trying positional fallback at col 10+")
-        # Sample first 3 data rows to see how many columns there are
-        sample_len = max(len(t) for _, t in data_cells[:3]) if data_cells else 0
-        log.info("Max cols in first 3 data rows: %d", sample_len)
-        if return_type == "cr":
-            fields = ["oneMonth", "threeMonths", "sixMonths", "oneYear", "threeYears", "fiveYears"]
-        else:
-            fields = ["oneYear", "threeYears", "fiveYears"]
-        for i, field in enumerate(fields):
-            ci = COL_RET_BASE + i * 2  # every other col (empty col between each)
-            if ci < sample_len:
-                ret_map[ci] = field
-
-    # Optional debug dump
-    if debug_path:
-        _write_debug(debug_path, return_type, header_rows, data_cells[:8], ret_map)
-
-    # Parse data rows
-    funds: list = []
-    for cells, texts in data_cells:
-        def cell(idx, default=""):
-            return texts[idx] if idx < len(texts) else default
-
-        fund_name = cell(COL_NAME)
-        if not fund_name or len(fund_name) < 2:
+        if not is_data_row(texts):
+            if not funds:
+                header_count += 1
             continue
 
+        data_count += 1
+
+        def cell(idx) -> str:
+            return texts[idx] if idx < len(texts) else ""
+
+        # Category
         raw_cat   = cell(COL_TYPE)
         cat_lower = raw_cat.lower()
         category  = raw_cat
@@ -309,17 +230,57 @@ def parse_table(html: str, return_type: str = "default",
                 category = val
                 break
 
+        # Risk level
         risk_raw   = cell(COL_RISK)
         m          = re.search(r"[1-5]", risk_raw)
         risk_level = int(m.group()) if m else RISK_BY_CATEGORY.get(category, 3)
 
-        ret_vals: dict = {}
-        for ci, field in ret_map.items():
-            v = parse_float(cell(ci))
-            if v is not None:
-                ret_vals[field] = v
+        # Return values from fixed columns
+        ann_1y  = parse_float(cell(COL_ANN_1Y))    # 1Y annualized % p.a.
+        cum_5y  = parse_float(cell(COL_CUM_5Y))     # 5Y cumulative %
+        cyr_25  = parse_float(cell(COL_CYR_2025))   # 2025 calendar year %
+        cyr_24  = parse_float(cell(COL_CYR_2024))   # 2024 calendar year %
+        cyr_23  = parse_float(cell(COL_CYR_2023))   # 2023 calendar year %
+        cyr_22  = parse_float(cell(COL_CYR_2022))   # 2022 calendar year %
 
-        fund_id = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+        # oneYear: use ann_1y (annualized 12-month return, most accurate)
+        one_year = ann_1y if ann_1y is not None else 0.0
+
+        # fiveYears: use cum_5y (5Y cumulative total return)
+        five_years = cum_5y if cum_5y is not None else round(one_year * 5 * 0.85, 2)
+
+        # threeYears: compound of last 3 calendar years
+        if all(v is not None for v in [cyr_25, cyr_24, cyr_23]):
+            three_y_cum = ((1 + cyr_25 / 100) * (1 + cyr_24 / 100) * (1 + cyr_23 / 100) - 1) * 100
+            three_years = round(three_y_cum, 4)
+        else:
+            three_years = round(one_year * 3 * 0.9, 4)
+
+        # sixMonths: proxy from 2025 calendar year / 2
+        # (assumes 2025 full-year return is a proxy for recent performance)
+        if cyr_25 is not None:
+            six_months = round(cyr_25 * 0.5, 4)
+        else:
+            six_months = round(one_year * 0.5, 4)
+
+        # Shorter periods: derived fractions
+        three_months = round(one_year * 0.25, 4)
+        one_month    = round(one_year / 12,   4)
+        one_week     = round(one_year / 52,   4)
+
+        returns = {
+            "oneWeek":     one_week,
+            "oneMonth":    one_month,
+            "threeMonths": three_months,
+            "sixMonths":   six_months,
+            "oneYear":     round(one_year,   4),
+            "threeYears":  three_years,
+            "fiveYears":   round(five_years, 4),
+        }
+
+        fund_name = cell(COL_NAME)
+        fund_id   = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+
         fund = {
             "id":        fund_id,
             "name":      fund_name,
@@ -329,85 +290,41 @@ def parse_table(html: str, return_type: str = "default",
             "riskLevel": max(1, min(5, risk_level)),
             "nav":       10.0,
             "currency":  "HKD",
-            "returns":   ret_vals,
+            "returns":   returns,
         }
         size = parse_float(cell(COL_SIZE))
         if size is not None:
             fund["fundSize"] = size
+
         funds.append(fund)
 
-    log.info("Parsed %d funds", len(funds))
+    log.info("Skipped %d header rows | Parsed %d fund rows", header_count, data_count)
+
+    # Sort by 1-year return descending
+    funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
+
+    # Debug dump
+    if debug_path:
+        _write_debug(debug_path, funds[:5])
+
     return funds
 
 
-def _write_debug(debug_path, return_type, header_rows, sample_data, ret_map):
-    lines = [f"=== PARSE DEBUG  returnType={return_type} ===", ""]
-    lines.append("== HEADER ROWS ==")
-    for ri, row in enumerate(header_rows):
-        lines.append(f"  hrow[{ri}]: {row}")
-    lines.append("")
-    lines.append(f"== DETECTED RETURN COLUMNS: {ret_map} ==")
-    lines.append("")
-    lines.append("== FIRST DATA ROWS (ALL CELLS) ==")
-    for ri, (_, texts) in enumerate(sample_data):
-        lines.append(f"  data[{ri}] ({len(texts)} cells):")
-        for ci, t in enumerate(texts):
-            if t:
-                lines.append(f"    col {ci:2d}: {t!r}")
+def _write_debug(debug_path: str, sample: list) -> None:
+    lines = ["=== PARSE DEBUG v7 ===", f"Top 5 funds by 1Y:"]
+    for f in sample:
+        r = f["returns"]
+        lines.append(
+            f"  {f['name'][:35]:35s} | "
+            f"1Y:{r['oneYear']:7.2f}%  "
+            f"3Y:{r['threeYears']:7.2f}%  "
+            f"5Y:{r['fiveYears']:7.2f}%  "
+            f"6M:{r['sixMonths']:7.2f}%"
+        )
     Path(debug_path).parent.mkdir(parents=True, exist_ok=True)
     with open(debug_path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))
-    log.info("Debug dump -> %s", debug_path)
-
-
-# ---------------------------------------------------------------------------
-# Merge
-# ---------------------------------------------------------------------------
-
-def merge(funds_default: list, funds_cr: list) -> list:
-    """
-    Merge annualized (default) and cumulative (cr) return data.
-    Priority for short-term periods: cr > default.
-    Priority for long-term periods: default > cr (annualized is more accurate).
-    """
-    by_name = {f["name"]: f for f in funds_default}
-
-    # Overlay cr data
-    for f_cr in funds_cr:
-        name = f_cr["name"]
-        if name in by_name:
-            base = by_name[name]
-            # Merge returns: cr wins for 1M/3M/6M; default wins for 1Y/3Y/5Y
-            base_ret = base["returns"]
-            cr_ret   = f_cr["returns"]
-            for field in ["oneMonth", "threeMonths", "sixMonths"]:
-                if field in cr_ret:
-                    base_ret[field] = cr_ret[field]
-            for field in ["oneYear", "threeYears", "fiveYears"]:
-                if field not in base_ret and field in cr_ret:
-                    base_ret[field] = cr_ret[field]
-
-    # Fill missing period returns with approximations
-    for fund in by_name.values():
-        r   = fund["returns"]
-        y1  = r.get("oneYear", 0.0)
-        r.setdefault("sixMonths",   round(y1 * 0.5,       4))
-        r.setdefault("threeMonths", round(y1 * 0.25,      4))
-        r.setdefault("oneMonth",    round(y1 / 12,        4))
-        r.setdefault("oneWeek",     round(y1 / 52,        4))
-        r.setdefault("threeYears",  round(y1 * 3 * 0.9,   4))
-        r.setdefault("fiveYears",   round(y1 * 5 * 0.85,  4))
-
-        # Normalise to required set, round to 4dp
-        fund["returns"] = {
-            k: round(float(r.get(k, 0.0)), 4)
-            for k in ["oneWeek", "oneMonth", "threeMonths", "sixMonths",
-                      "oneYear", "threeYears", "fiveYears"]
-        }
-
-    result = list(by_name.values())
-    result.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
-    return result
+    log.info("Debug -> %s", debug_path)
 
 
 # ---------------------------------------------------------------------------
@@ -447,73 +364,45 @@ def save(funds: list, source: str, note: str) -> None:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--debug-html", metavar="PATH",
-                    help="Write parse debug info to file")
-    ap.add_argument("--save-html",  metavar="PATH",
-                    help="Save raw page HTML to file")
+    ap.add_argument("--debug-html", metavar="PATH", help="Write parse debug to file")
+    ap.add_argument("--save-html",  metavar="PATH", help="Save raw HTML to file")
     args = ap.parse_args()
 
     log.info("=" * 60)
-    log.info("MPF scraper v6  -  %s", LIST_URL)
+    log.info("MPF scraper v7  -  %s", LIST_URL)
     log.info("Output: %s", DATA_FILE)
     log.info("=" * 60)
 
     sess = make_session()
 
-    # --- Step 1: GET default page (annualized returns: 1Y, 5Y, 10Y) ---
-    log.info("\n[Step 1] GET default page (annualized returns)...")
+    log.info("\nFetching %s ...", LIST_URL)
     r = safe_get(sess, LIST_URL)
     if r is None or r.status_code != 200:
-        log.error("Failed to GET list page")
+        log.error("GET failed (status=%s)", r.status_code if r else "N/A")
+        cached = load_cache()
+        if cached:
+            log.info("Keeping cache: %d funds, %s",
+                     cached.get("totalFunds", 0), cached.get("lastUpdatedHKT", "?"))
         sys.exit(1)
+
     r.encoding = r.apparent_encoding or "utf-8"
-
-    funds_default = parse_table(
-        r.text,
-        return_type="default",
-        debug_path=args.debug_html,
-        save_html=args.save_html,
-    )
-    log.info("[Step 1] Parsed %d funds (default/ar)", len(funds_default))
-
-    if not funds_default:
-        log.error("No funds from default page")
-        sys.exit(1)
-
-    time.sleep(1.5)
-
-    # --- Step 2: POST with returnType=cr (cumulative: 1M, 3M, 6M, 1Y, 3Y, 5Y) ---
-    log.info("\n[Step 2] POST returnType=cr (cumulative returns)...")
-    payload_cr = {**FORM_BASE, "returnType": "cr"}
-    r_cr = safe_post(sess, LIST_URL, payload_cr)
-    funds_cr: list = []
-    if r_cr and r_cr.status_code == 200:
-        r_cr.encoding = r_cr.apparent_encoding or "utf-8"
-        funds_cr = parse_table(r_cr.text, return_type="cr")
-        log.info("[Step 2] Parsed %d funds (cr)", len(funds_cr))
-    else:
-        log.warning("[Step 2] cr POST failed (status=%s); will use approximations",
-                    r_cr.status_code if r_cr else "N/A")
-
-    # --- Step 3: Merge ---
-    log.info("\n[Step 3] Merging...")
-    funds = merge(funds_default, funds_cr)
-    log.info("[Step 3] %d funds merged", len(funds))
+    funds = parse_page(r.text, debug_path=args.debug_html, save_html=args.save_html)
 
     if len(funds) < 50:
-        log.error("Only %d funds — suspiciously low, aborting", len(funds))
+        log.error("Only %d funds parsed — likely a page structure change, aborting", len(funds))
         sys.exit(1)
 
-    # --- Step 4: Save ---
-    has_cr = len(funds_cr) > 0
     source = "mpfa"
     note   = (f"mfp.mpfa.org.hk/eng/mpp_list.jsp | "
               f"{len(funds)} funds | "
-              f"{'annualized+cumulative' if has_cr else 'annualized (1Y approx for short periods)'}")
+              f"1Y/5Y real; 3Y from calendar years; 6M/3M/1M/1W derived")
     save(funds, source, note)
 
+    # Print summary
+    nonzero = sum(1 for f in funds if abs(f["returns"]["oneYear"]) > 0.01)
     log.info("\n" + "=" * 60)
-    log.info("Done! dataSource=%s totalFunds=%d", source, len(funds))
+    log.info("Done! %d funds, %d with non-zero 1Y return", len(funds), nonzero)
+    log.info("dataSource=%s", source)
     log.info("=" * 60)
 
 

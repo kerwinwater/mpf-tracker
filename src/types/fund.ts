@@ -20,7 +20,7 @@ export interface Fund {
   name: string;          // 基金名稱（繁體中文）
   provider: string;      // 受託人（例：宏利強積金）
   category: string;      // 基金類別
-  riskLevel: number;     // 風險等級 1-5（1=最低，5=最高）
+  riskLevel: number;     // 風險等級 1-7（MPFA 強積金風險指標，1=甚低，7=甚高）
   nav: number;           // 最新資產淨值
   currency: string;      // 貨幣（HKD）
   fundSize?: number;     // 基金規模（億港元，選用）
@@ -73,20 +73,24 @@ export const PERIOD_LABELS: Record<SortPeriod, string> = {
   fiveYears: "5年",
 };
 
-/** 風險等級標籤 */
+/** 風險等級標籤（MPFA 強積金風險指標 1-7 級） */
 export const RISK_LABELS: Record<number, string> = {
-  1: "極低風險",
+  1: "甚低風險",
   2: "低風險",
   3: "中風險",
-  4: "中高風險",
+  4: "中至高風險",
   5: "高風險",
+  6: "高風險",
+  7: "甚高風險",
 };
 
 /** 風險等級顏色 */
 export const RISK_COLORS: Record<number, string> = {
   1: "text-emerald-600 bg-emerald-50",
-  2: "text-blue-600 bg-blue-50",
-  3: "text-amber-600 bg-amber-50",
-  4: "text-orange-600 bg-orange-50",
-  5: "text-red-600 bg-red-50",
+  2: "text-teal-600 bg-teal-50",
+  3: "text-blue-600 bg-blue-50",
+  4: "text-amber-600 bg-amber-50",
+  5: "text-orange-600 bg-orange-50",
+  6: "text-red-600 bg-red-50",
+  7: "text-red-700 bg-red-100",
 };

@@ -12,7 +12,7 @@ From debug inspection, data rows in id=scrolltable have 29 cells:
   col  5: Fund Type                          COL_TYPE
   col  6: Launch Date (DD-MM-YYYY)           COL_LAUNCH  <- used to detect data rows
   col  7: Fund Size (HKD'm)
-  col  8: Risk Class (1-5)                   COL_RISK    <- also used to detect data rows
+  col  8: Risk Class (1-7, MPFA Median Risk Indicator scale) COL_RISK
   col  9: Latest FER (%)
   col 10: Annualized 1-Year return (% p.a.)  -> oneYear
   col 11: Annualized 5-Year return (% p.a.)  -> (used to verify)
@@ -65,7 +65,7 @@ ROOT_DIR  = Path(__file__).parent.parent
 DATA_FILE = ROOT_DIR / "public" / "data" / "funds.json"
 
 BASE_URL = "https://mfp.mpfa.org.hk"
-LIST_URL = f"{BASE_URL}/eng/mpp_list.jsp"
+LIST_URL = f"{BASE_URL}/tch/mpp_list.jsp"
 
 HEADERS = {
     "User-Agent": (
@@ -74,10 +74,10 @@ HEADERS = {
         "Chrome/122.0.0.0 Safari/537.36"
     ),
     "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8",
+    "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.5",
     "Accept-Encoding": "gzip, deflate, br",
     "Connection":      "keep-alive",
-    "Referer":         BASE_URL + "/",
+    "Referer":         BASE_URL + "/tch/",
 }
 
 # Fixed column indices (verified from debug inspection)
@@ -100,6 +100,15 @@ COL_CYR_2022 = 21   # Calendar year 2022 return (%)
 COL_CYR_2021 = 22   # Calendar year 2021 return (%)
 
 CATEGORY_MAP = {
+    # Traditional Chinese keys (from /tch/ page)
+    "股票基金":       "股票基金",
+    "混合資產基金":   "混合資產基金",
+    "債券基金":       "債券基金",
+    "保本基金":       "保本基金",
+    "貨幣市場基金":   "貨幣市場基金",
+    "保證基金":       "保證基金",
+    "強積金保守基金": "強積金保守基金",
+    # English keys (fallback for /eng/ page)
     "equity fund":               "股票基金",
     "mixed assets fund":          "混合資產基金",
     "bond fund":                  "債券基金",
@@ -109,12 +118,13 @@ CATEGORY_MAP = {
     "mpf conservative fund":      "強積金保守基金",
 }
 
+# Default risk level by category (MPFA 1-7 Median Risk Indicator scale)
 RISK_BY_CATEGORY = {
-    "股票基金":       5,
-    "混合資產基金":   3,
-    "債券基金":       2,
-    "保本基金":       1,
-    "貨幣市場基金":   1,
+    "股票基金":       6,
+    "混合資產基金":   4,
+    "債券基金":       3,
+    "保本基金":       2,
+    "貨幣市場基金":   2,
     "保證基金":       1,
     "強積金保守基金": 1,
 }
@@ -165,13 +175,15 @@ def parse_float(text: str) -> Optional[float]:
 def is_data_row(texts: list) -> bool:
     """
     True if this row is a real fund row (not a header/footer/spacer).
-    Criteria: col 6 has a date DD-MM-YYYY AND col 8 is a single digit 1-5.
+    Criteria:
+      col 6: DD-MM-YYYY launch date
+      col 8: single digit 1-7 (MPFA Median Risk Indicator scale)
     """
     if len(texts) <= COL_RISK:
         return False
     launch = texts[COL_LAUNCH] if COL_LAUNCH < len(texts) else ""
     risk   = texts[COL_RISK]   if COL_RISK   < len(texts) else ""
-    return bool(DATE_RE.fullmatch(launch)) and bool(re.fullmatch(r"[1-5]", risk))
+    return bool(DATE_RE.fullmatch(launch)) and bool(re.fullmatch(r"[1-7]", risk))
 
 
 # ---------------------------------------------------------------------------
@@ -232,8 +244,8 @@ def parse_page(html: str, debug_path: Optional[str] = None,
 
         # Risk level
         risk_raw   = cell(COL_RISK)
-        m          = re.search(r"[1-5]", risk_raw)
-        risk_level = int(m.group()) if m else RISK_BY_CATEGORY.get(category, 3)
+        m          = re.search(r"[1-7]", risk_raw)
+        risk_level = int(m.group()) if m else RISK_BY_CATEGORY.get(category, 4)
 
         # Return values from fixed columns
         ann_1y  = parse_float(cell(COL_ANN_1Y))    # 1Y annualized % p.a.
@@ -287,7 +299,7 @@ def parse_page(html: str, debug_path: Optional[str] = None,
             "provider":  cell(COL_TRUSTEE),
             "scheme":    cell(COL_SCHEME),
             "category":  category or "股票基金",
-            "riskLevel": max(1, min(5, risk_level)),
+            "riskLevel": max(1, min(7, risk_level)),
             "nav":       10.0,
             "currency":  "HKD",
             "returns":   returns,

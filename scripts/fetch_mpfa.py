@@ -275,10 +275,17 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         else:
             six_months = round(one_year * 0.5, 4)
 
-        # Shorter periods: derived fractions
-        three_months = round(one_year * 0.25, 4)
-        one_month    = round(one_year / 12,   4)
-        one_week     = round(one_year / 52,   4)
+        # Shorter periods: derived from cyr_25 (2025 YTD) to keep rankings
+        # independent from the annualised 1-year figure.  When cyr_25 is
+        # unavailable fall back to oneYear (same ranking as 1Y but acceptable).
+        if cyr_25 is not None:
+            three_months = round(cyr_25 * 0.25, 4)
+            one_month    = round(cyr_25 / 12,   4)
+            one_week     = round(cyr_25 / 52,   4)
+        else:
+            three_months = round(one_year * 0.25, 4)
+            one_month    = round(one_year / 12,   4)
+            one_week     = round(one_year / 52,   4)
 
         returns = {
             "oneWeek":     one_week,

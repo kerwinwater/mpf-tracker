@@ -36,14 +36,20 @@ export default function FundCard({
       ? Math.min((Math.abs(mainReturn) / maxAbsReturn) * 100, 100)
       : 0;
 
-  // Animate bar on mount
+  // Re-animate bar whenever period or rank changes
   const [revealed, setRevealed] = useState(false);
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setTimeout(() => setRevealed(true), rank * 30);
+    setRevealed(false);
+    let rafId: number;
+    let timerId: ReturnType<typeof setTimeout>;
+    rafId = requestAnimationFrame(() => {
+      timerId = setTimeout(() => setRevealed(true), rank * 30);
     });
-    return () => cancelAnimationFrame(id);
-  }, [rank]);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timerId);
+    };
+  }, [rank, activePeriod]);
 
   const rankStyle = getRankStyle(rank);
   const medal = rank <= 3 ? MEDALS[rank - 1] : null;

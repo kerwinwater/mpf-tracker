@@ -1,25 +1,41 @@
 #!/usr/bin/env python3
 """
-MPF 強積金基金數據爬蟲 v2
-=====================================
+MPF list scraper v9
+============================================================
+Scrapes mpp_list.jsp for fund metadata and MPFA-computed returns.
+Outputs public/data/funds.json with metadata + annual returns.
 
-數據來源：積金局基金表現平台 mfp.mpfa.org.hk
-目標頁面：https://mfp.mpfa.org.hk/eng/information/fund/prices_and_performances.jsp
+The short-period returns (1W/1M/3M/6M) are initially set from
+calendar-year proxies. fetch_nav.py overwrites them with real
+values derived from the monthly NAV price history.
 
-運作流程：
-1. 訪問 MPFA 績效頁面，建立 Session 取得 Cookie
-2. 逐一抓取 7 個回報時段（1W/1M/3M/6M/1Y/3Y/5Y）
-3. 解析 HTML 表格，動態識別欄位位置
-4. 合併所有時段數據，寫入 public/data/funds.json
-5. 失敗時保留快取，確保網站不中斷
-
-使用：
-    python3 scripts/fetch_mpfa.py
-
-依賴：
-    pip install requests beautifulsoup4 lxml
+Column layout of scrolltable data rows (29 cells, 0-indexed):
+  col  0: expand widget
+  col  1: Scheme
+  col  2: spacer
+  col  3: Constituent Fund (fund name)        COL_NAME
+  col  4: MPF Trustee                         COL_TRUSTEE
+  col  5: Fund Type                           COL_TYPE
+  col  6: Launch Date DD-MM-YYYY              COL_LAUNCH  <- row detector
+  col  7: Fund Size HKD'm
+  col  8: Risk Class 1-7                      COL_RISK    <- row detector
+  col  9: FER %
+  col 10: Annualized 1-Year (% p.a.)          -> oneYear
+  col 11: Annualized 5-Year (% p.a.)
+  col 12-13: 10Y / Since-launch ann
+  col 14: Cumulative 1-Year %
+  col 15: Cumulative 5-Year %                 -> fiveYears
+  col 16-17: 10Y / Since-launch cum
+  col 18: Calendar Year 2025 %               -> short-period proxy
+  col 19: Calendar Year 2024 %
+  col 20: Calendar Year 2023 %
+  col 21: Calendar Year 2022 %
+  col 22: Calendar Year 2021 %
+  col 23-27: fees
+  col 28: detail page link  -> cfId extracted here
 """
 
+import argparse
 import json
 import hashlib
 import logging
@@ -33,7 +49,6 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup
 
-# ─── 日誌設定 ─────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -41,22 +56,12 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# ─── 路徑設定 ─────────────────────────────────────────────────────────────────
 ROOT_DIR  = Path(__file__).parent.parent
-DATA_FILE = ROOT_DIR / "public" / "data" / "funds.json"   # ← 輸出到 public/ 供前端讀取
+DATA_FILE = ROOT_DIR / "public" / "data" / "funds.json"
 
-# ─── MPFA 網站設定（英文版） ──────────────────────────────────────────────────
-BASE_URL  = "https://mfp.mpfa.org.hk"
+BASE_URL = "https://mfp.mpfa.org.hk"
+LIST_URL = f"{BASE_URL}/tch/mpp_list.jsp"
 
-# 英文版績效頁面
-PERF_PAGE = f"{BASE_URL}/eng/information/fund/prices_and_performances.jsp"
-PERF_API  = f"{BASE_URL}/eng/information/fund/prices_and_performances.do"
-
-# 備用：繁體中文版（如英文版失敗）
-PERF_PAGE_TCH = f"{BASE_URL}/tch/information/fund/prices_and_performances.jsp"
-PERF_API_TCH  = f"{BASE_URL}/tch/information/fund/prices_and_performances.do"
-
-# 模擬 Chrome 瀏覽器標頭
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -64,34 +69,27 @@ HEADERS = {
         "Chrome/122.0.0.0 Safari/537.36"
     ),
     "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7",
+    "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.5",
     "Accept-Encoding": "gzip, deflate, br",
     "Connection":      "keep-alive",
-    "Cache-Control":   "no-cache",
+    "Referer":         BASE_URL + "/tch/",
 }
 
-# 7 個回報時段（MPFA 參數 → JSON key）
-PERIODS = {
-    "1W": "oneWeek",
-    "1M": "oneMonth",
-    "3M": "threeMonths",
-    "6M": "sixMonths",
-    "1Y": "oneYear",
-    "3Y": "threeYears",
-    "5Y": "fiveYears",
-}
+COL_SCHEME   = 1
+COL_NAME     = 3
+COL_TRUSTEE  = 4
+COL_TYPE     = 5
+COL_LAUNCH   = 6
+COL_SIZE     = 7
+COL_RISK     = 8
+COL_ANN_1Y   = 10
+COL_CUM_5Y   = 15
+COL_CYR_2025 = 18
+COL_CYR_2024 = 19
+COL_CYR_2023 = 20
+COL_DETAIL   = 28
 
-# 類別名稱標準化（英文 → 繁中）
 CATEGORY_MAP = {
-    # 英文
-    "Equity Fund":                "股票基金",
-    "Mixed Assets Fund":          "混合資產基金",
-    "Bond Fund":                  "債券基金",
-    "Capital Preservation Fund":  "保本基金",
-    "Money Market Fund":          "貨幣市場基金",
-    "Guaranteed Fund":            "保證基金",
-    "MPF Conservative Fund":      "強積金保守基金",
-    # 繁中（MPFA 有時混用）
     "股票基金":       "股票基金",
     "混合資產基金":   "混合資產基金",
     "債券基金":       "債券基金",
@@ -99,330 +97,257 @@ CATEGORY_MAP = {
     "貨幣市場基金":   "貨幣市場基金",
     "保證基金":       "保證基金",
     "強積金保守基金": "強積金保守基金",
+    "equity fund":               "股票基金",
+    "mixed assets fund":          "混合資產基金",
+    "bond fund":                  "債券基金",
+    "capital preservation fund":  "保本基金",
+    "money market fund":          "貨幣市場基金",
+    "guaranteed fund":            "保證基金",
+    "mpf conservative fund":      "強積金保守基金",
 }
 
-# 依類別推算風險等級
 RISK_BY_CATEGORY = {
-    "股票基金":       5,
-    "混合資產基金":   3,
-    "債券基金":       2,
-    "保本基金":       1,
-    "貨幣市場基金":   1,
+    "股票基金":       6,
+    "混合資產基金":   4,
+    "債券基金":       3,
+    "保本基金":       2,
+    "貨幣市場基金":   2,
     "保證基金":       1,
     "強積金保守基金": 1,
 }
 
-
-# ─── Session 管理 ─────────────────────────────────────────────────────────────
-
-def create_session() -> requests.Session:
-    sess = requests.Session()
-    sess.headers.update(HEADERS)
-    return sess
+DATE_RE = re.compile(r"\d{2}-\d{2}-\d{4}")
 
 
-def init_session(sess: requests.Session, page_url: str, api_url: str) -> bool:
-    """
-    訪問績效頁面取得 JSESSIONID Cookie。
-    MPFA 是 JSP 應用，必須先建立 session 才能 POST 查詢。
-    """
-    log.info(f"連接 MPFA 網站：{page_url}")
-    try:
-        r = sess.get(page_url, timeout=30)
-        r.raise_for_status()
-        cookies = list(sess.cookies.keys())
-        log.info(f"✅ 連接成功 HTTP {r.status_code}，Cookies: {cookies}")
-        return True
-    except requests.exceptions.RequestException as e:
-        log.error(f"❌ 連接失敗：{e}")
-        return False
+# ---------------------------------------------------------------------------
+# HTTP
+# ---------------------------------------------------------------------------
+
+def make_session() -> requests.Session:
+    s = requests.Session()
+    s.headers.update(HEADERS)
+    return s
 
 
-# ─── 數據抓取 ─────────────────────────────────────────────────────────────────
-
-def fetch_period(
-    sess: requests.Session,
-    api_url: str,
-    page_url: str,
-    lang: str,
-    period_code: str,
-    max_retries: int = 3,
-) -> Optional[str]:
-    """
-    POST 請求抓取指定時段的基金回報 HTML 表格。
-
-    MPFA POST 參數：
-      period    → 時段代碼 (1W/1M/3M/6M/1Y/3Y/5Y)
-      sortBy    → 排序欄位（fundName / rtnPct）
-      sortOrder → asc / desc
-      fundType  → 基金類別（空白 = 全部）
-      trusteeId → 受託人（空白 = 全部）
-      pageNo    → 頁碼（1 起）
-      pageSize  → 每頁筆數（設 9999 取得全部）
-    """
-    payload = {
-        "lang":        lang,
-        "sortBy":      "fundName",
-        "sortOrder":   "asc",
-        "period":      period_code,
-        "fundType":    "",
-        "trusteeId":   "",
-        "pageNo":      "1",
-        "pageSize":    "9999",
-    }
-    extra_headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Referer":       page_url,
-        "Origin":        BASE_URL,
-        "X-Requested-With": "XMLHttpRequest",
-    }
-
-    for attempt in range(1, max_retries + 1):
+def safe_get(sess, url, retries=2, **kwargs) -> Optional[requests.Response]:
+    kwargs.setdefault("timeout", 30)
+    for attempt in range(retries + 1):
         try:
-            r = sess.post(api_url, data=payload, headers=extra_headers, timeout=45)
-            r.raise_for_status()
-            r.encoding = "utf-8"
-
-            body = r.text
-            if len(body) < 300:
-                log.warning(f"  ⚠️  {period_code}: 回應太短 ({len(body)} bytes)，第 {attempt} 次")
-                if attempt < max_retries:
-                    time.sleep(2 ** attempt)
-                    continue
-                return None
-
-            log.info(f"  ✅ {period_code}: HTTP {r.status_code}，{len(body):,} bytes")
-            return body
-
-        except requests.exceptions.Timeout:
-            log.warning(f"  ⚠️  {period_code}: 逾時，第 {attempt}/{max_retries} 次")
-        except requests.exceptions.RequestException as e:
-            log.warning(f"  ⚠️  {period_code}: 第 {attempt}/{max_retries} 次失敗 — {e}")
-
-        if attempt < max_retries:
-            time.sleep(2 ** attempt)
-
-    log.error(f"  ❌ {period_code}: {max_retries} 次重試後仍失敗")
+            r = sess.get(url, **kwargs)
+            log.debug("GET %s -> %d (%d bytes)", url, r.status_code, len(r.content))
+            return r
+        except requests.RequestException as e:
+            log.warning("GET attempt %d/%d: %s", attempt + 1, retries + 1, e)
+            if attempt < retries:
+                time.sleep(2 ** attempt)
     return None
 
 
-# ─── HTML 解析 ────────────────────────────────────────────────────────────────
-
-# 識別不同語言的欄位名稱
-HEADER_PATTERNS = {
-    "name":     [r"fund\s*name", r"基金名稱", r"name"],
-    "type":     [r"fund\s*type", r"基金類別", r"類別", r"type"],
-    "trustee":  [r"trustee", r"受託人", r"provider"],
-    "return":   [r"return", r"回報", r"rtn\s*%", r"%"],
-    "nav":      [r"nav", r"net\s*asset", r"資產淨值", r"unit\s*price"],
-}
-
-
-def detect_columns(headers: list[str]) -> dict[str, int]:
-    """
-    動態偵測表格各欄的位置。
-    MPFA 網頁改版時欄位順序可能改變，此函數自動適應。
-    """
-    result = {}
-    for col_key, patterns in HEADER_PATTERNS.items():
-        for i, h in enumerate(headers):
-            h_lower = h.lower().strip()
-            if any(re.search(p, h_lower) for p in patterns):
-                if col_key not in result:  # 取第一個匹配
-                    result[col_key] = i
-    return result
+def parse_float(text: str) -> Optional[float]:
+    if not text:
+        return None
+    t = text.replace("%", "").replace(",", "").replace("+", "").strip()
+    if t in ("N/A", "NA", "n.a.", "n/a", "-", "--", ""):
+        return None
+    try:
+        return float(t)
+    except ValueError:
+        return None
 
 
-def parse_fund_table(html: str, period_key: str) -> dict:
-    """
-    解析 MPFA 回應的 HTML 表格，提取基金數據。
+# ---------------------------------------------------------------------------
+# Row detection
+# ---------------------------------------------------------------------------
 
-    策略：
-    1. 找到包含基金數據的 <table>（嘗試多種選擇器）
-    2. 解析 <thead> 偵測欄位位置
-    3. 逐行讀取 <tbody> 的基金數據
-    """
+def is_data_row(texts: list) -> bool:
+    if len(texts) <= COL_RISK:
+        return False
+    launch = texts[COL_LAUNCH] if COL_LAUNCH < len(texts) else ""
+    risk   = texts[COL_RISK]   if COL_RISK   < len(texts) else ""
+    return bool(DATE_RE.fullmatch(launch)) and bool(re.fullmatch(r"[1-7]", risk))
+
+
+# ---------------------------------------------------------------------------
+# cf_id extraction
+# ---------------------------------------------------------------------------
+
+def _extract_cf_id(cells: list) -> Optional[str]:
+    """Extract the numeric cf_id from the detail link in col 28."""
+    check = cells[COL_DETAIL:COL_DETAIL + 1] + cells[-3:]
+    for cell in check:
+        for a in cell.find_all("a"):
+            href    = a.get("href", "")
+            onclick = a.get("onclick", "")
+            for src in (href, onclick):
+                m = re.search(r"cf_id=(\d+)", src, re.IGNORECASE)
+                if m:
+                    return m.group(1)
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Main parser
+# ---------------------------------------------------------------------------
+
+def parse_page(html: str, debug_path: Optional[str] = None,
+               save_html: Optional[str] = None) -> list:
+    """Parse mpp_list.jsp and return list of fund dicts."""
+
+    if save_html:
+        Path(save_html).parent.mkdir(parents=True, exist_ok=True)
+        with open(save_html, "w", encoding="utf-8") as fh:
+            fh.write(html)
+        log.info("Raw HTML saved (%d bytes) -> %s", len(html), save_html)
+
     soup = BeautifulSoup(html, "lxml")
-    funds: dict = {}
-
-    # ── 找到目標表格 ──────────────────────────────────────────────────────────
-    table = None
-
-    # 策略 1：找有 class 含 "fund" 或 "result" 的 table
-    for cls_pat in [r"fund", r"result", r"list", r"table"]:
-        table = soup.find("table", class_=re.compile(cls_pat, re.I))
-        if table:
-            break
-
-    # 策略 2：找有 id 含 "fund" 或 "result" 的 table
-    if not table:
-        for id_pat in [r"fund", r"result", r"list"]:
-            table = soup.find("table", id=re.compile(id_pat, re.I))
-            if table:
-                break
-
-    # 策略 3：取最大的表格（行數最多）
-    if not table:
+    tbl  = soup.find("table", id="scrolltable")
+    if tbl is None:
         tables = soup.find_all("table")
-        if tables:
-            table = max(tables, key=lambda t: len(t.find_all("tr")))
+        log.warning("id=scrolltable not found; %d tables total", len(tables))
+        tbl = max(tables, key=lambda t: len(t.find_all("tr")), default=None)
 
-    if not table:
-        log.warning(f"  ⚠️  {period_key}: 找不到任何表格")
-        return {}
+    if tbl is None:
+        log.error("No table found")
+        return []
 
-    # ── 解析表頭 ──────────────────────────────────────────────────────────────
-    thead = table.find("thead")
-    header_row = thead.find("tr") if thead else table.find("tr")
+    all_rows = tbl.find_all("tr")
+    log.info("Scrolltable rows: %d", len(all_rows))
 
-    if not header_row:
-        log.warning(f"  ⚠️  {period_key}: 找不到表頭")
-        return {}
+    funds: list = []
+    data_count  = 0
+    cf_id_count = 0
 
-    raw_headers = [th.get_text(strip=True) for th in header_row.find_all(["th", "td"])]
-    col_map = detect_columns(raw_headers)
-    log.debug(f"  欄位對照：{col_map}（原始標頭：{raw_headers}）")
+    for row in all_rows:
+        cells = row.find_all(["td", "th"])
+        texts = [
+            c.get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
+            for c in cells
+        ]
 
-    # 最少需要名稱欄，其他可缺省
-    name_col    = col_map.get("name",    0)
-    type_col    = col_map.get("type",    1)
-    trustee_col = col_map.get("trustee", 2)
-    return_col  = col_map.get("return",  3)
-    nav_col     = col_map.get("nav",    -1)
-
-    # ── 解析數據行 ────────────────────────────────────────────────────────────
-    tbody = table.find("tbody") or table
-    rows  = tbody.find_all("tr")
-    data_rows = [r for r in rows if r.find("td")]
-
-    log.info(f"  📊 {period_key}: 找到 {len(data_rows)} 行數據")
-
-    def cell(cells: list, idx: int) -> str:
-        if idx < 0 or idx >= len(cells):
-            return ""
-        return cells[idx].get_text(separator=" ", strip=True).replace("\xa0", "").strip()
-
-    for row in data_rows:
-        cells = row.find_all("td")
-        if len(cells) < 2:
+        if not is_data_row(texts):
             continue
 
-        name     = cell(cells, name_col)
-        category = cell(cells, type_col)
-        provider = cell(cells, trustee_col)
+        data_count += 1
 
-        # 找回報率欄：從 return_col 往後找第一個能 parse 成 float 的
-        return_val = None
-        for ci in range(return_col, min(return_col + 4, len(cells))):
-            raw = cell(cells, ci).replace("%", "").replace(",", "").strip()
-            try:
-                return_val = float(raw)
+        def cell(idx: int) -> str:
+            return texts[idx] if idx < len(texts) else ""
+
+        # Category
+        raw_cat  = cell(COL_TYPE)
+        category = raw_cat
+        for key, val in CATEGORY_MAP.items():
+            if raw_cat.lower().startswith(key):
+                category = val
                 break
-            except ValueError:
-                continue
 
-        if return_val is None:
-            log.debug(f"    跳過（無回報數據）：{name!r}")
-            continue
+        # Risk level
+        risk_raw   = cell(COL_RISK)
+        m          = re.search(r"[1-7]", risk_raw)
+        risk_level = int(m.group()) if m else RISK_BY_CATEGORY.get(category, 4)
 
-        if not name:
-            continue
+        # Annualised / cumulative returns from list page
+        ann_1y = parse_float(cell(COL_ANN_1Y))
+        cum_5y = parse_float(cell(COL_CUM_5Y))
+        cyr_25 = parse_float(cell(COL_CYR_2025))
+        cyr_24 = parse_float(cell(COL_CYR_2024))
+        cyr_23 = parse_float(cell(COL_CYR_2023))
 
-        # NAV
-        nav_val = 0.0
-        if nav_col >= 0:
-            raw_nav = cell(cells, nav_col).replace(",", "").strip()
-            try:
-                nav_val = float(raw_nav)
-            except ValueError:
-                pass
+        one_year   = ann_1y if ann_1y is not None else 0.0
+        five_years = cum_5y if cum_5y is not None else round(one_year * 5 * 0.85, 2)
 
-        category_zh = CATEGORY_MAP.get(category, category) or "股票基金"
+        # threeYears: compound 2023+2024+2025 calendar years
+        if all(v is not None for v in [cyr_25, cyr_24, cyr_23]):
+            three_y = (
+                (1 + cyr_25 / 100) * (1 + cyr_24 / 100) * (1 + cyr_23 / 100) - 1
+            ) * 100
+            three_years = round(three_y, 4)
+        else:
+            three_years = round(one_year * 3 * 0.9, 4)
 
-        if name not in funds:
-            funds[name] = {
-                "category": category_zh,
-                "provider": provider,
-                "nav":      nav_val,
-            }
-        funds[name][period_key] = return_val
+        # Short-period proxies (cyr_25-based, different ranking from 1Y).
+        # fetch_nav.py will overwrite these with real NAV-based values.
+        base = cyr_25 if cyr_25 is not None else one_year
+        returns = {
+            "oneWeek":     round(base / 52,   4),
+            "oneMonth":    round(base / 12,   4),
+            "threeMonths": round(base * 0.25, 4),
+            "sixMonths":   round(base * 0.5,  4),
+            "oneYear":     round(one_year,    4),
+            "threeYears":  three_years,
+            "fiveYears":   round(five_years,  4),
+        }
+
+        fund_name = cell(COL_NAME)
+        fund_id   = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
+        cf_id     = _extract_cf_id(cells)
+        if cf_id:
+            cf_id_count += 1
+
+        fund: dict = {
+            "id":       fund_id,
+            "name":     fund_name,
+            "provider": cell(COL_TRUSTEE),
+            "scheme":   cell(COL_SCHEME),
+            "category": category or "股票基金",
+            "riskLevel": max(1, min(7, risk_level)),
+            "nav":      10.0,   # placeholder; fetch_nav.py fills real value
+            "currency": "HKD",
+            "returns":  returns,
+        }
+        if cf_id:
+            fund["cfId"] = cf_id          # used by fetch_nav.py
+
+        size = parse_float(cell(COL_SIZE))
+        if size is not None:
+            fund["fundSize"] = size
+
+        funds.append(fund)
+
+    log.info(
+        "Parsed %d fund rows — cf_id found for %d/%d",
+        data_count, cf_id_count, data_count,
+    )
+
+    funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
+
+    if debug_path:
+        _write_debug(debug_path, funds[:5])
 
     return funds
 
 
-# ─── 數據合併 ─────────────────────────────────────────────────────────────────
-
-def merge_all_periods(all_data: dict[str, dict]) -> list:
-    """
-    把各時段的基金數據合併成完整的基金列表。
-
-    輸入格式：{ "oneWeek": {基金名: {...}}, "oneMonth": {基金名: {...}}, ... }
-    輸出格式：[{id, name, provider, category, riskLevel, nav, returns: {...}}]
-    """
-    all_names: set = set()
-    for period_funds in all_data.values():
-        all_names.update(period_funds.keys())
-
-    log.info(f"合併後共 {len(all_names)} 個唯一基金")
-
-    funds = []
-    for name in sorted(all_names):
-        # 從任何有數據的時段取得基本資訊
-        base: dict = {}
-        for period_funds in all_data.values():
-            if name in period_funds:
-                base = period_funds[name]
-                break
-
-        category = base.get("category", "股票基金")
-        provider = base.get("provider", "")
-        nav      = base.get("nav", 10.0)
-
-        # 各時段回報（缺失的設為 0）
-        returns: dict = {}
-        for period_key in PERIODS.values():
-            val = 0.0
-            for period_funds in all_data.values():
-                if name in period_funds and period_key in period_funds[name]:
-                    val = period_funds[name][period_key]
-                    break
-            returns[period_key] = round(float(val), 4)
-
-        fund_id = f"fund-{hashlib.md5(name.encode()).hexdigest()[:6]}"
-
-        funds.append({
-            "id":        fund_id,
-            "name":      name,
-            "provider":  provider,
-            "category":  category,
-            "riskLevel": RISK_BY_CATEGORY.get(category, 3),
-            "nav":       round(float(nav), 4) if nav else 10.0,
-            "currency":  "HKD",
-            "returns":   returns,
-        })
-
-    # 按一年回報降序排列
-    funds.sort(key=lambda f: f["returns"].get("oneYear", 0), reverse=True)
-    return funds
+def _write_debug(debug_path: str, sample: list) -> None:
+    lines = ["=== PARSE DEBUG v9 ===", "Top 5 funds by 1Y:"]
+    for f in sample:
+        r = f["returns"]
+        lines.append(
+            f"  {f['name'][:30]:30s} cfId={f.get('cfId','?'):>5s} | "
+            f"1Y:{r['oneYear']:7.2f}%  3Y:{r['threeYears']:7.2f}%  5Y:{r['fiveYears']:7.2f}%"
+        )
+    Path(debug_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(debug_path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines))
+    log.info("Debug -> %s", debug_path)
 
 
-# ─── 檔案讀寫 ─────────────────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Persistence
+# ---------------------------------------------------------------------------
 
 def load_cache() -> Optional[dict]:
     if DATA_FILE.exists():
         try:
-            with open(DATA_FILE, encoding="utf-8") as f:
-                return json.load(f)
+            with open(DATA_FILE, encoding="utf-8") as fh:
+                return json.load(fh)
         except Exception:
             pass
     return None
 
 
 def save(funds: list, source: str, note: str) -> None:
-    hkt_tz  = timezone(timedelta(hours=8))
-    now_hkt = datetime.now(hkt_tz)
-
-    output = {
+    hkt     = timezone(timedelta(hours=8))
+    now_hkt = datetime.now(hkt)
+    output  = {
         "lastUpdated":    datetime.now(timezone.utc).isoformat(),
         "lastUpdatedHKT": now_hkt.strftime("%Y-%m-%d %H:%M HKT"),
         "dataSource":     source,
@@ -430,104 +355,51 @@ def save(funds: list, source: str, note: str) -> None:
         "totalFunds":     len(funds),
         "funds":          funds,
     }
-
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-
-    log.info(f"✅ 已寫入 {DATA_FILE}")
-    log.info(f"   {len(funds)} 個基金 | 來源：{source} | {now_hkt.strftime('%Y-%m-%d %H:%M HKT')}")
+    with open(DATA_FILE, "w", encoding="utf-8") as fh:
+        json.dump(output, fh, ensure_ascii=False, indent=2)
+    log.info("Saved %d funds -> %s", len(funds), DATA_FILE)
 
 
-# ─── 主程式 ───────────────────────────────────────────────────────────────────
-
-def run_scraper(sess: requests.Session, page_url: str, api_url: str, lang: str) -> dict:
-    """執行爬蟲，回傳各時段數據字典。"""
-    all_data: dict = {}
-    failed: list   = []
-
-    for code, key in PERIODS.items():
-        html = fetch_period(sess, api_url, page_url, lang, code)
-        if html:
-            parsed = parse_fund_table(html, key)
-            if parsed:
-                all_data[key] = parsed
-                log.info(f"  ✅ {code}: {len(parsed)} 個基金")
-            else:
-                log.warning(f"  ⚠️  {code}: 解析到 0 個基金")
-                failed.append(code)
-        else:
-            failed.append(code)
-
-        time.sleep(1.5)  # 避免請求過於頻繁
-
-    if failed:
-        log.warning(f"失敗時段：{failed}")
-
-    return all_data
-
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main():
+    ap = argparse.ArgumentParser(description="Fetch MPFA fund list")
+    ap.add_argument("--debug-html", metavar="PATH", help="Write parse debug summary")
+    ap.add_argument("--save-html",  metavar="PATH", help="Save raw HTML to file")
+    args = ap.parse_args()
+
     log.info("=" * 60)
-    log.info("🚀 MPF 基金數據爬蟲 v2 啟動")
-    log.info(f"   輸出檔案：{DATA_FILE}")
+    log.info("MPF list scraper v9  -  %s", LIST_URL)
     log.info("=" * 60)
 
-    sess = create_session()
-
-    # ── 嘗試英文版 ──────────────────────────────────────────────────────────
-    log.info("\n─── 嘗試英文版 MPFA ───")
-    if init_session(sess, PERF_PAGE, PERF_API):
-        all_data = run_scraper(sess, PERF_PAGE, PERF_API, "eng")
-    else:
-        all_data = {}
-
-    # ── 如英文版失敗，嘗試繁體中文版 ────────────────────────────────────────
-    if not all_data:
-        log.info("\n─── 英文版失敗，嘗試繁體中文版 ───")
-        sess2 = create_session()
-        if init_session(sess2, PERF_PAGE_TCH, PERF_API_TCH):
-            all_data = run_scraper(sess2, PERF_PAGE_TCH, PERF_API_TCH, "tch")
-
-    # ── 評估結果 ─────────────────────────────────────────────────────────────
-    if not all_data:
-        log.warning("⚠️  所有版本均失敗，使用快取數據")
+    sess = make_session()
+    r = safe_get(sess, LIST_URL)
+    if r is None or r.status_code != 200:
+        log.error("GET failed (status=%s)", r.status_code if r else "N/A")
         cached = load_cache()
         if cached:
-            log.info(f"📋 快取數據保留（{cached.get('lastUpdatedHKT', '未知時間')}）")
-            sys.exit(0)
-        else:
-            log.error("❌ 無快取，爬取失敗")
-            sys.exit(1)
-
-    # ── 合併數據 ─────────────────────────────────────────────────────────────
-    log.info(f"\n合併 {len(all_data)} 個時段的數據...")
-    funds = merge_all_periods(all_data)
-
-    if not funds:
-        log.error("❌ 合併後基金列表為空")
+            log.info("Keeping cache: %d funds", cached.get("totalFunds", 0))
         sys.exit(1)
 
-    # ── 決定數據來源標籤 ──────────────────────────────────────────────────────
-    total_periods = len(PERIODS)
-    got_periods   = len(all_data)
+    r.encoding = r.apparent_encoding or "utf-8"
+    funds = parse_page(r.text, debug_path=args.debug_html, save_html=args.save_html)
 
-    if got_periods == total_periods:
-        source = "mpfa"
-        note   = "數據來源：積金局基金表現平台 mfp.mpfa.org.hk（完整數據）"
-    else:
-        source = "mpfa_partial"
-        note   = (
-            f"數據來源：積金局基金表現平台 mfp.mpfa.org.hk"
-            f"（{got_periods}/{total_periods} 個時段成功）"
-        )
+    if len(funds) < 50:
+        log.error("Only %d funds — possible page structure change", len(funds))
+        sys.exit(1)
 
-    # ── 儲存 ─────────────────────────────────────────────────────────────────
-    save(funds, source, note)
+    note = (
+        f"mfp.mpfa.org.hk/tch/mpp_list.jsp | {len(funds)} funds | "
+        f"1Y/5Y real; 3Y calendar-compound; 1W-6M=proxy(cyr2025)"
+    )
+    save(funds, "mpfa", note)
 
-    log.info("\n" + "=" * 60)
-    log.info("🎉 爬蟲完成！")
-    log.info("=" * 60)
+    nonzero = sum(1 for f in funds if abs(f["returns"]["oneYear"]) > 0.01)
+    cf_ids  = sum(1 for f in funds if f.get("cfId"))
+    log.info("Done: %d funds, %d non-zero 1Y, %d with cfId", len(funds), nonzero, cf_ids)
 
 
 if __name__ == "__main__":

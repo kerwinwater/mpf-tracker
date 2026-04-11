@@ -1,101 +1,76 @@
-# ─── 每日自動更新 MPF 基金數據 ────────────────────────────────────────────────
-#
-# 運作流程：
-# 1. 每天香港時間 08:00（UTC 00:00）自動觸發
-# 2. 執行 scripts/fetch_mpfa.py 從 MPFA 網站抓取最新回報數據
-# 3. 如果 public/data/funds.json 有變化，自動 commit + push
-# 4. Vercel 偵測到新 commit 後自動重新部署（更新靜態資源）
-
-name: 每日更新 MPF 基金數據
+name: Update MPF Fund Data
 
 on:
   schedule:
-    - cron: "0 0 * * 1-5"   # 週一至週五 UTC 00:00 = 香港時間 08:00
-  workflow_dispatch:         # 允許手動在 GitHub Actions 頁面觸發
+    - cron: "0 10 * * 1-5"   # 18:00 HKT (UTC+8) on weekdays
+  workflow_dispatch:
 
 jobs:
-  update-fund-data:
-    name: 抓取並更新基金數據
+  update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     permissions:
-      contents: write   # 需要 write 權限才能 push commit
+      contents: write
 
     steps:
-      # ─── 1. 取出程式碼 ────────────────────────────────────────────────────
-      - name: 📥 取出最新程式碼
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ─── 2. 設定 Python 3.11 ──────────────────────────────────────────────
-      - name: 🐍 設定 Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
-      # ─── 3. 安裝 Python 依賴 ──────────────────────────────────────────────
-      - name: 📦 安裝爬蟲依賴
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # ─── 4. 執行爬蟲（輸出到 public/data/funds.json） ────────────────────
-      - name: 🕷️ 抓取 MPFA 基金數據
-        run: python3 scripts/fetch_mpfa.py
+      - name: Fetch MPFA fund list
+        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
 
-      # ─── 5. 顯示更新摘要 ──────────────────────────────────────────────────
-      - name: 📊 顯示更新摘要
+      - name: Fetch NAV history and compute real returns
+        run: python3 scripts/fetch_nav.py --delay 0.6
+
+      - name: Show result
         run: |
           python3 -c "
           import json
-          with open('public/data/funds.json', encoding='utf-8') as f:
-              d = json.load(f)
-          print('=== 數據更新摘要 ===')
-          print('更新時間:', d.get('lastUpdatedHKT', 'N/A'))
-          print('數據來源:', d.get('dataSource', 'N/A'))
-          print('基金數量:', d.get('totalFunds', 'N/A'))
-          "
-
-      # ─── 6. 檢查 public/data/funds.json 是否有變化 ───────────────────────
-      - name: 🔍 檢查數據是否更新
-        id: check
-        run: |
-          if git diff --quiet public/data/funds.json; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "📌 數據無變化，跳過 commit"
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "✅ 數據有更新，準備 commit"
-          fi
-
-      # ─── 7. Commit + Push ─────────────────────────────────────────────────
-      - name: 💾 Commit 並推送更新數據
-        if: steps.check.outputs.changed == 'true'
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          UPDATE_TIME=$(python3 -c "
-          from datetime import datetime, timezone, timedelta
-          hkt = datetime.now(timezone(timedelta(hours=8)))
-          print(hkt.strftime('%Y-%m-%d %H:%M HKT'))
-          ")
-
-          DATA_SOURCE=$(python3 -c "
-          import json
-          with open('public/data/funds.json', encoding='utf-8') as f:
+          with open('public/data/funds.json') as f:
               d = json.load(f)
           src = d.get('dataSource', 'unknown')
-          print('MPFA即時' if src == 'mpfa' else 'MPFA部分' if 'partial' in src else '備用')
-          ")
+          print('=== Scraper Result ===')
+          print('dataSource :', src)
+          print('totalFunds :', d.get('totalFunds', 0))
+          print('lastUpdated:', d.get('lastUpdatedHKT', d.get('lastUpdated', 'N/A')))
+          print('note       :', d.get('note', ''))
+          print()
+          print('Top 5 funds — short period vs 1Y:')
+          for f in d['funds'][:5]:
+              r = f['returns']
+              src_tag = f.get('navSource', 'proxy')
+              print(f'  {f[\"name\"][:35]:35s} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}% [{src_tag}]')
 
-          git add public/data/funds.json
-          git commit -m "data: 更新 MPF 基金數據 [${UPDATE_TIME}] (${DATA_SOURCE})"
-          git push
+          import os
+          if os.path.exists('public/data/nav_history.json'):
+              with open('public/data/nav_history.json') as f2:
+                  nav = json.load(f2)
+              print()
+              print('nav_history.json:')
+              print('  months tracked:', len(nav.get('months', [])))
+              print('  funds tracked :', len(nav.get('navs', {})))
+          "
 
-      # ─── 8. （選用）觸發 Vercel Deploy Hook ──────────────────────────────
-      - name: 🚀 通知 Vercel 重新部署
-        if: steps.check.outputs.changed == 'true' && secrets.VERCEL_DEPLOY_HOOK != ''
+      - name: Commit and push if data changed
         run: |
-          curl -sS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
-          echo "✅ 已觸發 Vercel 重新部署"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/funds.json public/data/nav_history.json public/data/debug_page.txt 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No data changes, skipping commit"
+          else
+            git commit -m "data: update MPF fund data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push
+            echo "Data updated and pushed"
+          fi

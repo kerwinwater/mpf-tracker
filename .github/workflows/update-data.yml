@@ -8,7 +8,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
     permissions:
       contents: write
 
@@ -30,31 +30,38 @@ jobs:
       - name: Fetch MPFA fund list (1Y / 3Y / 5Y + proxy short-period)
         run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
 
-      - name: Fetch real short-period returns via MPFA API (1W / 1M / 3M / 6M)
-        run: python3 scripts/fetch_nav.py --delay 1.0
+      - name: Fetch daily NAV and compute real returns
+        run: python3 scripts/fetch_nav.py --save-html public/data/nav_page_sample.html
 
       - name: Show result
         run: |
           python3 -c "
-          import json
+          import json, os
           with open('public/data/funds.json') as f:
               d = json.load(f)
           print('=== Result ===')
-          print('totalFunds :', d.get('totalFunds', len(d.get('funds',[]))))
+          print('totalFunds :', len(d.get('funds',[])))
           print('lastUpdated:', d.get('lastUpdatedHKT', 'N/A'))
           print('note       :', d.get('note', ''))
           print()
-          print('Top 5 funds (short-period vs 1Y):')
+          print('Top 5 funds (1W / 1M / 3M / 6M / 1Y):')
           for f in d['funds'][:5]:
               r = f['returns']
-              print(f'  {f[\"name\"][:35]:35s} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}%')
+              print(f'  {f[\"name\"][:35]:35s} | nav={f.get(\"nav\",0):8.4f} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}%')
+          if os.path.exists('public/data/nav_history.json'):
+              with open('public/data/nav_history.json') as f2:
+                  nav = json.load(f2)
+              print()
+              print('nav_history.json: %d dates, %d funds' % (len(nav.get('dates',[])), len(nav.get('navs',{}))))
+              if nav.get('dates'):
+                  print('latest date:', nav['dates'][0])
           "
 
       - name: Commit and push if data changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/funds.json public/data/debug_page.txt 2>/dev/null || true
+          git add public/data/funds.json public/data/nav_history.json public/data/debug_page.txt 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No data changes, skipping commit"
           else

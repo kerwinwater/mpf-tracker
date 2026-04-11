@@ -1,0 +1,125 @@
+# ─── GitHub Actions：每日自動更新 MPF 數據 ────────────────────────────────────
+#
+# 此 Workflow 的運作流程：
+# 1. 每天香港時間 09:00（UTC 01:00）自動觸發
+# 2. 執行 scripts/fetch-data.mjs 抓取最新 MPF 基金回報數據
+# 3. 如果數據有變化，自動 commit + push 到 GitHub
+# 4. Vercel 偵測到新 commit 後自動觸發重新部署
+#
+# 設計原則：
+# - 數據存在 data/funds.json（靜態 JSON 檔）
+# - 每次部署時 Next.js 讀取此檔案靜態生成頁面
+# - 無需數據庫，成本極低，適合個人專案
+
+name: 每日更新 MPF 基金數據
+
+on:
+  # 定時觸發（UTC 01:00 = 香港時間 09:00）
+  schedule:
+    - cron: "0 1 * * 1-5"   # 週一至週五（MPFA 工作日更新）
+
+  # 允許在 GitHub Actions 頁面手動觸發（方便測試）
+  workflow_dispatch:
+    inputs:
+      force_fallback:
+        description: "強制使用備用數據（測試用）"
+        required: false
+        default: "false"
+        type: boolean
+
+jobs:
+  update-fund-data:
+    name: 抓取並更新基金數據
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # 需要 contents: write 權限才能 push commit
+    permissions:
+      contents: write
+
+    steps:
+      # ─── 步驟 1：取出程式碼 ────────────────────────────────────────────────
+      - name: 📥 取出最新程式碼
+        uses: actions/checkout@v4
+        with:
+          # 使用具有 push 權限的 token
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ─── 步驟 2：設定 Node.js 環境 ────────────────────────────────────────
+      - name: 🟢 設定 Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      # ─── 步驟 3：安裝依賴 ─────────────────────────────────────────────────
+      # 只安裝 scripts/ 所需的依賴（cheerio, node-fetch）
+      - name: 📦 安裝依賴
+        run: npm ci --prefer-offline
+
+      # ─── 步驟 4：執行數據抓取腳本 ─────────────────────────────────────────
+      - name: 🕷️ 抓取 MPFA 最新基金數據
+        run: node scripts/fetch-data.mjs
+        env:
+          # 傳入環境變數，供腳本判斷是否強制使用備用數據
+          FORCE_FALLBACK: ${{ github.event.inputs.force_fallback || 'false' }}
+        # 即使抓取失敗也繼續（會使用備用數據）
+        continue-on-error: false
+
+      # ─── 步驟 5：顯示數據摘要 ─────────────────────────────────────────────
+      - name: 📊 顯示更新結果
+        run: |
+          echo "=== 數據更新摘要 ==="
+          node -e "
+            const data = JSON.parse(require('fs').readFileSync('data/funds.json'));
+            console.log('更新時間:', data.lastUpdated);
+            console.log('數據來源:', data.dataSource);
+            console.log('基金數量:', data.totalFunds);
+            console.log('說明:', data.note);
+          "
+
+      # ─── 步驟 6：檢查是否有數據變化 ────────────────────────────────────────
+      - name: 🔍 檢查數據是否有更新
+        id: check-changes
+        run: |
+          if git diff --quiet data/funds.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "📌 數據無變化，跳過 commit"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ 數據有更新，準備 commit"
+          fi
+
+      # ─── 步驟 7：Commit 並 Push 更新後的數據 ───────────────────────────────
+      - name: 💾 Commit 並推送更新數據
+        if: steps.check-changes.outputs.changed == 'true'
+        run: |
+          # 設定 git 用戶（GitHub Actions bot）
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # 取得更新時間
+          UPDATE_TIME=$(node -e "
+            const d = new Date();
+            const hkt = new Date(d.getTime() + 8 * 3600000);
+            console.log(hkt.toISOString().replace('T', ' ').slice(0, 16) + ' HKT');
+          ")
+
+          # 取得數據來源
+          DATA_SOURCE=$(node -e "
+            const data = JSON.parse(require('fs').readFileSync('data/funds.json'));
+            console.log(data.dataSource === 'mpfa' ? 'MPFA即時' : '備用');
+          ")
+
+          git add data/funds.json
+          git commit -m "chore: 更新 MPF 基金數據 [${UPDATE_TIME}] (${DATA_SOURCE}數據)"
+          git push
+
+      # ─── 步驟 8：（可選）觸發 Vercel 重新部署 ─────────────────────────────
+      # 如果你的 Vercel 專案沒有自動連接 GitHub，可以在這裡手動觸發
+      # 需要在 Secrets 加入 VERCEL_DEPLOY_HOOK
+      - name: 🚀 觸發 Vercel 重新部署
+        if: steps.check-changes.outputs.changed == 'true' && secrets.VERCEL_DEPLOY_HOOK != ''
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+          echo "✅ 已觸發 Vercel 重新部署"

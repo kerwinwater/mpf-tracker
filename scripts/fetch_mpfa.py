@@ -359,17 +359,12 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         else:
             three_years = round(one_year * 3 * 0.9, 4)
 
-        # Short-period proxies (cyr_25-based, different ranking from 1Y).
-        # fetch_nav.py will overwrite these with real NAV-based values.
-        base = cyr_25 if cyr_25 is not None else one_year
         returns = {
-            "oneWeek":     round(base / 52,   4),
-            "oneMonth":    round(base / 12,   4),
-            "threeMonths": round(base * 0.25, 4),
-            "sixMonths":   round(base * 0.5,  4),
-            "oneYear":     round(one_year,    4),
-            "threeYears":  three_years,
-            "fiveYears":   round(five_years,  4),
+            "year2025":   round(cyr_25,      4) if cyr_25 is not None else 0.0,
+            "year2024":   round(cyr_24,      4) if cyr_24 is not None else 0.0,
+            "year2023":   round(cyr_23,      4) if cyr_23 is not None else 0.0,
+            "threeYears": three_years,
+            "fiveYears":  round(five_years,  4),
         }
 
         fund_name = cell(COL_NAME)
@@ -429,7 +424,7 @@ def parse_page(html: str, debug_path: Optional[str] = None,
                 row_html_samples[0][:300] if row_html_samples else "N/A"
             )
 
-    funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
+    funds.sort(key=lambda f: f["returns"]["year2025"], reverse=True)
 
     if debug_path:
         _write_debug(debug_path, funds[:5], col28_samples, row_html_samples)
@@ -440,12 +435,13 @@ def parse_page(html: str, debug_path: Optional[str] = None,
 def _write_debug(debug_path: str, sample: list,
                   col28_samples: list = None,
                   row_html_samples: list = None) -> None:
-    lines = ["=== PARSE DEBUG v9 ===", "Top 5 funds by 1Y:"]
+    lines = ["=== PARSE DEBUG v9 ===", "Top 5 funds by 2025:"]
     for f in sample:
         r = f["returns"]
         lines.append(
-            f"  {f['name'][:30]:30s} cfId={f.get('cfId','?'):>5s} | "
-            f"1Y:{r['oneYear']:7.2f}%  3Y:{r['threeYears']:7.2f}%  5Y:{r['fiveYears']:7.2f}%"
+            f"  {f['name'][:30]:30s} | "
+            f"2025:{r['year2025']:7.2f}%  2024:{r['year2024']:7.2f}%  "
+            f"2023:{r['year2023']:7.2f}%  3Y:{r['threeYears']:7.2f}%  5Y:{r['fiveYears']:7.2f}%"
         )
     if col28_samples:
         lines.append("")
@@ -526,13 +522,12 @@ def main():
 
     note = (
         f"mfp.mpfa.org.hk/tch/mpp_list.jsp | {len(funds)} funds | "
-        f"1Y/5Y real; 3Y calendar-compound; 1W-6M=proxy(cyr2025)"
+        f"2025/2024/2023 calendar-year returns + 3Y compound + 5Y cumulative"
     )
     save(funds, "mpfa", note)
 
-    nonzero = sum(1 for f in funds if abs(f["returns"]["oneYear"]) > 0.01)
-    cf_ids  = sum(1 for f in funds if f.get("cfId"))
-    log.info("Done: %d funds, %d non-zero 1Y, %d with cfId", len(funds), nonzero, cf_ids)
+    nonzero = sum(1 for f in funds if abs(f["returns"]["year2025"]) > 0.01)
+    log.info("Done: %d funds, %d with non-zero 2025 return", len(funds), nonzero)
 
 
 if __name__ == "__main__":

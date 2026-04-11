@@ -75,7 +75,7 @@ export default function FundListClient() {
   const [fetchError, setFetchError] = useState(false);
 
   // ── 互動狀態 ───────────────────────────────────────────────────────────────
-  const [activePeriod, setActivePeriod]   = useState<SortPeriod>("oneYear");
+  const [activePeriod, setActivePeriod]   = useState<SortPeriod>("year2025");
   const [activeCategory, setActiveCategory] = useState<Category>("全部類別");
   const [searchQuery, setSearchQuery]     = useState("");
   const [sortAsc, setSortAsc]             = useState(false);

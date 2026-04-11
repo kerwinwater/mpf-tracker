@@ -13,7 +13,7 @@ interface FundCardProps {
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 // Always show these 3 periods in the mini-stats row
-const MINI_PERIODS: SortPeriod[] = ["oneWeek", "oneMonth", "oneYear"];
+const MINI_PERIODS: SortPeriod[] = ["year2025", "year2024", "fiveYears"];
 
 function getRankStyle(rank: number): { bg: string; color: string } {
   if (rank === 1) return { bg: "#fbbf24", color: "#000" };

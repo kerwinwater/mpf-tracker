@@ -8,11 +8,9 @@ interface PeriodTabsProps {
 }
 
 const PERIODS: SortPeriod[] = [
-  "oneWeek",
-  "oneMonth",
-  "threeMonths",
-  "sixMonths",
-  "oneYear",
+  "year2025",
+  "year2024",
+  "year2023",
   "threeYears",
   "fiveYears",
 ];

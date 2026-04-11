@@ -1,11 +1,12 @@
 # ─── Vercel 自動部署 ──────────────────────────────────────────────────────────
 #
-# 每次 push 到 main 分支時，自動部署到 Vercel Production。
+# 每次 push 到 main 分支時，使用 Vercel CLI 部署到 Production。
+# 使用官方 Vercel CLI 方式，比第三方 action 更穩定。
 #
 # 需要在 GitHub Repo Settings > Secrets and variables > Actions 中設置：
-#   VERCEL_TOKEN      → 從 https://vercel.com/account/tokens 創建
-#   VERCEL_ORG_ID     → 從 Vercel 項目設置頁面底部獲取
-#   VERCEL_PROJECT_ID → 從 Vercel 項目設置頁面底部獲取
+#   VERCEL_TOKEN      → https://vercel.com/account/tokens
+#   VERCEL_ORG_ID     → Vercel 項目設置頁底部 "Team ID"
+#   VERCEL_PROJECT_ID → Vercel 項目設置頁底部 "Project ID"
 
 name: Deploy to Vercel
 
@@ -14,22 +15,40 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 jobs:
   deploy:
-    name: 部署到 Vercel
+    name: 部署到 Vercel Production
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: 📥 取出最新程式碼
         uses: actions/checkout@v4
 
-      - name: 🚀 部署到 Vercel Production
-        uses: amondnet/vercel-action@v25
+      - name: 🟢 設定 Node.js 20
+        uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod"
-          working-directory: ./
+          node-version: "20"
+          cache: "npm"
+
+      - name: 📦 安裝 Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: 🔗 拉取 Vercel 項目設定
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 🔨 構建項目
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: 🚀 部署到 Vercel Production
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "✅ 部署成功：$URL"
+
+      - name: 📋 輸出部署網址
+        run: echo "🌐 Production URL：${{ steps.deploy.outputs.url }}"

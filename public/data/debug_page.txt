@@ -1,342 +1,230 @@
-=== MPFA PAGE STRUCTURE DUMP ===
-URL: https://mfp.mpfa.org.hk/eng/mpp_list.jsp
-Title: MPF Fund Platform
-HTML length: 2,705,419 chars
+=== PARSE DEBUG  returnType=default ===
 
-=== FORMS (2) ===
-Form[0]: action='mpp_list.jsp'  method='post'
-  input: name='isLowFeeFundList'  value='true'
-Form[1]: action='mpp_list.jsp'  method='post'
-  select: name='fundTypes'  value=''
-  select: name='fundSubTypes'  value=''
-  select: name='trustees'  value=''
-  input: name='tenthValHid'  value=''
-  select: name='topTen'  value=''
-  select: name='schemes'  value=''
-  input: name='returnType'  value='ar'
-  input: name='returnType'  value='cr'
-  input: name='returnType'  value='cyr'
-  input: name='returnType'  value='ar'
-  input: name='returnType'  value='cr'
-  input: name='returnType'  value='cyr'
-  input: name='sortlist_checkbox'  value='1520'
-  input: name=None  value='More'
-  input: name='sortlist_checkbox'  value='878'
+== HEADER ROWS ==
+  hrow[0]: ['', 'Return, Risk & Basic Fund Info', 'Fees & Charges']
+  hrow[1]: ['', '', 'Scheme', '', '', 'Constituent\r\n                    Fund', '', 'MPF Trustee', '', 'Fund\r\n                    Type', '', 'Launch Date', '', "Fund size (HKD' m)", '', 'Risk\r\n                            Class', '', 'Risk\r\n                            Class', '', '', '', 'Latest FER\r\n            (%)', 'Annualized return (% p.a.) Cumulative return (%) Calendar Year Return (%)', '', '', 'Management Fees (% p.a.)', 'Breakdown of Management Fees (% p.a.)', '', 'Guarantee Charge (% p.a.)', 'Details']
+  hrow[2]: ['']
+  hrow[3]: ['Risk\r\n                            Class']
+  hrow[4]: ['']
+  hrow[5]: ['']
+  hrow[6]: ['', '1 Year', '', '5 Year', '', '10 Year', '', 'Since Launch', '', '1 Year', '', '5 Year', '', '10 Year', '', 'Since Launch', '', '2025', '', '2024', '', '2023', '', '2022', '', '2021', '', 'Administration Fee or eMPF Platform Fee/ Trustee Fee/ Custodian Fee', '', 'Member Servicing Fee', '', 'Investment Management Fee', '']
 
-=== TABLES (14) ===
-Table[0]: 1 rows  class=None  id=None
-  row[0]: ['Fund Information Table', '', 'This table allows you to view the key in', '']
-Table[1]: 8 rows  class=None  id=None
-  row[0]: ['Fund TypeEquity FundMixed Assets FundBon', 'Fund Type', 'Equity FundMixed Assets FundBond FundGua', 'Fund Category', 'Equity Fund - AsiaEquity Fund - ChinaEqu', 'Trustee', 'AIA Company (Trustee) LimitedBank Consor', '10 Highest / Lowest Funds(by return / FE', 'Scheme', 'AIA MPF - Prime Value ChoiceAMTD MPF Sch']
-  row[1]: ['Fund Type', 'Equity FundMixed Assets FundBond FundGua', 'Fund Category', 'Equity Fund - AsiaEquity Fund - ChinaEqu']
-  row[2]: ['Trustee', 'AIA Company (Trustee) LimitedBank Consor', '10 Highest / Lowest Funds(by return / FE']
-  row[3]: ['Scheme', 'AIA MPF - Prime Value ChoiceAMTD MPF Sch', '']
-  row[4]: ['']
-  row[5]: ['', '']
-  row[6]: ['Return Type', 'Annualized returnCumulative returnCalend']
-  row[7]: ['']
-Table[2]: 3 rows  class=['txt']  id=None
-  row[0]: ['Fund Type', 'Equity FundMixed Assets FundBond FundGua', 'Fund Category', 'Equity Fund - AsiaEquity Fund - ChinaEqu']
-  row[1]: ['Trustee', 'AIA Company (Trustee) LimitedBank Consor', '10 Highest / Lowest Funds(by return / FE']
-  row[2]: ['Scheme', 'AIA MPF - Prime Value ChoiceAMTD MPF Sch', '']
-Table[3]: 4 rows  class=None  id=None
-  row[0]: ['']
-  row[1]: ['', '']
-  row[2]: ['Return Type', 'Annualized returnCumulative returnCalend']
-  row[3]: ['']
-Table[4]: 3 rows  class=None  id=None
-  row[0]: ['', 'Total number of constituent funds select', 'Latest information as of 28 Feb 2026', '', '']
-  row[1]: ['Total number of constituent funds select']
-  row[2]: []
-Table[5]: 454 rows  class=['txt']  id=scrolltable
-  row[0]: ['', 'Return, Risk & Basic Fund Info', 'Fees & Charges']
-  row[1]: ['', '', 'Scheme', '', '', 'Constituent\r\n                    Fund', '', 'MPFTrustee', '', 'Fund\r\n                    Type']
-  row[2]: ['']
-  row[3]: ['Risk\r\n                            Class']
-  row[4]: ['']
-  row[5]: ['']
-  row[6]: ['', '1 Year', '', '5 Year', '', '10 Year', '', 'SinceLaunch', '', '1 Year']
-  row[7]: ['', 'AIA MPF - Prime Value Choice', '', 'Age 65 Plus Fund', 'AIAT', 'Mixed Assets Fund - Default Investment S', '01-04-2017', '2,661.03', '4', '0.78633']
-Table[6]: 4 rows  class=None  id=None
-  row[0]: ['']
-  row[1]: ['Risk\r\n                            Class']
-  row[2]: ['']
-  row[3]: ['']
-Table[7]: 1 rows  class=None  id=None
-  row[0]: ['']
-Table[8]: 1 rows  class=None  id=None
-  row[0]: ['Note', '']
-Table[9]: 1 rows  class=None  id=None
-  row[0]: ['1. Fund size, annualized return and cumu']
-Table[10]: 1 rows  class=None  id=None
-  row[0]: ['']
-Table[11]: 1 rows  class=None  id=None
-  row[0]: ['Note', '']
-Table[12]: 1 rows  class=None  id=None
-  row[0]: ['You may select the DIS Funds in the drop']
-Table[13]: 1 rows  class=None  id=None
-  row[0]: ['']
+== DETECTED RETURN COLUMNS: {11: 'fiveYears', 13: 'tenYears'} ==
 
-=== FUND-RELATED LINKS (sample) ===
-  'mpp_index.jsp'                                              | 'MPFA home'
-  '../mobile/eng/mpp_index.jsp'                                | ''
-  'mpp_faq.jsp'                                                | 'FAQ'
-  'mpp_glossary.jsp'                                           | 'Glossary'
-  'mpp_index.jsp'                                              | ''
-  './mpp_index.jsp'                                            | ''
-  './mpp_chart.jsp'                                            | ''
-  './mpp_selection.jsp'                                        | ''
-  './mpp_fer.jsp'                                              | ''
-  './mpp_index.jsp'                                            | ''
-  './mpp_chart.jsp'                                            | ''
-  './mpp_selection.jsp'                                        | ''
-  './mpp_fer.jsp'                                              | ''
-  'mpp_glossary.jsp#Annualized_Return'                         | 'Annualized return'
-  'mpp_glossary.jsp#Cumulative_Return'                         | 'Cumulative return'
-  'mpp_glossary.jsp#CalendarYear_Return'                       | 'Calendar Year Return (%)'
-  'mpp_glossary.jsp#median_risk_indicator'                     | 'Median risk indicator'
-  'mpp_glossary.jsp#median_risk_indicator'                     | 'Median risk indicator'
-  'mpp_glossary.jsp#Constituent_Fund'                          | 'Constituent\r\n                    Fund'
-  'mpp_glossary.jsp#Fund_Type'                                 | 'Fund\r\n                    Type'
-  'mpp_glossary.jsp#Launch_Date'                               | 'LaunchDate'
-  'mpp_glossary.jsp#Fund_Size'                                 | "Fund size(HKD' m)"
-  'mpp_glossary.jsp#Fund_Risk_Indicator'                       | 'Risk\r\n                            Class'
-  'mpp_glossary.jsp#Risk_Class'                                | 'Risk\r\n                            Class'
-  'mpp_glossary.jsp#fer'                                       | 'LatestFER\r\n            (%)'
-  'mpp_glossary.jsp#Annualized_Return'                         | 'Annualized return (% p.a.)'
-  'mpp_glossary.jsp#Cumulative_Return'                         | 'Cumulative return (%)'
-  'mpp_glossary.jsp#CalendarYear_Return'                       | 'Calendar Year Return (%)'
-  'mpp_glossary.jsp#management_fee'                            | 'ManagementFees (% p.a.)'
-  'mpp_glossary.jsp#management_fee'                            | 'Breakdown of Management Fees (% p.a.)'
-  'mpp_glossary.jsp#guarantee_charge'                          | 'GuaranteeCharge(% p.a.)'
-  'mpp_glossary.jsp#adm_trust_custo_fee'                       | 'Administration Fee oreMPF Platform Fee/Trustee Fee'
-  'mpp_glossary.jsp#sponsor_fee'                               | 'MemberServicing Fee'
-  'mpp_glossary.jsp#investment_management_fee'                 | 'InvestmentManagementFee'
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000046' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000042' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-  'https://www.mpfa.org.hk/eng/public_registers/registered_schemes_cf/fudetail.do?schId=SCH000000000051' | ''
-
-=== SCRIPT TAGS WITH DATA ===
-Script[4] (3843 chars):
-
-
-    function MM_preloadImages() { //v3.0
-        var d = document;
-        if (d.images) {
-            if (!d.MM_p) d.MM_p = new Array();
-            var i, j = d.MM_p.length, a = MM_preloadImages.arguments;
-            for (i = 0; i < a.length; i++)
-                if (a[i].indexOf("#") != 0) {
-                    d.MM_p[j] = new Image;
-                    d.MM_p[j++].src = a[i];
-                }
-        }
-    }
-
-    function MM_swapImgRestore() { //v3.0
-        var i, x, a = document.MM_sr;
-        for (i = 0; a && i < a.length && (x = a[i]) && x.oSrc; i++) x.src = x.oSrc
-...
-
-Script[6] (13286 chars):
-
-
-    function changePage(type) {
-        topage = parseInt(document.filter_form.current_page.value, 10);
-        document.filter_form.reset();
-        if (type == 'previous') topage = topage - 1;
-        if (type == 'next') topage = topage + 1;
-        document.filter_form.page.value = topage;
-        document.filter_form.submit();
-    }
-
-    function doChangeShowRisk(show, sfieldStr, stypeStr
-    ) {
-        var sfields = sfieldStr.split(",");
-        var riskIndStr = "MCF_FUND_RISK_INDICATOR";
-        var riskClassStr = "MCF_RISK_CLASS";
-        var tmpStr = "";
-
-        i
-...
-
-Script[10] (9456 chars):
-
-
-    // fix bug for IE - freezeheader.js - start
-    var hdscrolltableStatus = false;
-    var hdscrolltableStatus_o = false;
-    var hdscrolltableLoaded = false;
-
-    window.onscroll = function () {
-        if ($('#hdscrolltable').css('visibility') == 'visible') {
-            hdscrolltableStatus = true;
-        } else {
-            hdscrolltableStatus = false;
-        }
-
-        //if( resett ){
-        //reSizeTableHeader();
-        //resett = false;
-        //}
-
-        if (hdscrolltableStatus_o != hdscrolltableStatus) {
-            reSizeTableHeader();
-            reset
-...
-
-Script[12] (8780 chars):
-
-
-    var ajax = new sack();
-    var ajax2 = new sack();
-
-    function getFSTList() {
-        /*
-	console.log("length: " + $("#fundTypes").val().length);
-	if( $("#fundTypes").val().length > 1 ){
-		console.log( "block" );
-		$( "#fundTypesTd input:checkbox" ).prop("disabled", true);
-
-	}
-	*/
-        var no = $("#fundTypes").val();
-        var fundType_ids = "";
-
-        if (no.length > 1 || no.length == 0) {
-            $("#topTenDiv select").val('');
-            $("#topTenDiv select").attr('disabled', 'disabled');
-        } else {
-            $("#topTenDiv select").removeAtt
-...
-
-Script[13] (233 chars):
-
-			document.addEventListener('DOMContentLoaded', function () {
-			    document.querySelector('#headerLowFund').addEventListener('click', function(){ document.getElementById('lowFeeFundList').submit(); return false; });
-			});
-		
-...
-
-Script[15] (102 chars):
-
-                                    var fundSubTypesData = [];
-                                    
-...
-
-Script[25] (101 chars):
-
-                                    fundSubTypesData[10] = 2;
-                                    
-...
-
-Script[26] (101 chars):
-
-                                    fundSubTypesData[18] = 4;
-                                    
-...
-
-Script[27] (101 chars):
-
-                                    fundSubTypesData[17] = 4;
-                                    
-...
-
-Script[28] (101 chars):
-
-                                    fundSubTypesData[16] = 4;
-                                    
-...
-
-Script[29] (101 chars):
-
-                                    fundSubTypesData[15] = 4;
-                                    
-...
-
-Script[30] (101 chars):
-
-                                    fundSubTypesData[20] = 4;
-                                    
-...
-
-Script[31] (101 chars):
-
-                                    fundSubTypesData[19] = 4;
-                                    
-...
-
-Script[32] (101 chars):
-
-                                    fundSubTypesData[21] = 4;
-                                    
-...
-
-Script[33] (101 chars):
-
-                                    fundSubTypesData[11] = 1;
-                                    
-...
-
-Script[34] (101 chars):
-
-                                    fundSubTypesData[12] = 1;
-                                    
-...
-
-Script[35] (101 chars):
-
-                                    fundSubTypesData[13] = 1;
-                                    
-...
-
-Script[36] (101 chars):
-
-                                    fundSubTypesData[14] = 1;
-                                    
-...
-
-Script[37] (101 chars):
-
-                                    fundSubTypesData[22] = 1;
-                                    
-...
+== FIRST DATA ROWS (ALL CELLS) ==
+  data[0] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Age 65 Plus Fund'
+    col  4: 'AIAT'
+    col  5: 'Mixed Assets Fund - Default Investment Strategy - Age 65 Plus Fund'
+    col  6: '01-04-2017'
+    col  7: '2,661.03'
+    col  8: '4'
+    col  9: '0.78633'
+    col 10: '6.51'
+    col 11: '0.96'
+    col 12: 'n.a.'
+    col 13: '2.43'
+    col 14: '6.51'
+    col 15: '4.88'
+    col 16: 'n.a.'
+    col 17: '23.88'
+    col 18: '5.82'
+    col 19: '3.09'
+    col 20: '7.10'
+    col 21: '-14.78'
+    col 22: '0.89'
+    col 23: 'Up to 0.75'
+    col 24: '0.5'
+    col 25: '0'
+    col 26: 'Up to 0.25'
+    col 27: '0'
+  data[1] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Asian Bond Fund'
+    col  4: 'AIAT'
+    col  5: 'Bond Fund - Asia Bond Fund'
+    col  6: '23-09-2011'
+    col  7: '1,947.15'
+    col  8: '4'
+    col  9: '0.78523'
+    col 10: '6.28'
+    col 11: '0.35'
+    col 12: '1.79'
+    col 13: '1.38'
+    col 14: '6.28'
+    col 15: '1.75'
+    col 16: '19.36'
+    col 17: '21.96'
+    col 18: '6.97'
+    col 19: '1.91'
+    col 20: '3.96'
+    col 21: '-8.62'
+    col 22: '-5.72'
+    col 23: 'Up to 0.8995'
+    col 24: '0.51'
+    col 25: '0'
+    col 26: 'Up to 0.3895'
+    col 27: '0'
+  data[2] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Balanced Portfolio'
+    col  4: 'AIAT'
+    col  5: 'Mixed Assets Fund - 41% to 60% Equity'
+    col  6: '01-12-2000'
+    col  7: '8,883.51'
+    col  8: '5'
+    col  9: '1.66923'
+    col 10: '17.67'
+    col 11: '2.19'
+    col 12: '4.67'
+    col 13: '4.07'
+    col 14: '17.67'
+    col 15: '11.46'
+    col 16: '57.90'
+    col 17: '173.88'
+    col 18: '15.90'
+    col 19: '4.72'
+    col 20: '4.69'
+    col 21: '-16.22'
+    col 22: '0.19'
+    col 23: 'Up to 1.285'
+    col 24: '0.51'
+    col 25: '0.2'
+    col 26: 'Up to 0.575'
+    col 27: '0'
+  data[3] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Capital Stable Portfolio'
+    col  4: 'AIAT'
+    col  5: 'Mixed Assets Fund - 21% to 40% Equity'
+    col  6: '01-12-2000'
+    col  7: '4,755.51'
+    col  8: '4'
+    col  9: '1.66408'
+    col 10: '12.67'
+    col 11: '0.95'
+    col 12: '2.97'
+    col 13: '3.23'
+    col 14: '12.67'
+    col 15: '4.86'
+    col 16: '34.01'
+    col 17: '123.29'
+    col 18: '11.68'
+    col 19: '2.30'
+    col 20: '4.72'
+    col 21: '-15.00'
+    col 22: '-1.17'
+    col 23: 'Up to 1.285'
+    col 24: '0.51'
+    col 25: '0.2'
+    col 26: 'Up to 0.575'
+    col 27: '0'
+  data[4] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Core Accumulation Fund'
+    col  4: 'AIAT'
+    col  5: 'Mixed Assets Fund - Default Investment Strategy - Core Accumulation Fund'
+    col  6: '01-04-2017'
+    col  7: '8,915.46'
+    col  8: '5'
+    col  9: '0.77931'
+    col 10: '15.30'
+    col 11: '6.24'
+    col 12: 'n.a.'
+    col 13: '6.94'
+    col 14: '15.30'
+    col 15: '35.32'
+    col 16: 'n.a.'
+    col 17: '81.84'
+    col 18: '13.79'
+    col 19: '9.55'
+    col 20: '14.13'
+    col 21: '-16.22'
+    col 22: '9.63'
+    col 23: 'Up to 0.75'
+    col 24: '0.5'
+    col 25: '0'
+    col 26: 'Up to 0.25'
+    col 27: '0'
+  data[5] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Global Bond Fund'
+    col  4: 'AIAT'
+    col  5: 'Bond Fund - Global Bond Fund'
+    col  6: '01-12-2007'
+    col  7: '3,535.86'
+    col  8: '4'
+    col  9: '0.97634'
+    col 10: '6.35'
+    col 11: '-2.56'
+    col 12: '0.33'
+    col 13: '0.93'
+    col 14: '6.35'
+    col 15: '-12.16'
+    col 16: '3.40'
+    col 17: '18.33'
+    col 18: '6.33'
+    col 19: '-1.64'
+    col 20: '5.09'
+    col 21: '-19.55'
+    col 22: '-5.61'
+    col 23: 'Up to 0.895'
+    col 24: '0.51'
+    col 25: '0'
+    col 26: 'Up to 0.385'
+    col 27: '0'
+  data[6] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Growth Portfolio'
+    col  4: 'AIAT'
+    col  5: 'Mixed Assets Fund - 81% to 100% Equity'
+    col  6: '01-12-2000'
+    col  7: '18,675.35'
+    col  8: '5'
+    col  9: '1.66770'
+    col 10: '28.84'
+    col 11: '5.92'
+    col 12: '8.66'
+    col 13: '5.82'
+    col 14: '28.84'
+    col 15: '33.32'
+    col 16: '129.43'
+    col 17: '317.44'
+    col 18: '25.23'
+    col 19: '10.20'
+    col 20: '6.98'
+    col 21: '-16.80'
+    col 22: '3.71'
+    col 23: 'Up to 1.285'
+    col 24: '0.51'
+    col 25: '0.2'
+    col 26: 'Up to 0.575'
+    col 27: '0'
+  data[7] (29 cells):
+    col  1: 'AIA MPF - Prime Value Choice'
+    col  3: 'Guaranteed Portfolio'
+    col  4: 'AIAT'
+    col  5: 'Guaranteed Fund'
+    col  6: '01-12-2000'
+    col  7: '10,490.74'
+    col  8: '1'
+    col  9: '1.55718'
+    col 10: '1.60'
+    col 11: '0.70'
+    col 12: '0.42'
+    col 13: '1.33'
+    col 14: '1.60'
+    col 15: '3.53'
+    col 16: '4.31'
+    col 17: '39.62'
+    col 18: '1.60'
+    col 19: '1.13'
+    col 20: '0.23'
+    col 21: '0.15'
+    col 22: '0.15'
+    col 23: '1.16'
+    col 24: '0.51'
+    col 25: '0'
+    col 26: '0.65'
+    col 27: '0'

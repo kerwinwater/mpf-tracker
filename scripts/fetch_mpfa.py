@@ -171,45 +171,111 @@ def is_data_row(texts: list) -> bool:
 # cf_id extraction
 # ---------------------------------------------------------------------------
 
-def _extract_cf_id(cells: list) -> Optional[str]:
-    """Extract the numeric cf_id from the detail link in col 28.
+# Patterns that extract a URL containing cf_id from JavaScript strings
+_ONCLICK_URL_RE = re.compile(
+    r"""(?:window\.open|location\.href\s*=|openWin|openWindow|open)\s*\(\s*['"]([^'"]+)['"]""",
+    re.IGNORECASE,
+)
+_JSP_URL_RE = re.compile(r"""['"]([^'"]*cf_detail[^'"]*cf_id[^'"]*\d[^'"]*)['"]""",
+                          re.IGNORECASE)
 
-    Tries multiple strategies in order:
-    1. cf_id=NNN  anywhere in any attribute of any tag in candidate cells
-    2. Raw cell HTML string scan for cf_id=NNN
-    3. JavaScript function call patterns: openXxx(NNN), detailXxx(NNN)
+
+def _cfid_from_text(text: str) -> Optional[str]:
+    """Try to extract a cf_id number from any string."""
+    # Pattern 1: cf_id=NNN in URL query string
+    m = re.search(r"cf_id=(\d+)", text, re.IGNORECASE)
+    if m:
+        return m.group(1)
+    # Pattern 2: URL inside quotes that mentions cf_detail + digit
+    m = _JSP_URL_RE.search(text)
+    if m:
+        m2 = re.search(r"cf_id=(\d+)", m.group(1), re.IGNORECASE)
+        if m2:
+            return m2.group(1)
+    return None
+
+
+def _extract_cf_id_from_row(row_element) -> Optional[str]:
     """
-    # Candidate cells: col 28 first, then last 3 columns as fallback
-    check = cells[COL_DETAIL:COL_DETAIL + 1] + cells[-3:]
+    Exhaustively search a table row for a cf_id.
 
-    # Strategy 1 & 2: scan every attribute + raw HTML for cf_id=NNN
-    for cell in check:
-        # All tag attributes
-        for tag in cell.find_all(True):
-            for attr_val in tag.attrs.values():
-                if isinstance(attr_val, list):
-                    attr_val = " ".join(attr_val)
-                m = re.search(r"cf_id=(\d+)", str(attr_val), re.IGNORECASE)
-                if m:
-                    return m.group(1)
-        # Raw HTML of the cell
-        raw = str(cell)
-        m = re.search(r"cf_id=(\d+)", raw, re.IGNORECASE)
-        if m:
-            return m.group(1)
+    Searches (in order):
+    1. Every attribute of every element in the ENTIRE ROW
+    2. Raw row HTML string
+    3. JS function call with numeric arg: openXxx(NNN)
+    """
+    # Build raw HTML of entire row once
+    raw_row = str(row_element)
 
-    # Strategy 3: JavaScript function calls like open_detail(12345) or
-    # showDetail('12345') anywhere in the candidate cells
-    for cell in check:
-        raw = str(cell)
-        m = re.search(
-            r"(?:open|detail|fund|show|view|info)\w*\s*\(\s*['\"]?(\d{4,6})['\"]?\s*\)",
-            raw, re.IGNORECASE,
-        )
-        if m:
-            return m.group(1)
+    # Strategy 1: scan every attribute
+    for tag in row_element.find_all(True):
+        for attr_val in tag.attrs.values():
+            s = " ".join(attr_val) if isinstance(attr_val, list) else str(attr_val)
+            cf = _cfid_from_text(s)
+            if cf:
+                return cf
+
+    # Strategy 2: raw row HTML (catches cases like onclick embedded in HTML comment)
+    cf = _cfid_from_text(raw_row)
+    if cf:
+        return cf
+
+    # Strategy 3: any JS function call with a 4-6 digit numeric argument
+    # e.g. openDetail(12345), goFund('12345'), showWin(12345)
+    m = re.search(
+        r"""(?:open|detail|fund|show|view|info|go|win|pop)\w*\s*"""
+        r"""\(\s*['"]?(\d{4,6})['"]?\s*[,)]""",
+        raw_row, re.IGNORECASE,
+    )
+    if m:
+        return m.group(1)
 
     return None
+
+
+def _build_global_cfid_map(html: str, fund_names: list[str]) -> dict[str, str]:
+    """
+    Global fallback: scan the ENTIRE page HTML for cf_id patterns.
+    Returns {fund_name: cf_id} by positional matching.
+
+    If the page embeds cfIds in <script> blocks or data attributes
+    rather than in table cells, this catches them.
+    """
+    # Collect all cf_id values in document order (preserving duplicates)
+    all_ids = re.findall(r"cf_id=(\d+)", html, re.IGNORECASE)
+    # Deduplicate while preserving order
+    seen: set = set()
+    unique_ids: list = []
+    for fid in all_ids:
+        if fid not in seen:
+            seen.add(fid)
+            unique_ids.append(fid)
+
+    if not unique_ids:
+        return {}
+
+    log.info("Global HTML scan: found %d unique cf_id values", len(unique_ids))
+
+    # If count matches, map positionally
+    if len(unique_ids) == len(fund_names):
+        return dict(zip(fund_names, unique_ids))
+
+    # Otherwise try to match via surrounding text
+    result: dict[str, str] = {}
+    for fid in unique_ids:
+        # Find the position in the HTML
+        pos = html.lower().find(f"cf_id={fid.lower()}")
+        if pos == -1:
+            continue
+        # Look for a fund name in the surrounding 2000 chars
+        window = html[max(0, pos - 1000): pos + 1000]
+        for name in fund_names:
+            if name in window and name not in result.values():
+                result[name] = fid
+                break
+
+    log.info("Global mapping matched %d/%d funds", len(result), len(fund_names))
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -244,6 +310,7 @@ def parse_page(html: str, debug_path: Optional[str] = None,
     data_count  = 0
     cf_id_count = 0
     col28_samples: list = []   # raw HTML of col 28 for debug
+    row_html_samples: list = []  # full row HTML samples for debug
 
     for row in all_rows:
         cells = row.find_all(["td", "th"])
@@ -307,13 +374,16 @@ def parse_page(html: str, debug_path: Optional[str] = None,
 
         fund_name = cell(COL_NAME)
         fund_id   = "fund-" + hashlib.md5(fund_name.encode()).hexdigest()[:6]
-        cf_id     = _extract_cf_id(cells)
+        cf_id     = _extract_cf_id_from_row(row)
         if cf_id:
             cf_id_count += 1
 
-        # Collect col-28 HTML for debug (first 3 data rows only)
-        if len(col28_samples) < 3 and COL_DETAIL < len(cells):
-            col28_samples.append(str(cells[COL_DETAIL]))
+        # Collect debug samples (first 3 data rows)
+        if len(col28_samples) < 3:
+            if COL_DETAIL < len(cells):
+                col28_samples.append(str(cells[COL_DETAIL]))
+            if len(row_html_samples) < 3:
+                row_html_samples.append(str(row)[:600])
 
         fund: dict = {
             "id":       fund_id,
@@ -336,19 +406,40 @@ def parse_page(html: str, debug_path: Optional[str] = None,
         funds.append(fund)
 
     log.info(
-        "Parsed %d fund rows — cf_id found for %d/%d",
+        "Parsed %d fund rows — cf_id found for %d/%d (row-level scan)",
         data_count, cf_id_count, data_count,
     )
+
+    # ── Global fallback: scan entire page HTML if row-level scan got 0 ────────
+    if cf_id_count == 0 and funds:
+        log.warning("Row-level cf_id scan got 0 results — trying global HTML scan")
+        fund_names = [f["name"] for f in funds]
+        global_map = _build_global_cfid_map(html, fund_names)
+        if global_map:
+            for fund in funds:
+                gid = global_map.get(fund["name"])
+                if gid:
+                    fund["cfId"] = gid
+                    cf_id_count += 1
+            log.info("Global scan applied: %d/%d funds now have cfId", cf_id_count, len(funds))
+        else:
+            log.warning(
+                "Global scan also found 0 cf_id values in page HTML. "
+                "Row HTML sample: %s",
+                row_html_samples[0][:300] if row_html_samples else "N/A"
+            )
 
     funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
 
     if debug_path:
-        _write_debug(debug_path, funds[:5], col28_samples)
+        _write_debug(debug_path, funds[:5], col28_samples, row_html_samples)
 
     return funds
 
 
-def _write_debug(debug_path: str, sample: list, col28_samples: list = None) -> None:
+def _write_debug(debug_path: str, sample: list,
+                  col28_samples: list = None,
+                  row_html_samples: list = None) -> None:
     lines = ["=== PARSE DEBUG v9 ===", "Top 5 funds by 1Y:"]
     for f in sample:
         r = f["returns"]
@@ -359,8 +450,13 @@ def _write_debug(debug_path: str, sample: list, col28_samples: list = None) -> N
     if col28_samples:
         lines.append("")
         lines.append("=== RAW HTML of col-28 (first 3 data rows) ===")
-        for i, html in enumerate(col28_samples[:3]):
-            lines.append(f"[Row {i}] {html[:400]}")
+        for i, snippet in enumerate(col28_samples[:3]):
+            lines.append(f"[Row {i}] {snippet[:400]}")
+    if row_html_samples:
+        lines.append("")
+        lines.append("=== FULL ROW HTML (first data row, 600 chars) ===")
+        for i, snippet in enumerate(row_html_samples[:1]):
+            lines.append(f"[Row {i}] {snippet}")
     Path(debug_path).parent.mkdir(parents=True, exist_ok=True)
     with open(debug_path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))

@@ -28,7 +28,17 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Fetch MPFA fund list
-        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
+        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt --save-html public/data/raw_list.html
+
+      - name: Diagnose cf_id in raw HTML
+        run: |
+          echo "=== cf_id occurrences in raw HTML ==="
+          count=$(grep -oi "cf_id=[0-9]*" public/data/raw_list.html 2>/dev/null | wc -l)
+          echo "Total cf_id= matches: $count"
+          grep -oi "cf_id=[0-9]*" public/data/raw_list.html 2>/dev/null | head -10 || echo "(none found)"
+          echo ""
+          echo "=== First 500 chars of raw HTML ==="
+          head -c 500 public/data/raw_list.html 2>/dev/null || echo "(file not found)"
 
       - name: Fetch NAV history and compute real returns
         run: python3 scripts/fetch_nav.py --delay 0.6

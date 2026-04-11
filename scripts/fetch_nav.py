@@ -1,52 +1,37 @@
 #!/usr/bin/env python3
 """
-NAV history fetcher  —  fetch_nav.py
+Period return fetcher  —  fetch_nav.py  v2
 =====================================================================
-Fetches monthly unit-price history for every fund that has a cfId in
-funds.json.  Stores the history in public/data/nav_history.json and
-then overwrites the returns in funds.json with values computed from
-the actual price data.
+Fetches real short-period returns (1W / 1M / 3M / 6M) for all MPF
+funds from the MPFA prices-and-performances API.
 
-Data source
------------
-  https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=<N>
+API endpoint (POST)
+-------------------
+  https://mfp.mpfa.org.hk/eng/information/fund/prices_and_performances.do
 
-The page contains a "歷史單位價格" (historical unit price) section
-with a table whose rows look like:
-  <tr>
-    <td>2026-03</td>          ← month  (YYYY-MM  or  MM/YYYY)
-    <td>12.3456</td>          ← unit price
-    <td>…</td>                ← possible extra cols (ignored)
-  </tr>
+Form parameters tried (in order until one works):
+  period=1W   → 1-week return
+  period=1M   → 1-month return
+  period=3M   → 3-month return
+  period=6M   → 6-month return
 
-Period return formulas  (index 0 = most-recent month)
-------------------------------------------------------
-  oneMonth    = nav[0]/nav[1]  - 1
-  threeMonths = nav[0]/nav[3]  - 1
-  sixMonths   = nav[0]/nav[6]  - 1
-  oneYear     = nav[0]/nav[12] - 1
-  threeYears  = nav[0]/nav[36] - 1   (cumulative, not annualised)
-  fiveYears   = nav[0]/nav[60] - 1   (cumulative, not annualised)
-  oneWeek     = (1 + oneMonth)^(7/30) - 1   (estimated)
+The response is an HTML page containing a table with columns:
+  Scheme / Fund Name / Fund Type / Return (%)
 
-Falls back to the MPFA-proxy values from funds.json whenever there
-are not enough history points.
+The script:
+  1. Fetches 4 API responses (one per short period)
+  2. Parses each HTML table → {normalised_name: return_pct}
+  3. Matches by fund name to the existing funds.json
+  4. Overwrites returns.oneWeek / oneMonth / threeMonths / sixMonths
+  5. Saves updated funds.json  (1Y / 3Y / 5Y values are left intact)
 
-nav_history.json layout
------------------------
-{
-  "lastUpdated": "2026-04",
-  "months":  ["2026-04", "2026-03", ...],   # most-recent first
-  "navs": {
-    "fund-41a382": [12.34, 12.20, 11.95, ...]
-  }
-}
+Falls back to the cyr_25 proxy values already in funds.json whenever
+the API call or name match fails.
 """
 
 import argparse
 import json
 import logging
-import math
 import re
 import sys
 import time
@@ -64,13 +49,31 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-ROOT_DIR      = Path(__file__).parent.parent
-FUNDS_FILE    = ROOT_DIR / "public" / "data" / "funds.json"
-NAV_FILE      = ROOT_DIR / "public" / "data" / "nav_history.json"
-MAX_MONTHS    = 72      # keep up to 6 years of history
+ROOT_DIR   = Path(__file__).parent.parent
+FUNDS_FILE = ROOT_DIR / "public" / "data" / "funds.json"
 
-BASE_URL      = "https://mfp.mpfa.org.hk"
-DETAIL_URL    = f"{BASE_URL}/tch/cf_detail.jsp"
+BASE_URL = "https://mfp.mpfa.org.hk"
+
+# Candidate API endpoints and parameter formats to try
+API_CONFIGS = [
+    # (url, param_key, period_values)
+    (
+        f"{BASE_URL}/eng/information/fund/prices_and_performances.do",
+        "period",
+        {"oneWeek": "1W", "oneMonth": "1M", "threeMonths": "3M", "sixMonths": "6M"},
+    ),
+    (
+        f"{BASE_URL}/tch/information/fund/prices_and_performances.do",
+        "period",
+        {"oneWeek": "1W", "oneMonth": "1M", "threeMonths": "3M", "sixMonths": "6M"},
+    ),
+    # Alternative parameter name
+    (
+        f"{BASE_URL}/eng/information/fund/prices_and_performances.do",
+        "returnPeriod",
+        {"oneWeek": "1W", "oneMonth": "1M", "threeMonths": "3M", "sixMonths": "6M"},
+    ),
+]
 
 HEADERS = {
     "User-Agent": (
@@ -78,223 +81,201 @@ HEADERS = {
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/122.0.0.0 Safari/537.36"
     ),
-    "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.5",
+    "Accept":          "text/html,application/xhtml+xml,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9,zh-TW;q=0.8",
     "Accept-Encoding": "gzip, deflate, br",
+    "Content-Type":    "application/x-www-form-urlencoded",
     "Connection":      "keep-alive",
-    "Referer":         BASE_URL + "/tch/",
+    "Referer":         f"{BASE_URL}/eng/information/fund/prices_and_performances.jsp",
 }
 
+
 # ──────────────────────────────────────────────────────────────────────────────
-# HTTP helpers
+# HTTP
 # ──────────────────────────────────────────────────────────────────────────────
 
 def make_session() -> requests.Session:
-    s = requests.Session()
-    s.headers.update(HEADERS)
-    return s
+    sess = requests.Session()
+    sess.headers.update(HEADERS)
+    # Prime the session / get cookies
+    try:
+        sess.get(f"{BASE_URL}/eng/information/fund/prices_and_performances.jsp",
+                 timeout=20)
+    except Exception:
+        pass
+    return sess
 
 
-def safe_get(sess, url, retries=2, **kwargs) -> Optional[requests.Response]:
-    kwargs.setdefault("timeout", 30)
+def safe_post(sess, url, data: dict, retries=2) -> Optional[requests.Response]:
     for attempt in range(retries + 1):
         try:
-            r = sess.get(url, **kwargs)
+            r = sess.post(url, data=data, timeout=40)
+            log.debug("POST %s %s -> %d (%d bytes)",
+                      url, data, r.status_code, len(r.content))
             return r
         except requests.RequestException as e:
-            log.warning("GET attempt %d/%d %s: %s", attempt + 1, retries + 1, url, e)
+            log.warning("POST attempt %d/%d: %s", attempt + 1, retries + 1, e)
             if attempt < retries:
                 time.sleep(2 ** attempt)
     return None
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# NAV page parser
+# Name normalisation for fuzzy matching
 # ──────────────────────────────────────────────────────────────────────────────
 
-# Month normaliser: accepts "2026-03", "03/2026", "2026/03", "Mar-2026", etc.
-_MONTH_PATTERNS = [
-    re.compile(r"^(\d{4})[/-](\d{1,2})$"),           # 2026-03  or  2026/03
-    re.compile(r"^(\d{1,2})[/-](\d{4})$"),           # 03/2026  or  03-2026
-    re.compile(r"^(\d{4})年(\d{1,2})月$"),            # 2026年03月
-]
+def _norm(name: str) -> str:
+    """Normalise a fund name for matching (lowercase, collapse spaces)."""
+    return re.sub(r"\s+", " ", name.lower().strip())
 
-def _normalise_month(raw: str) -> Optional[str]:
-    raw = raw.strip()
-    for pat in _MONTH_PATTERNS:
-        m = pat.match(raw)
-        if m:
-            a, b = m.group(1), m.group(2)
-            if len(a) == 4:
-                return f"{a}-{int(b):02d}"
-            else:
-                return f"{b}-{int(a):02d}"
+
+def build_name_index(funds: list) -> dict[str, dict]:
+    """Return {normalised_name: fund_dict} for all funds."""
+    return {_norm(f["name"]): f for f in funds}
+
+
+def fuzzy_match(api_name: str, index: dict[str, dict]) -> Optional[dict]:
+    """Match an API fund name to the nearest fund in index."""
+    norm = _norm(api_name)
+
+    # Exact match
+    if norm in index:
+        return index[norm]
+
+    # Substring match: API name contains our name or vice-versa
+    for key, fund in index.items():
+        if key in norm or norm in key:
+            return fund
+
     return None
 
 
-def _parse_nav_price(raw: str) -> Optional[float]:
-    t = raw.replace(",", "").strip()
+# ──────────────────────────────────────────────────────────────────────────────
+# HTML table parser
+# ──────────────────────────────────────────────────────────────────────────────
+
+def parse_float(text: str) -> Optional[float]:
+    t = text.replace("%", "").replace(",", "").replace("+", "").strip()
+    if t in ("N/A", "NA", "n.a.", "n/a", "-", "--", ""):
+        return None
     try:
-        v = float(t)
-        return v if 0.001 < v < 1_000_000 else None
+        return float(t)
     except ValueError:
         return None
 
 
-def parse_detail_page(html: str) -> list[tuple[str, float]]:
+def parse_period_table(html: str) -> dict[str, float]:
     """
-    Returns a list of (month_str, nav_price) sorted most-recent-first.
-    month_str is 'YYYY-MM'.
+    Parse an MPFA prices-and-performances response.
+
+    Returns {fund_name: return_pct}.
+
+    The table is expected to have columns like:
+      Scheme | Fund Name | Fund Type | Return (%)
+    or the Chinese equivalent.  We detect the "return" column by
+    looking for "%" header keywords.
     """
     soup = BeautifulSoup(html, "lxml")
-
     results: dict[str, float] = {}
 
-    # Strategy 1 – find every <table> and scan for rows with (month, price)
     for tbl in soup.find_all("table"):
-        rows = tbl.find_all("tr")
-        for row in rows:
+        headers = []
+        header_row = tbl.find("tr")
+        if not header_row:
+            continue
+        for th in header_row.find_all(["th", "td"]):
+            headers.append(th.get_text(strip=True).lower())
+
+        if not headers:
+            continue
+
+        # Identify name column and return column
+        name_col = None
+        ret_col  = None
+        for i, h in enumerate(headers):
+            if any(k in h for k in ["fund name", "constituent fund",
+                                     "基金名稱", "成分基金"]):
+                name_col = i
+            if any(k in h for k in ["%", "return", "回報", "performance",
+                                     "表現", "升跌"]):
+                ret_col = i
+
+        # Fallback: last column is often the return
+        if name_col is None:
+            for i, h in enumerate(headers):
+                if any(k in h for k in ["fund", "基金", "name", "名稱"]):
+                    name_col = i
+                    break
+        if ret_col is None and headers:
+            ret_col = len(headers) - 1
+
+        if name_col is None or ret_col is None:
+            continue
+
+        row_count = 0
+        for row in tbl.find_all("tr")[1:]:  # skip header
             cells = row.find_all(["td", "th"])
-            texts = [c.get_text(separator=" ", strip=True).replace("\xa0", " ").strip()
-                     for c in cells]
-            if len(texts) < 2:
+            if len(cells) <= max(name_col, ret_col):
                 continue
-            month = _normalise_month(texts[0])
-            if month is None:
-                # try column 1 as month (some layouts swap)
-                month = _normalise_month(texts[1])
-                price_raw = texts[0] if month else None
-            else:
-                price_raw = texts[1]
+            name = cells[name_col].get_text(strip=True)
+            val  = parse_float(cells[ret_col].get_text(strip=True))
+            if name and val is not None:
+                results[name] = val
+                row_count += 1
 
-            if month and price_raw:
-                price = _parse_nav_price(price_raw)
-                if price:
-                    results[month] = price
+        if row_count > 10:
+            log.debug("Parsed %d rows from table (name_col=%d ret_col=%d)",
+                      row_count, name_col, ret_col)
+            break  # found the right table
 
-    # Strategy 2 – look for "最新單位價格" label + nearby value (current month)
-    for tag in soup.find_all(string=re.compile(r"最新單位價格|單位價格")):
-        parent = tag.parent
-        # check siblings / parent for a numeric value
-        for sibling in list(parent.next_siblings)[:4]:
-            raw = getattr(sibling, "get_text", lambda **_: str(sibling))(
-                separator=" ", strip=True
-            )
-            price = _parse_nav_price(raw.replace(",", "").strip())
-            if price:
-                now_month = datetime.now(timezone.utc).strftime("%Y-%m")
-                results.setdefault(now_month, price)
-                break
-
-    if not results:
-        return []
-
-    # Sort most-recent first
-    sorted_pairs = sorted(results.items(), key=lambda kv: kv[0], reverse=True)
-    return sorted_pairs
+    return results
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Period return calculations
+# Probe API to find working config
 # ──────────────────────────────────────────────────────────────────────────────
 
-def compute_returns(navs: list[float], fallback: dict) -> dict:
+def probe_api(sess) -> Optional[tuple]:
     """
-    navs: list of NAV values, index 0 = most-recent month.
-    fallback: existing returns dict from funds.json (used if history too short).
+    Try each API config until one returns >10 fund rows for a test period.
+    Returns (url, param_key, period_map) or None.
     """
-    def pct(n: int) -> Optional[float]:
-        if len(navs) > n and navs[n] and navs[0]:
-            return round((navs[0] / navs[n] - 1) * 100, 4)
-        return None
+    for url, param_key, period_map in API_CONFIGS:
+        test_period = list(period_map.values())[1]  # try 1M
+        log.info("Probing API: POST %s  %s=%s", url, param_key, test_period)
+        r = safe_post(sess, url, {param_key: test_period}, retries=1)
+        if r is None:
+            log.warning("No response from %s", url)
+            continue
+        if r.status_code != 200:
+            log.warning("HTTP %d from %s", r.status_code, url)
+            continue
+        r.encoding = r.apparent_encoding or "utf-8"
+        data = parse_period_table(r.text)
+        if len(data) > 10:
+            log.info("API probe success: %d funds returned  (url=%s param=%s)",
+                     len(data), url, param_key)
+            return (url, param_key, period_map)
+        log.warning("Only %d rows parsed from %s — trying next config", len(data), url)
 
-    one_month    = pct(1)
-    three_months = pct(3)
-    six_months   = pct(6)
-    one_year     = pct(12)
-    three_years  = pct(36)
-    five_years   = pct(60)
-
-    # 1W estimated from 1M via compound
-    if one_month is not None:
-        one_week = round(((1 + one_month / 100) ** (7 / 30) - 1) * 100, 4)
-    else:
-        one_week = None
-
-    # Build result, falling back to existing values where we lack history
-    def use(computed, key):
-        if computed is not None:
-            return computed
-        return fallback.get(key, 0.0)
-
-    return {
-        "oneWeek":     use(one_week,    "oneWeek"),
-        "oneMonth":    use(one_month,   "oneMonth"),
-        "threeMonths": use(three_months,"threeMonths"),
-        "sixMonths":   use(six_months,  "sixMonths"),
-        "oneYear":     use(one_year,    "oneYear"),
-        "threeYears":  use(three_years, "threeYears"),
-        "fiveYears":   use(five_years,  "fiveYears"),
-    }
+    return None
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# NAV history JSON I/O
-# ──────────────────────────────────────────────────────────────────────────────
-
-def load_nav_history() -> dict:
-    if NAV_FILE.exists():
-        try:
-            with open(NAV_FILE, encoding="utf-8") as fh:
-                return json.load(fh)
-        except Exception:
-            pass
-    return {"lastUpdated": "", "months": [], "navs": {}}
-
-
-def save_nav_history(history: dict) -> None:
-    NAV_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(NAV_FILE, "w", encoding="utf-8") as fh:
-        json.dump(history, fh, ensure_ascii=False, separators=(",", ":"))
-    log.info("nav_history.json saved (%d months, %d funds)",
-             len(history["months"]), len(history["navs"]))
-
-
-def merge_fund_history(existing_navs: list[float],
-                       existing_months: list[str],
-                       new_pairs: list[tuple[str, float]],
-                       master_months: list[str]) -> list[float]:
-    """
-    Merge new price data into the aligned master months array.
-    Returns a new list aligned to master_months (None for missing months).
-    """
-    # Build a dict from existing data
-    hist: dict[str, float] = {}
-    for m, v in zip(existing_months, existing_navs):
-        if v is not None:
-            hist[m] = v
-    # Overwrite / add new data
-    for month, price in new_pairs:
-        hist[month] = price
-    # Align to master_months
-    return [hist.get(m) for m in master_months]
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Main logic
+# Main
 # ──────────────────────────────────────────────────────────────────────────────
 
 def main():
-    ap = argparse.ArgumentParser(description="Fetch MPFA monthly NAV history")
-    ap.add_argument("--delay",    type=float, default=0.7,
-                    help="Seconds between detail page requests (default 0.7)")
-    ap.add_argument("--max-funds", type=int, default=0,
-                    help="Stop after N funds (0 = all, for testing)")
-    ap.add_argument("--dry-run",  action="store_true",
-                    help="Parse but do not write output files")
-    ap.add_argument("--fund-id",  metavar="FUND_ID",
-                    help="Process only this fund ID (for debugging)")
+    ap = argparse.ArgumentParser(description="Fetch MPFA period returns via API")
+    ap.add_argument("--delay",   type=float, default=1.0,
+                    help="Seconds between API calls (default 1.0)")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="Parse but do not write funds.json")
     args = ap.parse_args()
+
+    log.info("=" * 60)
+    log.info("fetch_nav.py v2  —  MPFA period-return API")
+    log.info("=" * 60)
 
     # ── Load fund list ─────────────────────────────────────────────────────────
     if not FUNDS_FILE.exists():
@@ -305,160 +286,116 @@ def main():
         funds_data = json.load(fh)
 
     funds = funds_data.get("funds", [])
-    funds_with_cf = [f for f in funds if f.get("cfId")]
-    log.info("funds.json: %d total, %d with cfId", len(funds), len(funds_with_cf))
-
-    if not funds_with_cf:
-        log.error("No funds have cfId — run fetch_mpfa.py first")
+    if not funds:
+        log.error("No funds in funds.json")
         sys.exit(1)
 
-    if args.fund_id:
-        funds_with_cf = [f for f in funds_with_cf if f["id"] == args.fund_id]
-        if not funds_with_cf:
-            log.error("Fund ID %s not found", args.fund_id)
-            sys.exit(1)
+    log.info("Loaded %d funds from funds.json", len(funds))
+    name_index = build_name_index(funds)
 
-    if args.max_funds:
-        funds_with_cf = funds_with_cf[:args.max_funds]
-
-    # ── Load existing NAV history ──────────────────────────────────────────────
-    history = load_nav_history()
-
-    # ── Build / extend master months list ─────────────────────────────────────
-    # We'll collect all months from new scrapes and merge with existing
-    master_months_set: set[str] = set(history.get("months", []))
-    new_data: dict[str, list[tuple[str, float]]] = {}   # fund_id -> pairs
-
+    # ── Find a working API config ──────────────────────────────────────────────
     sess = make_session()
-    ok_count = 0
-    fail_count = 0
+    config = probe_api(sess)
 
-    log.info("Fetching NAV history for %d funds (delay=%.1fs)...", len(funds_with_cf), args.delay)
+    if config is None:
+        log.error(
+            "All API configs failed — short-period returns will remain as "
+            "cyr_25 proxies.  Check the MPFA website for API changes."
+        )
+        sys.exit(1)
 
-    for i, fund in enumerate(funds_with_cf):
-        cf_id     = fund["cfId"]
-        fund_id   = fund["id"]
-        fund_name = fund["name"]
+    api_url, param_key, period_map = config
 
-        url = f"{DETAIL_URL}?cf_id={cf_id}"
-        r   = safe_get(sess, url)
+    # ── Fetch each short period ────────────────────────────────────────────────
+    # Map: mpf_period_key → return_data_dict
+    period_results: dict[str, dict[str, float]] = {}
 
+    for fund_key, api_period in period_map.items():
+        log.info("Fetching %s (%s=%s)...", fund_key, param_key, api_period)
+        r = safe_post(sess, api_url, {param_key: api_period})
         if r is None or r.status_code != 200:
-            log.warning("[%d/%d] SKIP %s (cf_id=%s, status=%s)",
-                        i + 1, len(funds_with_cf), fund_name[:30], cf_id,
+            log.warning("SKIP %s — HTTP %s", fund_key,
                         r.status_code if r else "N/A")
-            fail_count += 1
-        else:
-            r.encoding = r.apparent_encoding or "utf-8"
-            pairs = parse_detail_page(r.text)
-            if pairs:
-                new_data[fund_id] = pairs
-                for month, _ in pairs:
-                    master_months_set.add(month)
-                ok_count += 1
-                log.debug("[%d/%d] OK  %s — %d months", i + 1, len(funds_with_cf),
-                          fund_name[:30], len(pairs))
-            else:
-                log.warning("[%d/%d] NODATA %s (cf_id=%s)",
-                            i + 1, len(funds_with_cf), fund_name[:30], cf_id)
-                fail_count += 1
+            continue
 
-        if i % 50 == 49:
-            log.info("Progress: %d/%d  (ok=%d fail=%d)",
-                     i + 1, len(funds_with_cf), ok_count, fail_count)
+        r.encoding = r.apparent_encoding or "utf-8"
+        data = parse_period_table(r.text)
+        if not data:
+            log.warning("SKIP %s — 0 rows parsed", fund_key)
+            continue
 
-        if args.delay > 0 and i < len(funds_with_cf) - 1:
+        period_results[fund_key] = data
+        log.info("  %s: %d fund rows", fund_key, len(data))
+
+        if args.delay > 0:
             time.sleep(args.delay)
 
-    log.info("Fetch done: ok=%d  fail=%d", ok_count, fail_count)
-
-    if not new_data:
-        log.error("No NAV data retrieved — aborting")
+    if not period_results:
+        log.error("No period data fetched — aborting")
         sys.exit(1)
 
-    # ── Build master months array (sorted most-recent first, capped) ──────────
-    master_months = sorted(master_months_set, reverse=True)[:MAX_MONTHS]
-    log.info("Master months: %d  (%s … %s)",
-             len(master_months),
-             master_months[0] if master_months else "?",
-             master_months[-1] if master_months else "?")
+    # ── Apply returns to funds ─────────────────────────────────────────────────
+    matched_total = 0
+    match_counts  = {k: 0 for k in period_results}
 
-    # ── Merge histories ────────────────────────────────────────────────────────
-    old_months = history.get("months", [])
-    old_navs   = history.get("navs",   {})
-
-    merged_navs: dict = {}
-    for fund in funds_with_cf:
-        fund_id = fund["id"]
-        existing_vals   = old_navs.get(fund_id, [])
-        existing_months = old_months[: len(existing_vals)]
-        new_pairs       = new_data.get(fund_id, [])
-        merged           = merge_fund_history(
-            existing_vals, existing_months, new_pairs, master_months
-        )
-        # Only store if we have at least one real value
-        if any(v is not None for v in merged):
-            merged_navs[fund_id] = merged
-
-    # Preserve history for funds we didn't re-fetch this run (max_funds / fund_id mode)
-    if args.max_funds or args.fund_id:
-        for fid, vals in old_navs.items():
-            if fid not in merged_navs:
-                # realign to new master_months
-                hist_dict = {m: v for m, v in zip(old_months, vals) if v is not None}
-                merged_navs[fid] = [hist_dict.get(m) for m in master_months]
-
-    history_out = {
-        "lastUpdated": datetime.now(timezone.utc).strftime("%Y-%m"),
-        "months":      master_months,
-        "navs":        merged_navs,
-    }
-
-    if not args.dry_run:
-        save_nav_history(history_out)
-
-    # ── Update funds.json returns ──────────────────────────────────────────────
-    nav_updated = 0
     for fund in funds:
-        fund_id  = fund["id"]
-        nav_list = merged_navs.get(fund_id)
-        if not nav_list:
-            continue
+        for period_key, data in period_results.items():
+            # Try exact → fuzzy match
+            val = data.get(fund["name"])
+            if val is None:
+                hit = fuzzy_match(fund["name"], {_norm(n): v for n, v in data.items()
+                                                  if isinstance(n, str)})
+                # hit is a float if we reuse fuzzy_match incorrectly; re-do properly
+                norm_data = {_norm(n): float(v) for n, v in data.items()
+                             if isinstance(v, (int, float))}
+                norm_key = _norm(fund["name"])
+                val = norm_data.get(norm_key)
+                if val is None:
+                    for k, v in norm_data.items():
+                        if k in norm_key or norm_key in k:
+                            val = v
+                            break
 
-        # Get non-None navs in order (most-recent first)
-        clean_navs = [v for v in nav_list if v is not None]
-        if not clean_navs:
-            continue
+            if val is not None:
+                fund["returns"][period_key] = round(val, 4)
+                match_counts[period_key] = match_counts.get(period_key, 0) + 1
 
-        fund["nav"] = clean_navs[0]
+    # Recompute 1W from 1M if 1W not available
+    for fund in funds:
+        if "oneWeek" not in period_results and "oneMonth" in period_results:
+            om = fund["returns"].get("oneMonth", 0)
+            fund["returns"]["oneWeek"] = round(
+                ((1 + om / 100) ** (7 / 30) - 1) * 100, 4
+            )
 
-        new_returns = compute_returns(clean_navs, fund.get("returns", {}))
-        fund["returns"]    = new_returns
-        fund["navSource"]  = "monthly_history"
-        nav_updated += 1
+    matched_total = min(match_counts.values()) if match_counts else 0
+    log.info("Match summary:")
+    for k, v in match_counts.items():
+        log.info("  %-14s  %d / %d funds matched", k, v, len(funds))
 
-    log.info("Updated returns for %d/%d funds from NAV history", nav_updated, len(funds))
-
+    # ── Save funds.json ────────────────────────────────────────────────────────
     if not args.dry_run:
         hkt     = timezone(timedelta(hours=8))
         now_hkt = datetime.now(hkt)
+        fetched_periods = list(period_results.keys())
+
         funds_data["lastUpdated"]    = datetime.now(timezone.utc).isoformat()
         funds_data["lastUpdatedHKT"] = now_hkt.strftime("%Y-%m-%d %H:%M HKT")
         funds_data["note"] = (
             f"mfp.mpfa.org.hk | {len(funds)} funds | "
-            f"returns computed from monthly NAV history | "
-            f"nav_history: {len(merged_navs)} funds × {len(master_months)} months"
+            f"short-period returns from API ({', '.join(fetched_periods)}); "
+            f"1Y/3Y/5Y from list page"
         )
 
-        # Re-sort by 1Y return descending
         funds.sort(key=lambda f: f["returns"]["oneYear"], reverse=True)
         funds_data["funds"] = funds
 
         with open(FUNDS_FILE, "w", encoding="utf-8") as fh:
             json.dump(funds_data, fh, ensure_ascii=False, indent=2)
-        log.info("funds.json updated (%d funds)", len(funds))
+        log.info("funds.json saved (%d funds, %d periods updated)",
+                 len(funds), len(period_results))
 
-    log.info("Done. nav_updated=%d  ok=%d  fail=%d", nav_updated, ok_count, fail_count)
+    log.info("Done.")
 
 
 if __name__ == "__main__":

@@ -27,21 +27,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Fetch MPFA fund list
-        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt --save-html public/data/raw_list.html
+      - name: Fetch MPFA fund list (1Y / 3Y / 5Y + proxy short-period)
+        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
 
-      - name: Diagnose cf_id in raw HTML
-        run: |
-          echo "=== cf_id occurrences in raw HTML ==="
-          count=$(grep -oi "cf_id=[0-9]*" public/data/raw_list.html 2>/dev/null | wc -l)
-          echo "Total cf_id= matches: $count"
-          grep -oi "cf_id=[0-9]*" public/data/raw_list.html 2>/dev/null | head -10 || echo "(none found)"
-          echo ""
-          echo "=== First 500 chars of raw HTML ==="
-          head -c 500 public/data/raw_list.html 2>/dev/null || echo "(file not found)"
-
-      - name: Fetch NAV history and compute real returns
-        run: python3 scripts/fetch_nav.py --delay 0.6
+      - name: Fetch real short-period returns via MPFA API (1W / 1M / 3M / 6M)
+        run: python3 scripts/fetch_nav.py --delay 1.0
 
       - name: Show result
         run: |
@@ -49,34 +39,22 @@ jobs:
           import json
           with open('public/data/funds.json') as f:
               d = json.load(f)
-          src = d.get('dataSource', 'unknown')
-          print('=== Scraper Result ===')
-          print('dataSource :', src)
-          print('totalFunds :', d.get('totalFunds', 0))
-          print('lastUpdated:', d.get('lastUpdatedHKT', d.get('lastUpdated', 'N/A')))
+          print('=== Result ===')
+          print('totalFunds :', d.get('totalFunds', len(d.get('funds',[]))))
+          print('lastUpdated:', d.get('lastUpdatedHKT', 'N/A'))
           print('note       :', d.get('note', ''))
           print()
-          print('Top 5 funds — short period vs 1Y:')
+          print('Top 5 funds (short-period vs 1Y):')
           for f in d['funds'][:5]:
               r = f['returns']
-              src_tag = f.get('navSource', 'proxy')
-              print(f'  {f[\"name\"][:35]:35s} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}% [{src_tag}]')
-
-          import os
-          if os.path.exists('public/data/nav_history.json'):
-              with open('public/data/nav_history.json') as f2:
-                  nav = json.load(f2)
-              print()
-              print('nav_history.json:')
-              print('  months tracked:', len(nav.get('months', [])))
-              print('  funds tracked :', len(nav.get('navs', {})))
+              print(f'  {f[\"name\"][:35]:35s} | 1W:{r[\"oneWeek\"]:6.2f}% 1M:{r[\"oneMonth\"]:6.2f}% 3M:{r[\"threeMonths\"]:6.2f}% 6M:{r[\"sixMonths\"]:6.2f}% 1Y:{r[\"oneYear\"]:6.2f}%')
           "
 
       - name: Commit and push if data changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/funds.json public/data/nav_history.json public/data/debug_page.txt 2>/dev/null || true
+          git add public/data/funds.json public/data/debug_page.txt 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No data changes, skipping commit"
           else

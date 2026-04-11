@@ -1,7 +1,7 @@
 === PARSE DEBUG v7 ===
 Top 5 funds by 1Y:
-  BEA (MPF) Asian Equity Fund         | 1Y:  68.01%  3Y:  60.01%  5Y:  42.25%  6M:  16.80%
-  BEA (Industry Scheme) Asian Equity  | 1Y:  67.29%  3Y:  59.06%  5Y:  42.63%  6M:  16.57%
-  Haitong Asia Pacific Fund - Class T | 1Y:  67.10%  3Y:  51.10%  5Y:  57.48%  6M:  14.83%
-  Haitong Asia Pacific Fund - Class A | 1Y:  67.06%  3Y:  50.92%  5Y:  57.11%  6M:  14.83%
-  BEA Asian Equity Fund               | 1Y:  64.98%  3Y:  59.42%  5Y:  34.06%  6M:  17.16%
+  海通韓國基金 - T類別                        | 1Y: 156.70%  3Y:  97.91%  5Y: 114.22%  6M:  42.40%
+  海通韓國基金 - A類別                        | 1Y: 156.60%  3Y:  97.95%  5Y: 114.21%  6M:  42.42%
+  東亞(強積金)亞洲股票基金                       | 1Y:  68.01%  3Y:  60.01%  5Y:  42.25%  6M:  16.80%
+  東亞 (行業計劃) 亞洲股票基金                    | 1Y:  67.29%  3Y:  59.06%  5Y:  42.63%  6M:  16.57%
+  海通亞太基金 - T類別                        | 1Y:  67.10%  3Y:  51.10%  5Y:  57.48%  6M:  14.83%

@@ -1,15 +1,55 @@
 {
-  "lastUpdated": "2026-04-11T18:18:21.200202+00:00",
-  "lastUpdatedHKT": "2026-04-12 02:18 HKT",
+  "lastUpdated": "2026-04-11T18:25:23.870556+00:00",
+  "lastUpdatedHKT": "2026-04-12 02:25 HKT",
   "dataSource": "mpfa",
-  "note": "mfp.mpfa.org.hk/eng/mpp_list.jsp | 312 funds | 1Y/5Y real; 3Y from calendar years; 6M/3M/1M/1W derived",
-  "totalFunds": 312,
+  "note": "mfp.mpfa.org.hk/eng/mpp_list.jsp | 434 funds | 1Y/5Y real; 3Y from calendar years; 6M/3M/1M/1W derived",
+  "totalFunds": 434,
   "funds": [
     {
-      "id": "fund-55ca86",
-      "name": "BEA (MPF) Asian Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-41a382",
+      "name": "海通韓國基金 - T類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 3.0135,
+        "oneMonth": 13.0583,
+        "threeMonths": 39.175,
+        "sixMonths": 42.395,
+        "oneYear": 156.7,
+        "threeYears": 97.9111,
+        "fiveYears": 114.22
+      },
+      "fundSize": 60.72
+    },
+    {
+      "id": "fund-3984dd",
+      "name": "海通韓國基金 - A類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 3.0115,
+        "oneMonth": 13.05,
+        "threeMonths": 39.15,
+        "sixMonths": 42.425,
+        "oneYear": 156.6,
+        "threeYears": 97.9492,
+        "fiveYears": 114.21
+      },
+      "fundSize": 10.54
+    },
+    {
+      "id": "fund-0cca2a",
+      "name": "東亞(強積金)亞洲股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -26,10 +66,10 @@
       "fundSize": 1423.06
     },
     {
-      "id": "fund-a0b328",
-      "name": "BEA (Industry Scheme) Asian Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-4159c6",
+      "name": "東亞 (行業計劃) 亞洲股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -46,10 +86,10 @@
       "fundSize": 622.47
     },
     {
-      "id": "fund-78d29a",
-      "name": "Haitong Asia Pacific Fund - Class T",
+      "id": "fund-7b32d9",
+      "name": "海通亞太基金 - T類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -66,10 +106,10 @@
       "fundSize": 51.52
     },
     {
-      "id": "fund-cab868",
-      "name": "Haitong Asia Pacific Fund - Class A",
+      "id": "fund-0d476a",
+      "name": "海通亞太基金 - A類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -86,10 +126,10 @@
       "fundSize": 23.97
     },
     {
-      "id": "fund-6f1455",
-      "name": "BEA Asian Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-b5c458",
+      "name": "東亞亞洲股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -106,10 +146,10 @@
       "fundSize": 15.38
     },
     {
-      "id": "fund-5fa4f8",
-      "name": "My Choice Asia Equity Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-7689bd",
+      "name": "我的亞洲股票基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -126,10 +166,10 @@
       "fundSize": 284.97
     },
     {
-      "id": "fund-c9532e",
-      "name": "Asia Pacific Equity Fund",
+      "id": "fund-ae131a",
+      "name": "亞太股票基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -146,10 +186,150 @@
       "fundSize": 6352.78
     },
     {
-      "id": "fund-caadb8",
-      "name": "BOC-Prudential Japan Equity Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-a309ca",
+      "name": "亞洲股票基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 1.0169,
+        "oneMonth": 4.4067,
+        "threeMonths": 13.22,
+        "sixMonths": 17.17,
+        "oneYear": 52.88,
+        "threeYears": 63.688,
+        "fiveYears": 57.67
+      },
+      "fundSize": 11530.22
+    },
+    {
+      "id": "fund-0501f6",
+      "name": "安聯東方太平洋基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9837,
+        "oneMonth": 4.2625,
+        "threeMonths": 12.7875,
+        "sixMonths": 16.945,
+        "oneYear": 51.15,
+        "threeYears": 54.9021,
+        "fiveYears": 50.58
+      },
+      "fundSize": 280.8
+    },
+    {
+      "id": "fund-784030",
+      "name": "安聯東方太平洋基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9829,
+        "oneMonth": 4.2592,
+        "threeMonths": 12.7775,
+        "sixMonths": 16.925,
+        "oneYear": 51.11,
+        "threeYears": 54.7693,
+        "fiveYears": 50.35
+      },
+      "fundSize": 280.2
+    },
+    {
+      "id": "fund-2a65b8",
+      "name": "安聯亞洲基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9792,
+        "oneMonth": 4.2433,
+        "threeMonths": 12.73,
+        "sixMonths": 15.915,
+        "oneYear": 50.92,
+        "threeYears": 40.4003,
+        "fiveYears": 9.88
+      },
+      "fundSize": 807.22
+    },
+    {
+      "id": "fund-7dd0f8",
+      "name": "安聯亞洲基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9785,
+        "oneMonth": 4.24,
+        "threeMonths": 12.72,
+        "sixMonths": 15.895,
+        "oneYear": 50.88,
+        "threeYears": 40.2625,
+        "fiveYears": 9.72
+      },
+      "fundSize": 698.55
+    },
+    {
+      "id": "fund-00ffb7",
+      "name": "安聯東方太平洋基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9771,
+        "oneMonth": 4.2342,
+        "threeMonths": 12.7025,
+        "sixMonths": 16.79,
+        "oneYear": 50.81,
+        "threeYears": 53.8416,
+        "fiveYears": 48.85
+      },
+      "fundSize": 36.05
+    },
+    {
+      "id": "fund-6dbe0f",
+      "name": "安聯亞洲基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.9727,
+        "oneMonth": 4.215,
+        "threeMonths": 12.645,
+        "sixMonths": 15.765,
+        "oneYear": 50.58,
+        "threeYears": 39.43,
+        "fiveYears": 8.62
+      },
+      "fundSize": 57.03
+    },
+    {
+      "id": "fund-936b91",
+      "name": "中銀保誠日本股票基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "股票基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -166,10 +346,10 @@
       "fundSize": 1919.19
     },
     {
-      "id": "fund-6129d2",
-      "name": "Manulife MPF Pacific Asia Equity Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-0be9bd",
+      "name": "宏利 MPF 亞太股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -186,10 +366,70 @@
       "fundSize": 19404.68
     },
     {
-      "id": "fund-07ea48",
-      "name": "BOC-Prudential Asia Equity Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-ae131a",
+      "name": "亞太股票基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.889,
+        "oneMonth": 3.8525,
+        "threeMonths": 11.5575,
+        "sixMonths": 15.135,
+        "oneYear": 46.23,
+        "threeYears": 49.6012,
+        "fiveYears": 19.79
+      },
+      "fundSize": 394.62
+    },
+    {
+      "id": "fund-cf2507",
+      "name": "智優逸亞太股票追蹤指數基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8885,
+        "oneMonth": 3.85,
+        "threeMonths": 11.55,
+        "sixMonths": 14.29,
+        "oneYear": 46.2,
+        "threeYears": 50.3216,
+        "fiveYears": 36.16
+      },
+      "fundSize": 1115.66
+    },
+    {
+      "id": "fund-cf2507",
+      "name": "智優逸亞太股票追蹤指數基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8883,
+        "oneMonth": 3.8492,
+        "threeMonths": 11.5475,
+        "sixMonths": 14.29,
+        "oneYear": 46.19,
+        "threeYears": 50.3216,
+        "fiveYears": 36.15
+      },
+      "fundSize": 3890.07
+    },
+    {
+      "id": "fund-282690",
+      "name": "中銀保誠亞洲股票基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -206,10 +446,70 @@
       "fundSize": 5134.9
     },
     {
-      "id": "fund-22b034",
-      "name": "BEA (MPF) Japan Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-49b545",
+      "name": "永明強積金亞洲股票基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8713,
+        "oneMonth": 3.7758,
+        "threeMonths": 11.3275,
+        "sixMonths": 12.91,
+        "oneYear": 45.31,
+        "threeYears": 32.4761,
+        "fiveYears": 4.13
+      },
+      "fundSize": 5998.88
+    },
+    {
+      "id": "fund-e889dd",
+      "name": "永明強積金亞洲股票基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8662,
+        "oneMonth": 3.7533,
+        "threeMonths": 11.26,
+        "sixMonths": 12.785,
+        "oneYear": 45.04,
+        "threeYears": 31.6722,
+        "fiveYears": 3.11
+      },
+      "fundSize": 852.34
+    },
+    {
+      "id": "fund-8ca317",
+      "name": "宏利 MPF 中華威力基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8579,
+        "oneMonth": 3.7175,
+        "threeMonths": 11.1525,
+        "sixMonths": 18.865,
+        "oneYear": 44.61,
+        "threeYears": 43.4744,
+        "fiveYears": -2.39
+      },
+      "fundSize": 36732.23
+    },
+    {
+      "id": "fund-72e9fd",
+      "name": "東亞(強積金)日本股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -226,10 +526,190 @@
       "fundSize": 230.91
     },
     {
-      "id": "fund-eb734a",
-      "name": "Principal Dynamic Asia Pacific Equity Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-d06ab5",
+      "name": "東亞大中華股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.824,
+        "oneMonth": 3.5708,
+        "threeMonths": 10.7125,
+        "sixMonths": 18.27,
+        "oneYear": 42.85,
+        "threeYears": 48.1083,
+        "fiveYears": 8.21
+      },
+      "fundSize": 31.9
+    },
+    {
+      "id": "fund-44215d",
+      "name": "BCT（行業）亞洲股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8227,
+        "oneMonth": 3.565,
+        "threeMonths": 10.695,
+        "sixMonths": 13.315,
+        "oneYear": 42.78,
+        "threeYears": 40.6313,
+        "fiveYears": 18.88
+      },
+      "fundSize": 605.81
+    },
+    {
+      "id": "fund-74b3d3",
+      "name": "BCT亞洲股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.8208,
+        "oneMonth": 3.5567,
+        "threeMonths": 10.67,
+        "sixMonths": 13.355,
+        "oneYear": 42.68,
+        "threeYears": 39.914,
+        "fiveYears": 13.76
+      },
+      "fundSize": 5782.09
+    },
+    {
+      "id": "fund-28b7d8",
+      "name": "安聯大中華基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7958,
+        "oneMonth": 3.4483,
+        "threeMonths": 10.345,
+        "sixMonths": 18.575,
+        "oneYear": 41.38,
+        "threeYears": 43.2571,
+        "fiveYears": 2.53
+      },
+      "fundSize": 273.14
+    },
+    {
+      "id": "fund-5c3538",
+      "name": "安聯大中華基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.795,
+        "oneMonth": 3.445,
+        "threeMonths": 10.335,
+        "sixMonths": 18.555,
+        "oneYear": 41.34,
+        "threeYears": 43.1463,
+        "fiveYears": 2.38
+      },
+      "fundSize": 336.34
+    },
+    {
+      "id": "fund-3942c9",
+      "name": "交通銀行大中華股票成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7925,
+        "oneMonth": 3.4342,
+        "threeMonths": 10.3025,
+        "sixMonths": 18.555,
+        "oneYear": 41.21,
+        "threeYears": 42.2169,
+        "fiveYears": 1.1
+      },
+      "fundSize": 651.68
+    },
+    {
+      "id": "fund-7532b3",
+      "name": "安聯大中華基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7896,
+        "oneMonth": 3.4217,
+        "threeMonths": 10.265,
+        "sixMonths": 18.42,
+        "oneYear": 41.06,
+        "threeYears": 42.2804,
+        "fiveYears": 1.36
+      },
+      "fundSize": 18.18
+    },
+    {
+      "id": "fund-0db1ab",
+      "name": "東亞 (強積金) 大中華股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7856,
+        "oneMonth": 3.4042,
+        "threeMonths": 10.2125,
+        "sixMonths": 17.81,
+        "oneYear": 40.85,
+        "threeYears": 46.2594,
+        "fiveYears": 3.88
+      },
+      "fundSize": 1806.94
+    },
+    {
+      "id": "fund-4c3105",
+      "name": "東亞 (行業計劃) 大中華股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7838,
+        "oneMonth": 3.3967,
+        "threeMonths": 10.19,
+        "sixMonths": 17.78,
+        "oneYear": 40.76,
+        "threeYears": 45.9202,
+        "fiveYears": 4.74
+      },
+      "fundSize": 932.72
+    },
+    {
+      "id": "fund-32391a",
+      "name": "信安動力亞太股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -246,10 +726,10 @@
       "fundSize": 1188.31
     },
     {
-      "id": "fund-eb734a",
-      "name": "Principal Dynamic Asia Pacific Equity Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-32391a",
+      "name": "信安動力亞太股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -266,10 +746,10 @@
       "fundSize": 401.76
     },
     {
-      "id": "fund-ef43d5",
-      "name": "Principal Asian Equity Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-19fb69",
+      "name": "信安亞洲股票基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -286,10 +766,10 @@
       "fundSize": 240.06
     },
     {
-      "id": "fund-e7f49a",
-      "name": "BCOM Asian Dynamic Equity (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-45c20f",
+      "name": "交通銀行亞洲動力股票成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -306,10 +786,10 @@
       "fundSize": 687.37
     },
     {
-      "id": "fund-8344f5",
-      "name": "Principal Asian Equity Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-97aa63",
+      "name": "信安亞洲股票基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -326,10 +806,210 @@
       "fundSize": 4375.96
     },
     {
-      "id": "fund-f1c6ff",
-      "name": "Manulife MPF Japan Equity Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-ae131a",
+      "name": "亞太股票基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7406,
+        "oneMonth": 3.2092,
+        "threeMonths": 9.6275,
+        "sixMonths": 11.715,
+        "oneYear": 38.51,
+        "threeYears": 32.1221,
+        "fiveYears": 2.68
+      },
+      "fundSize": 11037.24
+    },
+    {
+      "id": "fund-ae131a",
+      "name": "亞太股票基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7404,
+        "oneMonth": 3.2083,
+        "threeMonths": 9.625,
+        "sixMonths": 11.715,
+        "oneYear": 38.5,
+        "threeYears": 32.1221,
+        "fiveYears": 2.67
+      },
+      "fundSize": 4985.93
+    },
+    {
+      "id": "fund-1c4ed6",
+      "name": "景順亞洲股票基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7383,
+        "oneMonth": 3.1992,
+        "threeMonths": 9.5975,
+        "sixMonths": 12.765,
+        "oneYear": 38.39,
+        "threeYears": 35.9936,
+        "fiveYears": 4.59
+      },
+      "fundSize": 965.23
+    },
+    {
+      "id": "fund-bbe218",
+      "name": "AMTD景順亞洲基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7369,
+        "oneMonth": 3.1933,
+        "threeMonths": 9.58,
+        "sixMonths": 12.73,
+        "oneYear": 38.32,
+        "threeYears": 35.4062,
+        "fiveYears": 3.95
+      },
+      "fundSize": 74.75
+    },
+    {
+      "id": "fund-c8deb5",
+      "name": "亞歐基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7363,
+        "oneMonth": 3.1908,
+        "threeMonths": 9.5725,
+        "sixMonths": 15.24,
+        "oneYear": 38.29,
+        "threeYears": 52.2823,
+        "fiveYears": 49.11
+      },
+      "fundSize": 1260.2
+    },
+    {
+      "id": "fund-2c23a6",
+      "name": "景順亞洲股票基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7352,
+        "oneMonth": 3.1858,
+        "threeMonths": 9.5575,
+        "sixMonths": 12.695,
+        "oneYear": 38.23,
+        "threeYears": 35.5288,
+        "fiveYears": 3.99
+      },
+      "fundSize": 745.71
+    },
+    {
+      "id": "fund-1ada53",
+      "name": "大中華股票基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7231,
+        "oneMonth": 3.1333,
+        "threeMonths": 9.4,
+        "sixMonths": 17.125,
+        "oneYear": 37.6,
+        "threeYears": 36.539,
+        "fiveYears": -9.07
+      },
+      "fundSize": 741.14
+    },
+    {
+      "id": "fund-1ceb93",
+      "name": "我的中國股票基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7188,
+        "oneMonth": 3.115,
+        "threeMonths": 9.345,
+        "sixMonths": 17.04,
+        "oneYear": 37.38,
+        "threeYears": 37.3625,
+        "fiveYears": -7.62
+      },
+      "fundSize": 645.05
+    },
+    {
+      "id": "fund-5176bd",
+      "name": "中國人壽大中華股票基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.7058,
+        "oneMonth": 3.0583,
+        "threeMonths": 9.175,
+        "sixMonths": 16.77,
+        "oneYear": 36.7,
+        "threeYears": 36.8336,
+        "fiveYears": 155.97
+      },
+      "fundSize": 158.06
+    },
+    {
+      "id": "fund-1ada53",
+      "name": "大中華股票基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6933,
+        "oneMonth": 3.0042,
+        "threeMonths": 9.0125,
+        "sixMonths": 17.19,
+        "oneYear": 36.05,
+        "threeYears": 46.4082,
+        "fiveYears": 5.69
+      },
+      "fundSize": 20375.57
+    },
+    {
+      "id": "fund-00f65d",
+      "name": "宏利 MPF 日本股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "股票基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -346,10 +1026,110 @@
       "fundSize": 11466.53
     },
     {
-      "id": "fund-059400",
-      "name": "AMTD Invesco Europe Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-b8d251",
+      "name": "海通環球分散基金 - T類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6608,
+        "oneMonth": 2.8633,
+        "threeMonths": 8.59,
+        "sixMonths": 12.645,
+        "oneYear": 34.36,
+        "threeYears": 88.6321,
+        "fiveYears": 89.15
+      },
+      "fundSize": 130.88
+    },
+    {
+      "id": "fund-d066c3",
+      "name": "海通環球分散基金 - A類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6583,
+        "oneMonth": 2.8525,
+        "threeMonths": 8.5575,
+        "sixMonths": 12.58,
+        "oneYear": 34.23,
+        "threeYears": 88.1455,
+        "fiveYears": 88.2
+      },
+      "fundSize": 68.08
+    },
+    {
+      "id": "fund-48e0a2",
+      "name": "永明強積金大中華股票基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6429,
+        "oneMonth": 2.7858,
+        "threeMonths": 8.3575,
+        "sixMonths": 14.8,
+        "oneYear": 33.43,
+        "threeYears": 33.2867,
+        "fiveYears": -11.67
+      },
+      "fundSize": 7354.95
+    },
+    {
+      "id": "fund-e0869b",
+      "name": "永明強積金大中華股票基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6383,
+        "oneMonth": 2.7658,
+        "threeMonths": 8.2975,
+        "sixMonths": 14.67,
+        "oneYear": 33.19,
+        "threeYears": 32.486,
+        "fiveYears": -12.53
+      },
+      "fundSize": 1224.97
+    },
+    {
+      "id": "fund-940310",
+      "name": "信安動力大中華股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.6192,
+        "oneMonth": 2.6833,
+        "threeMonths": 8.05,
+        "sixMonths": 14.36,
+        "oneYear": 32.2,
+        "threeYears": 29.0588,
+        "fiveYears": -14.42
+      },
+      "fundSize": 1499.41
+    },
+    {
+      "id": "fund-71381c",
+      "name": "AMTD景順歐洲基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -366,10 +1146,30 @@
       "fundSize": 43.77
     },
     {
-      "id": "fund-a82e44",
-      "name": "Principal Growth Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-a9b377",
+      "name": "歐洲股票基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.5871,
+        "oneMonth": 2.5442,
+        "threeMonths": 7.6325,
+        "sixMonths": 16.84,
+        "oneYear": 30.53,
+        "threeYears": 61.1823,
+        "fiveYears": 74.79
+      },
+      "fundSize": 3760.68
+    },
+    {
+      "id": "fund-c364b6",
+      "name": "信安增長基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -386,10 +1186,10 @@
       "fundSize": 3478.36
     },
     {
-      "id": "fund-a82e44",
-      "name": "Principal Growth Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-c364b6",
+      "name": "信安增長基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -406,10 +1206,10 @@
       "fundSize": 492.54
     },
     {
-      "id": "fund-32c1db",
-      "name": "AMTD Allianz Choice Growth Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-bf139b",
+      "name": "AMTD 安聯精選增長基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -426,10 +1226,10 @@
       "fundSize": 116.95
     },
     {
-      "id": "fund-534e16",
-      "name": "Allianz Growth Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-d112c7",
+      "name": "安聯增長基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -446,10 +1246,10 @@
       "fundSize": 1061.33
     },
     {
-      "id": "fund-993dcc",
-      "name": "Allianz Growth Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-56e6ee",
+      "name": "安聯增長基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -466,10 +1266,10 @@
       "fundSize": 984.09
     },
     {
-      "id": "fund-1f0d3f",
-      "name": "Growth Fund",
+      "id": "fund-8d8d1e",
+      "name": "增長基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -486,10 +1286,10 @@
       "fundSize": 33389.05
     },
     {
-      "id": "fund-1f0d3f",
-      "name": "Growth Fund",
+      "id": "fund-8d8d1e",
+      "name": "增長基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -506,10 +1306,10 @@
       "fundSize": 11022.09
     },
     {
-      "id": "fund-549afb",
-      "name": "BCOM Dynamic Growth (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-43637c",
+      "name": "交通銀行動力增長成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -526,10 +1326,10 @@
       "fundSize": 549.35
     },
     {
-      "id": "fund-458d1c",
-      "name": "Allianz Growth Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-4e0779",
+      "name": "安聯增長基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -546,10 +1346,10 @@
       "fundSize": 60.47
     },
     {
-      "id": "fund-d80b7b",
-      "name": "BOC-Prudential Growth Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-042f57",
+      "name": "中銀保誠增長基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -566,10 +1366,10 @@
       "fundSize": 17058.59
     },
     {
-      "id": "fund-e6f59e",
-      "name": "Growth Portfolio",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-311752",
+      "name": "增長組合",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -586,10 +1386,10 @@
       "fundSize": 18675.35
     },
     {
-      "id": "fund-79d42d",
-      "name": "Invesco Growth Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-a00537",
+      "name": "景順增長基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -606,10 +1406,10 @@
       "fundSize": 2981.33
     },
     {
-      "id": "fund-21ec51",
-      "name": "Invesco Growth Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-6dc726",
+      "name": "景順增長基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -626,10 +1426,70 @@
       "fundSize": 3033.65
     },
     {
-      "id": "fund-f8c931",
-      "name": "Manulife MPF 2045 Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-3e74c5",
+      "name": "安聯香港基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.5467,
+        "oneMonth": 2.3692,
+        "threeMonths": 7.1075,
+        "sixMonths": 17.745,
+        "oneYear": 28.43,
+        "threeYears": 28.5867,
+        "fiveYears": -3.43
+      },
+      "fundSize": 731.16
+    },
+    {
+      "id": "fund-7359b7",
+      "name": "安聯香港基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.546,
+        "oneMonth": 2.3658,
+        "threeMonths": 7.0975,
+        "sixMonths": 17.725,
+        "oneYear": 28.39,
+        "threeYears": 28.473,
+        "fiveYears": -3.58
+      },
+      "fundSize": 824.11
+    },
+    {
+      "id": "fund-b60fc4",
+      "name": "安聯香港基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.5412,
+        "oneMonth": 2.345,
+        "threeMonths": 7.035,
+        "sixMonths": 17.59,
+        "oneYear": 28.14,
+        "threeYears": 27.6967,
+        "fiveYears": -4.53
+      },
+      "fundSize": 46.23
+    },
+    {
+      "id": "fund-ab8a3f",
+      "name": "宏利 MPF 2045 退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -646,10 +1506,10 @@
       "fundSize": 2615.75
     },
     {
-      "id": "fund-b2e882",
-      "name": "Manulife MPF 2040 Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-2ab7ea",
+      "name": "宏利 MPF 2040 退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -666,10 +1526,30 @@
       "fundSize": 1512.83
     },
     {
-      "id": "fund-0037a7",
-      "name": "Principal Aggressive Strategy Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-25a596",
+      "name": "香港股票基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.5356,
+        "oneMonth": 2.3208,
+        "threeMonths": 6.9625,
+        "sixMonths": 17.485,
+        "oneYear": 27.85,
+        "threeYears": 28.0872,
+        "fiveYears": -4.47
+      },
+      "fundSize": 568.37
+    },
+    {
+      "id": "fund-49ff32",
+      "name": "信安進取策略基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -686,10 +1566,10 @@
       "fundSize": 37.35
     },
     {
-      "id": "fund-405253",
-      "name": "Principal Aggressive Strategy Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-f328db",
+      "name": "信安進取策略基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -706,10 +1586,10 @@
       "fundSize": 1494.3
     },
     {
-      "id": "fund-73bb60",
-      "name": "BCT (Pro) E90 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-f9c9aa",
+      "name": "BCT E90 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -726,10 +1606,10 @@
       "fundSize": 1130.87
     },
     {
-      "id": "fund-088d28",
-      "name": "European Equity Fund",
+      "id": "fund-a9b377",
+      "name": "歐洲股票基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -746,10 +1626,10 @@
       "fundSize": 5135.86
     },
     {
-      "id": "fund-088d28",
-      "name": "European Equity Fund",
+      "id": "fund-a9b377",
+      "name": "歐洲股票基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -766,10 +1646,10 @@
       "fundSize": 1843.66
     },
     {
-      "id": "fund-37f72c",
-      "name": "BOC-Prudential European Index Tracking Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-780aac",
+      "name": "中銀保誠歐洲指數追蹤基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -786,10 +1666,10 @@
       "fundSize": 1997.22
     },
     {
-      "id": "fund-307c5d",
-      "name": "BEA Growth Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-98ae0d",
+      "name": "東亞增長基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -806,10 +1686,10 @@
       "fundSize": 29.88
     },
     {
-      "id": "fund-123563",
-      "name": "ValueChoice Europe Equity Tracker Fund",
+      "id": "fund-33edc0",
+      "name": "智優逸歐洲股票追蹤指數基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -826,10 +1706,10 @@
       "fundSize": 924.67
     },
     {
-      "id": "fund-123563",
-      "name": "ValueChoice Europe Equity Tracker Fund",
+      "id": "fund-33edc0",
+      "name": "智優逸歐洲股票追蹤指數基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -846,10 +1726,90 @@
       "fundSize": 3245.17
     },
     {
-      "id": "fund-0084e9",
-      "name": "BCT (Pro) European Equity Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-37c896",
+      "name": "宏利 MPF 香港股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.5029,
+        "oneMonth": 2.1792,
+        "threeMonths": 6.5375,
+        "sixMonths": 16.01,
+        "oneYear": 26.15,
+        "threeYears": 28.1072,
+        "fiveYears": -14.82
+      },
+      "fundSize": 23414.43
+    },
+    {
+      "id": "fund-d20dad",
+      "name": "富達「儲蓄易」2050基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.499,
+        "oneMonth": 2.1625,
+        "threeMonths": 6.4875,
+        "sixMonths": 11.27,
+        "oneYear": 25.95,
+        "threeYears": 41.7412,
+        "fiveYears": 19.05
+      },
+      "fundSize": 700.69
+    },
+    {
+      "id": "fund-c3791a",
+      "name": "信安香港股票基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4958,
+        "oneMonth": 2.1483,
+        "threeMonths": 6.445,
+        "sixMonths": 17.53,
+        "oneYear": 25.78,
+        "threeYears": 35.9849,
+        "fiveYears": -9.36
+      },
+      "fundSize": 182.88
+    },
+    {
+      "id": "fund-0ee46b",
+      "name": "信安香港股票基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4948,
+        "oneMonth": 2.1442,
+        "threeMonths": 6.4325,
+        "sixMonths": 17.49,
+        "oneYear": 25.73,
+        "threeYears": 35.6074,
+        "fiveYears": -9.77
+      },
+      "fundSize": 3901.76
+    },
+    {
+      "id": "fund-8fd070",
+      "name": "BCT歐洲股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -866,10 +1826,30 @@
       "fundSize": 1504.54
     },
     {
-      "id": "fund-313146",
-      "name": "Manulife MPF Aggressive Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-35f5ad",
+      "name": "富達「儲蓄易」2040基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4935,
+        "oneMonth": 2.1383,
+        "threeMonths": 6.415,
+        "sixMonths": 11.03,
+        "oneYear": 25.66,
+        "threeYears": 41.4233,
+        "fiveYears": 19.18
+      },
+      "fundSize": 1765.57
+    },
+    {
+      "id": "fund-c2267b",
+      "name": "宏利 MPF 進取基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -886,10 +1866,50 @@
       "fundSize": 31601.39
     },
     {
-      "id": "fund-39e0d4",
-      "name": "My Choice Growth Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-b2e399",
+      "name": "富達「儲蓄易」2045基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4912,
+        "oneMonth": 2.1283,
+        "threeMonths": 6.385,
+        "sixMonths": 11.015,
+        "oneYear": 25.54,
+        "threeYears": 41.121,
+        "fiveYears": 18.65
+      },
+      "fundSize": 334.5
+    },
+    {
+      "id": "fund-056d88",
+      "name": "交通銀行香港動力股票成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4894,
+        "oneMonth": 2.1208,
+        "threeMonths": 6.3625,
+        "sixMonths": 17.335,
+        "oneYear": 25.45,
+        "threeYears": 34.7904,
+        "fiveYears": -10.64
+      },
+      "fundSize": 535.69
+    },
+    {
+      "id": "fund-628e23",
+      "name": "我的增長基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -906,10 +1926,50 @@
       "fundSize": 470.07
     },
     {
-      "id": "fund-d94123",
-      "name": "China Life Growth Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-ac85f9",
+      "name": "BCT儲蓄易2040 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4871,
+        "oneMonth": 2.1108,
+        "threeMonths": 6.3325,
+        "sixMonths": 10.905,
+        "oneYear": 25.33,
+        "threeYears": 41.0796,
+        "fiveYears": 18.97
+      },
+      "fundSize": 2117.09
+    },
+    {
+      "id": "fund-083a18",
+      "name": "BCT儲蓄易2050 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4852,
+        "oneMonth": 2.1025,
+        "threeMonths": 6.3075,
+        "sixMonths": 10.93,
+        "oneYear": 25.23,
+        "threeYears": 40.8085,
+        "fiveYears": 107.23
+      },
+      "fundSize": 264.06
+    },
+    {
+      "id": "fund-d61b1b",
+      "name": "中國人壽增長基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -926,10 +1986,30 @@
       "fundSize": 912.53
     },
     {
-      "id": "fund-1f0d3f",
-      "name": "Growth Fund",
+      "id": "fund-6eb98c",
+      "name": "BCT儲蓄易2045 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.479,
+        "oneMonth": 2.0758,
+        "threeMonths": 6.2275,
+        "sixMonths": 10.79,
+        "oneYear": 24.91,
+        "threeYears": 40.718,
+        "fiveYears": 105.87
+      },
+      "fundSize": 151.73
+    },
+    {
+      "id": "fund-8d8d1e",
+      "name": "增長基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -946,10 +2026,10 @@
       "fundSize": 8536.82
     },
     {
-      "id": "fund-8b2d8b",
-      "name": "Manulife MPF 2035 Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-e7a769",
+      "name": "宏利 MPF 2035 退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -966,10 +2046,30 @@
       "fundSize": 1719.3
     },
     {
-      "id": "fund-3dd3f5",
-      "name": "Principal Balanced Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-d27c00",
+      "name": "BCT大中華股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4767,
+        "oneMonth": 2.0658,
+        "threeMonths": 6.1975,
+        "sixMonths": 12.07,
+        "oneYear": 24.79,
+        "threeYears": 40.1731,
+        "fiveYears": 1.18
+      },
+      "fundSize": 2410.86
+    },
+    {
+      "id": "fund-3aebdf",
+      "name": "信安均衡基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -986,10 +2086,10 @@
       "fundSize": 278.92
     },
     {
-      "id": "fund-3dd3f5",
-      "name": "Principal Balanced Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-3aebdf",
+      "name": "信安均衡基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1006,10 +2106,10 @@
       "fundSize": 2219.87
     },
     {
-      "id": "fund-6c98fe",
-      "name": "Manulife MPF Fidelity Growth Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-69e80c",
+      "name": "宏利 MPF 富達增長基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1026,10 +2126,10 @@
       "fundSize": 12231.42
     },
     {
-      "id": "fund-088d28",
-      "name": "European Equity Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-a9b377",
+      "name": "歐洲股票基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1046,10 +2146,10 @@
       "fundSize": 175.0
     },
     {
-      "id": "fund-2fe797",
-      "name": "Global Equity Fund",
+      "id": "fund-070039",
+      "name": "環球股票基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1066,10 +2166,10 @@
       "fundSize": 1743.21
     },
     {
-      "id": "fund-2fe797",
-      "name": "Global Equity Fund",
+      "id": "fund-070039",
+      "name": "環球股票基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1086,10 +2186,30 @@
       "fundSize": 7605.76
     },
     {
-      "id": "fund-d00d29",
-      "name": "BEA (MPF) European Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-f017f6",
+      "name": "富達「儲蓄易」2035基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4671,
+        "oneMonth": 2.0242,
+        "threeMonths": 6.0725,
+        "sixMonths": 10.435,
+        "oneYear": 24.29,
+        "threeYears": 39.3312,
+        "fiveYears": 17.18
+      },
+      "fundSize": 731.59
+    },
+    {
+      "id": "fund-aed795",
+      "name": "東亞 (強積金) 歐洲股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1106,10 +2226,10 @@
       "fundSize": 212.04
     },
     {
-      "id": "fund-0ba737",
-      "name": "BEA (MPF) Growth Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-7ac74a",
+      "name": "東亞 (強積金) 增長基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1126,10 +2246,10 @@
       "fundSize": 3991.5
     },
     {
-      "id": "fund-d73ae0",
-      "name": "BEA (Industry Scheme) Growth Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-b3ae8a",
+      "name": "東亞 (行業計劃) 增長基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1146,10 +2266,130 @@
       "fundSize": 3910.79
     },
     {
-      "id": "fund-cd94af",
-      "name": "Haitong Core Accumulation Fund - Class A",
+      "id": "fund-dca17c",
+      "name": "東亞 (行業計劃) 香港股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4635,
+        "oneMonth": 2.0083,
+        "threeMonths": 6.025,
+        "sixMonths": 17.105,
+        "oneYear": 24.1,
+        "threeYears": 32.4862,
+        "fiveYears": -15.35
+      },
+      "fundSize": 787.64
+    },
+    {
+      "id": "fund-c31f5c",
+      "name": "永明富時強積金香港指數基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4617,
+        "oneMonth": 2.0008,
+        "threeMonths": 6.0025,
+        "sixMonths": 18.135,
+        "oneYear": 24.01,
+        "threeYears": 41.6532,
+        "fiveYears": -2.61
+      },
+      "fundSize": 512.34
+    },
+    {
+      "id": "fund-c6f286",
+      "name": "永明富時強積金香港指數基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4617,
+        "oneMonth": 2.0008,
+        "threeMonths": 6.0025,
+        "sixMonths": 18.135,
+        "oneYear": 24.01,
+        "threeYears": 41.6532,
+        "fiveYears": -2.61
+      },
+      "fundSize": 3989.83
+    },
+    {
+      "id": "fund-1fb9e4",
+      "name": "東亞(強積金)香港股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4612,
+        "oneMonth": 1.9983,
+        "threeMonths": 5.995,
+        "sixMonths": 17.095,
+        "oneYear": 23.98,
+        "threeYears": 32.2231,
+        "fiveYears": -15.58
+      },
+      "fundSize": 1085.24
+    },
+    {
+      "id": "fund-c861e3",
+      "name": "景順中港股票基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4608,
+        "oneMonth": 1.9967,
+        "threeMonths": 5.99,
+        "sixMonths": 15.49,
+        "oneYear": 23.96,
+        "threeYears": 18.2057,
+        "fiveYears": -23.7
+      },
+      "fundSize": 2196.54
+    },
+    {
+      "id": "fund-0771ad",
+      "name": "BCT儲蓄易2035 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4606,
+        "oneMonth": 1.9958,
+        "threeMonths": 5.9875,
+        "sixMonths": 10.3,
+        "oneYear": 23.95,
+        "threeYears": 39.0577,
+        "fiveYears": 17.03
+      },
+      "fundSize": 930.59
+    },
+    {
+      "id": "fund-e818da",
+      "name": "海通核心累積基金 - A類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1166,10 +2406,10 @@
       "fundSize": 41.49
     },
     {
-      "id": "fund-d73750",
-      "name": "Haitong Core Accumulation Fund - Class T",
+      "id": "fund-ca165f",
+      "name": "海通核心累積基金 - T類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1186,10 +2426,50 @@
       "fundSize": 40.75
     },
     {
-      "id": "fund-bd1dc4",
-      "name": "Allianz Choice Balanced Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-7b189a",
+      "name": "景順中港股票基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4579,
+        "oneMonth": 1.9842,
+        "threeMonths": 5.9525,
+        "sixMonths": 15.41,
+        "oneYear": 23.81,
+        "threeYears": 17.7822,
+        "fiveYears": -24.16
+      },
+      "fundSize": 1728.66
+    },
+    {
+      "id": "fund-ece433",
+      "name": "中港股票基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4556,
+        "oneMonth": 1.9742,
+        "threeMonths": 5.9225,
+        "sixMonths": 16.6,
+        "oneYear": 23.69,
+        "threeYears": 31.1555,
+        "fiveYears": -6.3
+      },
+      "fundSize": 12955.38
+    },
+    {
+      "id": "fund-71ed97",
+      "name": "安聯精選均衡基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1206,10 +2486,30 @@
       "fundSize": 929.5
     },
     {
-      "id": "fund-7271f9",
-      "name": "Global Growth Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-ece433",
+      "name": "中港股票基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4554,
+        "oneMonth": 1.9733,
+        "threeMonths": 5.92,
+        "sixMonths": 16.6,
+        "oneYear": 23.68,
+        "threeYears": 31.1555,
+        "fiveYears": -6.31
+      },
+      "fundSize": 5936.27
+    },
+    {
+      "id": "fund-e4d028",
+      "name": "環球增值基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1226,10 +2526,10 @@
       "fundSize": 526.89
     },
     {
-      "id": "fund-6ab925",
-      "name": "AMTD Allianz Choice Balanced Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-da0150",
+      "name": "AMTD 安聯精選均衡基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1246,10 +2546,10 @@
       "fundSize": 73.59
     },
     {
-      "id": "fund-159316",
-      "name": "Balanced Fund",
+      "id": "fund-ce9676",
+      "name": "均衡基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1266,10 +2566,30 @@
       "fundSize": 21670.53
     },
     {
-      "id": "fund-159316",
-      "name": "Balanced Fund",
+      "id": "fund-e83e45",
+      "name": "AMTD景順香港中國基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4519,
+        "oneMonth": 1.9583,
+        "threeMonths": 5.875,
+        "sixMonths": 15.235,
+        "oneYear": 23.5,
+        "threeYears": 17.8004,
+        "fiveYears": -23.95
+      },
+      "fundSize": 169.55
+    },
+    {
+      "id": "fund-ce9676",
+      "name": "均衡基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1286,10 +2606,10 @@
       "fundSize": 6871.11
     },
     {
-      "id": "fund-800db0",
-      "name": "Allianz Balanced Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-574012",
+      "name": "安聯均衡基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1306,10 +2626,10 @@
       "fundSize": 566.61
     },
     {
-      "id": "fund-02b0bb",
-      "name": "Allianz Balanced Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-0ad7be",
+      "name": "安聯均衡基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1326,10 +2646,10 @@
       "fundSize": 480.28
     },
     {
-      "id": "fund-40b748",
-      "name": "AMTD Invesco Target 2048 Retirement Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-e271dc",
+      "name": "AMTD景順目標2048退休基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1346,10 +2666,10 @@
       "fundSize": 18.0
     },
     {
-      "id": "fund-e17cb7",
-      "name": "ValueChoice Balanced Fund",
+      "id": "fund-1436f2",
+      "name": "智優逸均衡基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1366,10 +2686,10 @@
       "fundSize": 466.99
     },
     {
-      "id": "fund-e17cb7",
-      "name": "ValueChoice Balanced Fund",
+      "id": "fund-1436f2",
+      "name": "智優逸均衡基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1386,10 +2706,10 @@
       "fundSize": 2107.54
     },
     {
-      "id": "fund-2fe797",
-      "name": "Global Equity Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-8a2bcf",
+      "name": "環球證券基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1406,10 +2726,10 @@
       "fundSize": 372.79
     },
     {
-      "id": "fund-bec8a8",
-      "name": "Allianz Balanced Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-7d3d67",
+      "name": "安聯均衡基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1426,10 +2746,10 @@
       "fundSize": 30.35
     },
     {
-      "id": "fund-4150d8",
-      "name": "Principal Global Growth Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-0a2124",
+      "name": "信安環球增長基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1446,10 +2766,10 @@
       "fundSize": 252.78
     },
     {
-      "id": "fund-bbb307",
-      "name": "Principal Global Growth Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-99c74b",
+      "name": "信安環球增長基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1466,10 +2786,10 @@
       "fundSize": 4387.08
     },
     {
-      "id": "fund-9aebf8",
-      "name": "Invesco Balanced Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-7726fc",
+      "name": "景順均衡基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1486,10 +2806,30 @@
       "fundSize": 1386.83
     },
     {
-      "id": "fund-e3c597",
-      "name": "Sun Life MPF Growth Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-a0b968",
+      "name": "中銀保誠香港股票基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4404,
+        "oneMonth": 1.9083,
+        "threeMonths": 5.725,
+        "sixMonths": 16.85,
+        "oneYear": 22.9,
+        "threeYears": 37.0418,
+        "fiveYears": -6.15
+      },
+      "fundSize": 13091.26
+    },
+    {
+      "id": "fund-81f3e0",
+      "name": "永明強積金增長基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1506,10 +2846,10 @@
       "fundSize": 12546.81
     },
     {
-      "id": "fund-9bdc38",
-      "name": "Invesco Balanced Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-91c33c",
+      "name": "景順均衡基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1526,10 +2866,30 @@
       "fundSize": 1582.41
     },
     {
-      "id": "fund-a7f66a",
-      "name": "Fidelity SaveEasy 2030 Fund",
+      "id": "fund-abdf71",
+      "name": "全球基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4379,
+        "oneMonth": 1.8975,
+        "threeMonths": 5.6925,
+        "sixMonths": 10.275,
+        "oneYear": 22.77,
+        "threeYears": 67.29,
+        "fiveYears": 71.07
+      },
+      "fundSize": 4746.7
+    },
+    {
+      "id": "fund-eb8957",
+      "name": "富達「儲蓄易」2030基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1546,10 +2906,10 @@
       "fundSize": 686.13
     },
     {
-      "id": "fund-3c8e16",
-      "name": "Sun Life MPF Growth Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-2a273f",
+      "name": "永明強積金增長基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1566,10 +2926,10 @@
       "fundSize": 2061.76
     },
     {
-      "id": "fund-0ed6f3",
-      "name": "BCT (Pro) SaveEasy 2030 Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-cb3631",
+      "name": "BCT儲蓄易2030 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1586,10 +2946,10 @@
       "fundSize": 872.1
     },
     {
-      "id": "fund-efff5a",
-      "name": "BCT (Pro) Global Equity Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-d8c608",
+      "name": "BCT環球股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1606,10 +2966,10 @@
       "fundSize": 7290.0
     },
     {
-      "id": "fund-b9a589",
-      "name": "BCT (Pro) World Equity Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-711bd7",
+      "name": "BCT世界股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1626,10 +2986,10 @@
       "fundSize": 4006.03
     },
     {
-      "id": "fund-ddf327",
-      "name": "BOC-Prudential Global Equity Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-0dc1db",
+      "name": "中銀保誠環球股票基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1646,10 +3006,10 @@
       "fundSize": 10911.37
     },
     {
-      "id": "fund-5f9634",
-      "name": "My Choice Global Equity Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-3bb046",
+      "name": "我的環球股票基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1666,10 +3026,10 @@
       "fundSize": 603.96
     },
     {
-      "id": "fund-dafcc4",
-      "name": "BCT (Pro) E70 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-e34b7f",
+      "name": "BCT E70 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1686,10 +3046,10 @@
       "fundSize": 5512.3
     },
     {
-      "id": "fund-1b602f",
-      "name": "My Choice Balanced Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-67a289",
+      "name": "我的均衡基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1706,10 +3066,30 @@
       "fundSize": 264.92
     },
     {
-      "id": "fund-4ad730",
-      "name": "Manulife MPF 2030 Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-4495fb",
+      "name": "綠色退休基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4208,
+        "oneMonth": 1.8233,
+        "threeMonths": 5.47,
+        "sixMonths": 9.215,
+        "oneYear": 21.88,
+        "threeYears": 70.7161,
+        "fiveYears": 76.41
+      },
+      "fundSize": 8422.71
+    },
+    {
+      "id": "fund-b0e075",
+      "name": "宏利 MPF 2030 退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1726,10 +3106,10 @@
       "fundSize": 1488.83
     },
     {
-      "id": "fund-2a9fb3",
-      "name": "BCOM Balanced (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-f8d4dd",
+      "name": "交通銀行均衡成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1746,10 +3126,50 @@
       "fundSize": 580.46
     },
     {
-      "id": "fund-5b5f5c",
-      "name": "Sun Life MPF Multi-Sector Equity Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-5d070e",
+      "name": "BCT（行業）環球股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.416,
+        "oneMonth": 1.8025,
+        "threeMonths": 5.4075,
+        "sixMonths": 9.335,
+        "oneYear": 21.63,
+        "threeYears": 64.2503,
+        "fiveYears": 52.0
+      },
+      "fundSize": 558.76
+    },
+    {
+      "id": "fund-bef845",
+      "name": "BCT中國及香港股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4115,
+        "oneMonth": 1.7833,
+        "threeMonths": 5.35,
+        "sixMonths": 15.41,
+        "oneYear": 21.4,
+        "threeYears": 24.7632,
+        "fiveYears": -17.87
+      },
+      "fundSize": 9578.53
+    },
+    {
+      "id": "fund-55511f",
+      "name": "永明強積金行業股票基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1766,10 +3186,10 @@
       "fundSize": 15780.23
     },
     {
-      "id": "fund-6676cd",
-      "name": "BCT (Industry) E70 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-2ade59",
+      "name": "BCT（行業）E70 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1786,10 +3206,30 @@
       "fundSize": 632.3
     },
     {
-      "id": "fund-328519",
-      "name": "Sun Life MPF Multi-Sector Equity Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-492683",
+      "name": "BCT（行業）中國及香港股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.409,
+        "oneMonth": 1.7725,
+        "threeMonths": 5.3175,
+        "sixMonths": 15.335,
+        "oneYear": 21.27,
+        "threeYears": 26.9198,
+        "fiveYears": -15.75
+      },
+      "fundSize": 986.98
+    },
+    {
+      "id": "fund-06d0cb",
+      "name": "永明強積金行業股票基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1806,10 +3246,30 @@
       "fundSize": 2008.98
     },
     {
-      "id": "fund-2a2344",
-      "name": "Manulife MPF Growth Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-b73be3",
+      "name": "我的香港股票基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.405,
+        "oneMonth": 1.755,
+        "threeMonths": 5.265,
+        "sixMonths": 15.225,
+        "oneYear": 21.06,
+        "threeYears": 29.0451,
+        "fiveYears": -14.34
+      },
+      "fundSize": 326.31
+    },
+    {
+      "id": "fund-f09dcb",
+      "name": "宏利 MPF 增長基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1826,10 +3286,30 @@
       "fundSize": 23124.58
     },
     {
-      "id": "fund-d59cd2",
-      "name": "Fidelity Balanced Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-48e52b",
+      "name": "中國人壽香港股票基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4035,
+        "oneMonth": 1.7483,
+        "threeMonths": 5.245,
+        "sixMonths": 15.195,
+        "oneYear": 20.98,
+        "threeYears": 30.0098,
+        "fiveYears": -13.61
+      },
+      "fundSize": 614.95
+    },
+    {
+      "id": "fund-998368",
+      "name": "富達均衡基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1846,10 +3326,90 @@
       "fundSize": 1654.49
     },
     {
-      "id": "fund-f82aae",
-      "name": "BEA (MPF) Global Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-76d4f2",
+      "name": "信安中國股票基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.4002,
+        "oneMonth": 1.7342,
+        "threeMonths": 5.2025,
+        "sixMonths": 15.315,
+        "oneYear": 20.81,
+        "threeYears": 30.0702,
+        "fiveYears": -22.27
+      },
+      "fundSize": 184.94
+    },
+    {
+      "id": "fund-683aaf",
+      "name": "信安中國股票基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3983,
+        "oneMonth": 1.7258,
+        "threeMonths": 5.1775,
+        "sixMonths": 15.24,
+        "oneYear": 20.71,
+        "threeYears": 29.402,
+        "fiveYears": -22.94
+      },
+      "fundSize": 3053.18
+    },
+    {
+      "id": "fund-25a596",
+      "name": "香港股票基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3979,
+        "oneMonth": 1.7242,
+        "threeMonths": 5.1725,
+        "sixMonths": 15.015,
+        "oneYear": 20.69,
+        "threeYears": 27.3344,
+        "fiveYears": -16.12
+      },
+      "fundSize": 7591.83
+    },
+    {
+      "id": "fund-47b6ad",
+      "name": "交通銀行中國動力股票成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3973,
+        "oneMonth": 1.7217,
+        "threeMonths": 5.165,
+        "sixMonths": 15.18,
+        "oneYear": 20.66,
+        "threeYears": 28.8667,
+        "fiveYears": -23.38
+      },
+      "fundSize": 568.8
+    },
+    {
+      "id": "fund-f54ab3",
+      "name": "東亞 (強積金) 環球股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1866,10 +3426,10 @@
       "fundSize": 703.89
     },
     {
-      "id": "fund-0fccca",
-      "name": "BEA Global Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-a9b685",
+      "name": "東亞環球股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1886,10 +3446,10 @@
       "fundSize": 33.92
     },
     {
-      "id": "fund-e7c137",
-      "name": "China Life Balanced Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-a1de77",
+      "name": "中國人壽平衡基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1906,10 +3466,10 @@
       "fundSize": 519.85
     },
     {
-      "id": "fund-159316",
-      "name": "Balanced Fund",
+      "id": "fund-ce9676",
+      "name": "均衡基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1926,10 +3486,10 @@
       "fundSize": 4867.95
     },
     {
-      "id": "fund-df0217",
-      "name": "Principal Dynamic Global Equity Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-4c953b",
+      "name": "信安動力環球股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1946,10 +3506,10 @@
       "fundSize": 324.91
     },
     {
-      "id": "fund-df0217",
-      "name": "Principal Dynamic Global Equity Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-4c953b",
+      "name": "信安動力環球股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -1966,10 +3526,10 @@
       "fundSize": 3763.72
     },
     {
-      "id": "fund-7824c6",
-      "name": "BEA Balanced Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-78a833",
+      "name": "東亞均衡基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -1986,10 +3546,10 @@
       "fundSize": 20.3
     },
     {
-      "id": "fund-2fe797",
-      "name": "Global Equity Fund",
+      "id": "fund-070039",
+      "name": "環球股票基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2006,10 +3566,130 @@
       "fundSize": 9429.79
     },
     {
-      "id": "fund-42cee3",
-      "name": "AMTD Invesco Target 2038 Retirement Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-41fa87",
+      "name": "信安國際股票基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3787,
+        "oneMonth": 1.6408,
+        "threeMonths": 4.9225,
+        "sixMonths": 10.82,
+        "oneYear": 19.69,
+        "threeYears": 66.2948,
+        "fiveYears": 53.95
+      },
+      "fundSize": 250.28
+    },
+    {
+      "id": "fund-5ed778",
+      "name": "信安動力香港股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3785,
+        "oneMonth": 1.64,
+        "threeMonths": 4.92,
+        "sixMonths": 13.81,
+        "oneYear": 19.68,
+        "threeYears": 26.6916,
+        "fiveYears": -17.54
+      },
+      "fundSize": 1225.99
+    },
+    {
+      "id": "fund-2750cb",
+      "name": "中國股票基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3781,
+        "oneMonth": 1.6383,
+        "threeMonths": 4.915,
+        "sixMonths": 15.215,
+        "oneYear": 19.66,
+        "threeYears": 23.5712,
+        "fiveYears": -24.04
+      },
+      "fundSize": 9193.94
+    },
+    {
+      "id": "fund-2750cb",
+      "name": "中國股票基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3777,
+        "oneMonth": 1.6367,
+        "threeMonths": 4.91,
+        "sixMonths": 15.215,
+        "oneYear": 19.64,
+        "threeYears": 23.5712,
+        "fiveYears": -24.05
+      },
+      "fundSize": 4022.66
+    },
+    {
+      "id": "fund-33e226",
+      "name": "信安國際股票基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3767,
+        "oneMonth": 1.6325,
+        "threeMonths": 4.8975,
+        "sixMonths": 10.75,
+        "oneYear": 19.59,
+        "threeYears": 65.4662,
+        "fiveYears": 52.65
+      },
+      "fundSize": 2645.5
+    },
+    {
+      "id": "fund-be5920",
+      "name": "海通香港特區基金 - T類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3727,
+        "oneMonth": 1.615,
+        "threeMonths": 4.845,
+        "sixMonths": 15.46,
+        "oneYear": 19.38,
+        "threeYears": 26.1609,
+        "fiveYears": -5.91
+      },
+      "fundSize": 158.92
+    },
+    {
+      "id": "fund-1efcba",
+      "name": "AMTD景順目標2038退休基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2026,10 +3706,70 @@
       "fundSize": 18.71
     },
     {
-      "id": "fund-98ebbf",
-      "name": "Principal Long Term Accumulation Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-e2025f",
+      "name": "海通香港特區基金 - A類別",
+      "provider": "HSBC",
+      "scheme": "海通MPF退休金",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3708,
+        "oneMonth": 1.6067,
+        "threeMonths": 4.82,
+        "sixMonths": 15.41,
+        "oneYear": 19.28,
+        "threeYears": 25.8538,
+        "fiveYears": -6.29
+      },
+      "fundSize": 62.8
+    },
+    {
+      "id": "fund-5ed778",
+      "name": "信安動力香港股票基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3683,
+        "oneMonth": 1.5958,
+        "threeMonths": 4.7875,
+        "sixMonths": 13.53,
+        "oneYear": 19.15,
+        "threeYears": 26.3074,
+        "fiveYears": -18.6
+      },
+      "fundSize": 568.32
+    },
+    {
+      "id": "fund-49cb25",
+      "name": "交通銀行恒指ESG成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3677,
+        "oneMonth": 1.5933,
+        "threeMonths": 4.78,
+        "sixMonths": 16.15,
+        "oneYear": 19.12,
+        "threeYears": 23.4948,
+        "fiveYears": -9.14
+      },
+      "fundSize": 661.95
+    },
+    {
+      "id": "fund-db11ae",
+      "name": "信安長線增值基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2046,10 +3786,30 @@
       "fundSize": 192.34
     },
     {
-      "id": "fund-16da45",
-      "name": "Principal Long Term Accumulation Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-9edf2a",
+      "name": "東亞香港追蹤指數基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3656,
+        "oneMonth": 1.5842,
+        "threeMonths": 4.7525,
+        "sixMonths": 15.27,
+        "oneYear": 19.01,
+        "threeYears": 41.5557,
+        "fiveYears": 5.25
+      },
+      "fundSize": 351.26
+    },
+    {
+      "id": "fund-73f020",
+      "name": "信安長線增值基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2066,10 +3826,50 @@
       "fundSize": 1976.99
     },
     {
-      "id": "fund-6be171",
-      "name": "BOC-Prudential Balanced Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-6456eb",
+      "name": "宏利 MPF 恒指ESG基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3644,
+        "oneMonth": 1.5792,
+        "threeMonths": 4.7375,
+        "sixMonths": 15.51,
+        "oneYear": 18.95,
+        "threeYears": 26.1791,
+        "fiveYears": -6.94
+      },
+      "fundSize": 9290.01
+    },
+    {
+      "id": "fund-9edf2a",
+      "name": "東亞香港追蹤指數基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3633,
+        "oneMonth": 1.5742,
+        "threeMonths": 4.7225,
+        "sixMonths": 15.255,
+        "oneYear": 18.89,
+        "threeYears": 41.8003,
+        "fiveYears": 5.66
+      },
+      "fundSize": 207.68
+    },
+    {
+      "id": "fund-0b3569",
+      "name": "中銀保誠均衡基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2086,10 +3886,190 @@
       "fundSize": 8237.73
     },
     {
-      "id": "fund-dda1ad",
-      "name": "Manager's Choice Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-32808e",
+      "name": "恒指基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.361,
+        "oneMonth": 1.5642,
+        "threeMonths": 4.6925,
+        "sixMonths": 15.57,
+        "oneYear": 18.77,
+        "threeYears": 41.2415,
+        "fiveYears": 4.67
+      },
+      "fundSize": 14788.56
+    },
+    {
+      "id": "fund-32808e",
+      "name": "恒指基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.361,
+        "oneMonth": 1.5642,
+        "threeMonths": 4.6925,
+        "sixMonths": 15.57,
+        "oneYear": 18.77,
+        "threeYears": 41.2415,
+        "fiveYears": 4.67
+      },
+      "fundSize": 37390.24
+    },
+    {
+      "id": "fund-6c9be1",
+      "name": "富達香港盈富基金",
+      "provider": "HSBC",
+      "scheme": "富達退休集成信託",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3604,
+        "oneMonth": 1.5617,
+        "threeMonths": 4.685,
+        "sixMonths": 15.155,
+        "oneYear": 18.74,
+        "threeYears": 41.0042,
+        "fiveYears": 4.57
+      },
+      "fundSize": 2661.97
+    },
+    {
+      "id": "fund-ee9efa",
+      "name": "中銀保誠中國股票基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3587,
+        "oneMonth": 1.5542,
+        "threeMonths": 4.6625,
+        "sixMonths": 15.235,
+        "oneYear": 18.65,
+        "threeYears": 30.7087,
+        "fiveYears": -16.57
+      },
+      "fundSize": 9014.04
+    },
+    {
+      "id": "fund-3ca341",
+      "name": "景順恒指基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3585,
+        "oneMonth": 1.5533,
+        "threeMonths": 4.66,
+        "sixMonths": 15.2,
+        "oneYear": 18.64,
+        "threeYears": 41.2438,
+        "fiveYears": 4.43
+      },
+      "fundSize": 502.54
+    },
+    {
+      "id": "fund-435d53",
+      "name": "信安恒指基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3581,
+        "oneMonth": 1.5517,
+        "threeMonths": 4.655,
+        "sixMonths": 15.11,
+        "oneYear": 18.62,
+        "threeYears": 40.4196,
+        "fiveYears": 4.08
+      },
+      "fundSize": 2132.23
+    },
+    {
+      "id": "fund-b00935",
+      "name": "景順恒指基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3575,
+        "oneMonth": 1.5492,
+        "threeMonths": 4.6475,
+        "sixMonths": 15.17,
+        "oneYear": 18.59,
+        "threeYears": 41.0573,
+        "fiveYears": 4.21
+      },
+      "fundSize": 442.68
+    },
+    {
+      "id": "fund-9edf2a",
+      "name": "東亞香港追蹤指數基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3573,
+        "oneMonth": 1.5483,
+        "threeMonths": 4.645,
+        "sixMonths": 15.15,
+        "oneYear": 18.58,
+        "threeYears": 40.8142,
+        "fiveYears": 4.21
+      },
+      "fundSize": 23.44
+    },
+    {
+      "id": "fund-bab8cb",
+      "name": "中港基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3569,
+        "oneMonth": 1.5467,
+        "threeMonths": 4.64,
+        "sixMonths": 15.08,
+        "oneYear": 18.56,
+        "threeYears": 40.8698,
+        "fiveYears": 3.23
+      },
+      "fundSize": 6496.33
+    },
+    {
+      "id": "fund-193544",
+      "name": "基金經理精選退休基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2106,10 +4086,50 @@
       "fundSize": 5570.21
     },
     {
-      "id": "fund-658ab7",
-      "name": "BEA (MPF) Balanced Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-0bb031",
+      "name": "我的香港追蹤指數基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3558,
+        "oneMonth": 1.5417,
+        "threeMonths": 4.625,
+        "sixMonths": 15.47,
+        "oneYear": 18.5,
+        "threeYears": 41.4409,
+        "fiveYears": 4.43
+      },
+      "fundSize": 180.6
+    },
+    {
+      "id": "fund-381c23",
+      "name": "BCT恒指基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3537,
+        "oneMonth": 1.5325,
+        "threeMonths": 4.5975,
+        "sixMonths": 15.1,
+        "oneYear": 18.39,
+        "threeYears": 40.7617,
+        "fiveYears": 4.12
+      },
+      "fundSize": 5170.94
+    },
+    {
+      "id": "fund-1864b2",
+      "name": "東亞 (強積金) 均衡基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2126,10 +4146,10 @@
       "fundSize": 1888.57
     },
     {
-      "id": "fund-40df41",
-      "name": "Allianz Choice Stable Growth Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-9cef2f",
+      "name": "安聯精選穩定增長基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2146,10 +4166,10 @@
       "fundSize": 505.71
     },
     {
-      "id": "fund-3ac1cb",
-      "name": "BEA (Industry Scheme) Balanced Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-2b6c64",
+      "name": "東亞 (行業計劃) 均衡基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2166,10 +4186,10 @@
       "fundSize": 1967.76
     },
     {
-      "id": "fund-2285db",
-      "name": "Global Stable Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-8e0794",
+      "name": "環球均衡基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2186,10 +4206,10 @@
       "fundSize": 308.69
     },
     {
-      "id": "fund-66ddc2",
-      "name": "AMTD Allianz Choice Stable Growth Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-cd6e3d",
+      "name": "AMTD 安聯精選穩定增長基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2206,10 +4226,10 @@
       "fundSize": 99.64
     },
     {
-      "id": "fund-d61daf",
-      "name": "Allianz Stable Growth Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-12df67",
+      "name": "安聯穩定增長基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2226,10 +4246,30 @@
       "fundSize": 489.6
     },
     {
-      "id": "fund-4a21ee",
-      "name": "Allianz Stable Growth Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-00c1f9",
+      "name": "中銀保誠中證香港100指數基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3485,
+        "oneMonth": 1.51,
+        "threeMonths": 4.53,
+        "sixMonths": 16.22,
+        "oneYear": 18.12,
+        "threeYears": 41.8749,
+        "fiveYears": -2.86
+      },
+      "fundSize": 2618.33
+    },
+    {
+      "id": "fund-5b4e34",
+      "name": "安聯穩定增長基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2246,10 +4286,10 @@
       "fundSize": 493.09
     },
     {
-      "id": "fund-6ca475",
-      "name": "China Life Retire-Easy Global Equity Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-a46a8a",
+      "name": "中國人壽樂休閒環球股票基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2266,10 +4306,30 @@
       "fundSize": 374.13
     },
     {
-      "id": "fund-bb7035",
-      "name": "Allianz Stable Growth Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-6ee103",
+      "name": "信安 - 恒指基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3446,
+        "oneMonth": 1.4933,
+        "threeMonths": 4.48,
+        "sixMonths": 14.735,
+        "oneYear": 17.92,
+        "threeYears": 39.4131,
+        "fiveYears": 2.83
+      },
+      "fundSize": 807.52
+    },
+    {
+      "id": "fund-6d1bb7",
+      "name": "安聯穩定增長基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2286,10 +4346,10 @@
       "fundSize": 18.63
     },
     {
-      "id": "fund-28133f",
-      "name": "Balanced Portfolio",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-429716",
+      "name": "均衡組合",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2306,10 +4366,10 @@
       "fundSize": 8883.51
     },
     {
-      "id": "fund-b02b97",
-      "name": "Core Accumulation Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-e344ff",
+      "name": "核心累積基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2326,10 +4386,10 @@
       "fundSize": 464.25
     },
     {
-      "id": "fund-bcfc0f",
-      "name": "Invesco Core Accumulation Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-480a9f",
+      "name": "景順核心累積基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2346,10 +4406,10 @@
       "fundSize": 1131.23
     },
     {
-      "id": "fund-a37b19",
-      "name": "Invesco Core Accumulation Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-f7d448",
+      "name": "景順核心累積基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2366,10 +4426,10 @@
       "fundSize": 891.28
     },
     {
-      "id": "fund-5f1a0a",
-      "name": "China Life Core Accumulation Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-b1104b",
+      "name": "中國人壽核心累積基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2386,10 +4446,10 @@
       "fundSize": 481.02
     },
     {
-      "id": "fund-520d4b",
-      "name": "BCOM Core Accumulation Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-adec02",
+      "name": "交通銀行核心累積基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2406,10 +4466,10 @@
       "fundSize": 1024.87
     },
     {
-      "id": "fund-747a3e",
-      "name": "BCT (Pro) Core Accumulation Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-e7367d",
+      "name": "BCT核心累積基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2426,10 +4486,10 @@
       "fundSize": 5678.12
     },
     {
-      "id": "fund-9dc066",
-      "name": "BCT (Industry) Core Accumulation Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-6c9c73",
+      "name": "BCT（行業）核心累積基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2446,10 +4506,10 @@
       "fundSize": 849.79
     },
     {
-      "id": "fund-150188",
-      "name": "My Choice Stable Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-659de0",
+      "name": "我的平穩基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2466,10 +4526,10 @@
       "fundSize": 262.12
     },
     {
-      "id": "fund-24101f",
-      "name": "AMTD Invesco Core Accumulation Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-81ae14",
+      "name": "AMTD景順核心累積基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2486,10 +4546,10 @@
       "fundSize": 65.08
     },
     {
-      "id": "fund-f03441",
-      "name": "BCOM Stable Growth (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-dcf1e1",
+      "name": "交通銀行平穩增長成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2506,10 +4566,10 @@
       "fundSize": 687.71
     },
     {
-      "id": "fund-4f228a",
-      "name": "BCT (Pro) E50 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-59c935",
+      "name": "BCT E50 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2526,10 +4586,10 @@
       "fundSize": 2880.79
     },
     {
-      "id": "fund-aff527",
-      "name": "Sun Life MPF Balanced Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-0404e8",
+      "name": "永明強積金均衡基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2546,10 +4606,10 @@
       "fundSize": 6906.84
     },
     {
-      "id": "fund-74f9a8",
-      "name": "Manulife MPF International Equity Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-33ddea",
+      "name": "宏利 MPF 國際股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2566,10 +4626,50 @@
       "fundSize": 15202.84
     },
     {
-      "id": "fund-37968d",
-      "name": "Sun Life MPF Balanced Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-306fe0",
+      "name": "北美股票基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3221,
+        "oneMonth": 1.3958,
+        "threeMonths": 4.1875,
+        "sixMonths": 7.475,
+        "oneYear": 16.75,
+        "threeYears": 72.1041,
+        "fiveYears": 76.07
+      },
+      "fundSize": 20398.72
+    },
+    {
+      "id": "fund-306fe0",
+      "name": "北美股票基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3217,
+        "oneMonth": 1.3942,
+        "threeMonths": 4.1825,
+        "sixMonths": 7.475,
+        "oneYear": 16.73,
+        "threeYears": 72.1041,
+        "fiveYears": 76.04
+      },
+      "fundSize": 6213.25
+    },
+    {
+      "id": "fund-e35925",
+      "name": "永明強積金均衡基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2586,10 +4686,10 @@
       "fundSize": 1131.99
     },
     {
-      "id": "fund-998c17",
-      "name": "BEA (MPF) North American Equity Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-f6f182",
+      "name": "東亞 (強積金) 北美股票基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2606,10 +4706,10 @@
       "fundSize": 1054.29
     },
     {
-      "id": "fund-c6f7df",
-      "name": "Principal Core Accumulation Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-c880c4",
+      "name": "信安核心累積基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2626,10 +4726,10 @@
       "fundSize": 1131.1
     },
     {
-      "id": "fund-0c61eb",
-      "name": "Principal Core Accumulation Fund - Class N",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-a4a853",
+      "name": "信安核心累積基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2646,10 +4746,10 @@
       "fundSize": 4470.69
     },
     {
-      "id": "fund-c6f7df",
-      "name": "Principal Core Accumulation Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-c880c4",
+      "name": "信安核心累積基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2666,10 +4766,10 @@
       "fundSize": 110.07
     },
     {
-      "id": "fund-37a96b",
-      "name": "BCT (Industry) E50 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-b3b506",
+      "name": "BCT（行業）E50 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2686,10 +4786,10 @@
       "fundSize": 426.86
     },
     {
-      "id": "fund-ba5336",
-      "name": "Fidelity Stable Growth Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-ff5473",
+      "name": "富達穩定增長基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2706,10 +4806,10 @@
       "fundSize": 810.72
     },
     {
-      "id": "fund-317aa3",
-      "name": "Manulife MPF 2025 Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-8553bd",
+      "name": "宏利 MPF 2025 退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2726,10 +4826,10 @@
       "fundSize": 834.27
     },
     {
-      "id": "fund-a3ca34",
-      "name": "Manulife MPF Smart Retirement Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-1d57fa",
+      "name": "宏利 MPF 智優裕退休基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2746,10 +4846,10 @@
       "fundSize": 1404.41
     },
     {
-      "id": "fund-215f2a",
-      "name": "Stable Growth Fund",
+      "id": "fund-4fc405",
+      "name": "平穩增長基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2766,10 +4866,10 @@
       "fundSize": 4239.43
     },
     {
-      "id": "fund-6138cd",
-      "name": "Allianz MPF Core Accumulation Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-a6c545",
+      "name": "安聯強積金核心累積基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2786,10 +4886,10 @@
       "fundSize": 62.29
     },
     {
-      "id": "fund-e9e749",
-      "name": "Allianz MPF Core Accumulation Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-cfce65",
+      "name": "安聯強積金核心累積基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2806,10 +4906,10 @@
       "fundSize": 780.87
     },
     {
-      "id": "fund-283da8",
-      "name": "Allianz MPF Core Accumulation Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-d33fd0",
+      "name": "安聯強積金核心累積基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2826,10 +4926,30 @@
       "fundSize": 531.51
     },
     {
-      "id": "fund-b02b97",
-      "name": "Core Accumulation Fund",
+      "id": "fund-640b4d",
+      "name": "美國股票基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3052,
+        "oneMonth": 1.3225,
+        "threeMonths": 3.9675,
+        "sixMonths": 8.405,
+        "oneYear": 15.87,
+        "threeYears": 82.4507,
+        "fiveYears": 36.36
+      },
+      "fundSize": 1065.15
+    },
+    {
+      "id": "fund-e344ff",
+      "name": "核心累積基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2846,10 +4966,10 @@
       "fundSize": 30129.24
     },
     {
-      "id": "fund-b02b97",
-      "name": "Core Accumulation Fund",
+      "id": "fund-e344ff",
+      "name": "核心累積基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2866,10 +4986,10 @@
       "fundSize": 7355.21
     },
     {
-      "id": "fund-1d81d5",
-      "name": "Schroder MPF Core Accumulation Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-b9edc6",
+      "name": "施羅德強積金核心累積基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2886,10 +5006,30 @@
       "fundSize": 956.93
     },
     {
-      "id": "fund-7ab61e",
-      "name": "BOC-Prudential North America Index Tracking Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-86028d",
+      "name": "BCT美國股票基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.3025,
+        "oneMonth": 1.3108,
+        "threeMonths": 3.9325,
+        "sixMonths": 8.085,
+        "oneYear": 15.73,
+        "threeYears": 76.9522,
+        "fiveYears": 66.85
+      },
+      "fundSize": 4464.4
+    },
+    {
+      "id": "fund-424d61",
+      "name": "中銀保誠北美指數追蹤基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2906,10 +5046,50 @@
       "fundSize": 10898.39
     },
     {
-      "id": "fund-c5f21c",
-      "name": "My Choice Core Accumulation Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-96f35f",
+      "name": "智優逸北美股票追蹤指數基金",
+      "provider": "HSBC",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.301,
+        "oneMonth": 1.3042,
+        "threeMonths": 3.9125,
+        "sixMonths": 8.285,
+        "oneYear": 15.65,
+        "threeYears": 77.3961,
+        "fiveYears": 77.18
+      },
+      "fundSize": 4343.32
+    },
+    {
+      "id": "fund-96f35f",
+      "name": "智優逸北美股票追蹤指數基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.301,
+        "oneMonth": 1.3042,
+        "threeMonths": 3.9125,
+        "sixMonths": 8.285,
+        "oneYear": 15.65,
+        "threeYears": 77.3961,
+        "fiveYears": 77.18
+      },
+      "fundSize": 17291.72
+    },
+    {
+      "id": "fund-4eeca0",
+      "name": "我的核心累積基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2926,10 +5106,10 @@
       "fundSize": 260.14
     },
     {
-      "id": "fund-5eb436",
-      "name": "Sun Life MPF Core Accumulation Fund",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-bcfd8e",
+      "name": "永明強積金核心累積基金",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2946,10 +5126,10 @@
       "fundSize": 17563.65
     },
     {
-      "id": "fund-8cd6fb",
-      "name": "Manulife MPF Fidelity Stable Growth Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-f1eb34",
+      "name": "宏利 MPF 富達平穩增長基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -2966,10 +5146,10 @@
       "fundSize": 8151.31
     },
     {
-      "id": "fund-0014ef",
-      "name": "Manulife MPF Healthcare Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-022c1e",
+      "name": "宏利 MPF 康健護理基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -2986,10 +5166,10 @@
       "fundSize": 54502.21
     },
     {
-      "id": "fund-77b124",
-      "name": "BOC-Prudential Core Accumulation Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-3f65dc",
+      "name": "中銀保誠核心累積基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3006,10 +5186,10 @@
       "fundSize": 7509.64
     },
     {
-      "id": "fund-b02b97",
-      "name": "Core Accumulation Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-e344ff",
+      "name": "核心累積基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -3026,10 +5206,10 @@
       "fundSize": 8915.46
     },
     {
-      "id": "fund-816689",
-      "name": "AMTD Invesco Target 2028 Retirement Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-46de76",
+      "name": "AMTD景順目標2028退休基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3046,10 +5226,30 @@
       "fundSize": 25.29
     },
     {
-      "id": "fund-cb3a13",
-      "name": "Manulife MPF Core Accumulation Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-d3bf6b",
+      "name": "美洲基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2923,
+        "oneMonth": 1.2667,
+        "threeMonths": 3.8,
+        "sixMonths": 7.935,
+        "oneYear": 15.2,
+        "threeYears": 76.1301,
+        "fiveYears": 81.57
+      },
+      "fundSize": 7140.15
+    },
+    {
+      "id": "fund-9feb13",
+      "name": "宏利 MPF 核心累積基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3066,10 +5266,10 @@
       "fundSize": 34038.81
     },
     {
-      "id": "fund-c24fbe",
-      "name": "SHKP MPF Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-6a9e2a",
+      "name": "新地強積金基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -3086,10 +5286,10 @@
       "fundSize": 1859.1
     },
     {
-      "id": "fund-b02b97",
-      "name": "Core Accumulation Fund",
+      "id": "fund-e344ff",
+      "name": "核心累積基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -3106,10 +5306,30 @@
       "fundSize": 5573.61
     },
     {
-      "id": "fund-52b88b",
-      "name": "Principal Stable Yield Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-fc8135",
+      "name": "永明強積金香港股票基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2863,
+        "oneMonth": 1.2408,
+        "threeMonths": 3.7225,
+        "sixMonths": 12.68,
+        "oneYear": 14.89,
+        "threeYears": 15.9043,
+        "fiveYears": -14.05
+      },
+      "fundSize": 31570.7
+    },
+    {
+      "id": "fund-9d01e0",
+      "name": "信安平穩回報基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3126,10 +5346,10 @@
       "fundSize": 108.11
     },
     {
-      "id": "fund-4a9c96",
-      "name": "Principal Stable Yield Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-7d6e89",
+      "name": "信安平穩回報基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3146,10 +5366,30 @@
       "fundSize": 2217.34
     },
     {
-      "id": "fund-1f7b55",
-      "name": "BEA Stable Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-e518db",
+      "name": "永明強積金香港股票基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2821,
+        "oneMonth": 1.2225,
+        "threeMonths": 3.6675,
+        "sixMonths": 12.555,
+        "oneYear": 14.67,
+        "threeYears": 15.2117,
+        "fiveYears": -14.89
+      },
+      "fundSize": 5268.89
+    },
+    {
+      "id": "fund-46c6ae",
+      "name": "東亞平穩基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3166,10 +5406,10 @@
       "fundSize": 14.31
     },
     {
-      "id": "fund-fa95ca",
-      "name": "BEA Core Accumulation Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-b035c0",
+      "name": "東亞核心累積基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3186,10 +5426,10 @@
       "fundSize": 32.58
     },
     {
-      "id": "fund-12dab4",
-      "name": "BEA (MPF) Core Accumulation Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-936bd2",
+      "name": "東亞 (強積金) 核心累積基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3206,10 +5446,10 @@
       "fundSize": 1172.19
     },
     {
-      "id": "fund-0e6e77",
-      "name": "BEA (Industry Scheme) Core Accumulation Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-04c83a",
+      "name": "東亞 (行業計劃) 核心累積基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3226,10 +5466,50 @@
       "fundSize": 3520.64
     },
     {
-      "id": "fund-561cd0",
-      "name": "Invesco Global Stable Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-c04bb5",
+      "name": "信安美國股票基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2696,
+        "oneMonth": 1.1683,
+        "threeMonths": 3.505,
+        "sixMonths": 7.66,
+        "oneYear": 14.02,
+        "threeYears": 74.2619,
+        "fiveYears": 75.92
+      },
+      "fundSize": 297.12
+    },
+    {
+      "id": "fund-c851d8",
+      "name": "信安美國股票基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2677,
+        "oneMonth": 1.16,
+        "threeMonths": 3.48,
+        "sixMonths": 7.595,
+        "oneYear": 13.92,
+        "threeYears": 73.4007,
+        "fiveYears": 74.44
+      },
+      "fundSize": 6025.76
+    },
+    {
+      "id": "fund-0d6a80",
+      "name": "景順環球穩定基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3246,10 +5526,10 @@
       "fundSize": 647.5
     },
     {
-      "id": "fund-8995bf",
-      "name": "BOC-Prudential Stable Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-abe0e4",
+      "name": "中銀保誠平穩基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3266,10 +5546,10 @@
       "fundSize": 8114.22
     },
     {
-      "id": "fund-c3c510",
-      "name": "Principal Stable Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-ee9b87",
+      "name": "信安平穩基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3286,10 +5566,10 @@
       "fundSize": 1437.45
     },
     {
-      "id": "fund-c3c510",
-      "name": "Principal Stable Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-ee9b87",
+      "name": "信安平穩基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3306,10 +5586,10 @@
       "fundSize": 161.05
     },
     {
-      "id": "fund-3b336a",
-      "name": "Invesco Capital Stable Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-7a5807",
+      "name": "景順資本穩定基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3326,10 +5606,30 @@
       "fundSize": 676.93
     },
     {
-      "id": "fund-53937a",
-      "name": "AMTD Invesco Target Retirement Now Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-838828",
+      "name": "宏利 MPF 歐洲股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2619,
+        "oneMonth": 1.135,
+        "threeMonths": 3.405,
+        "sixMonths": 7.415,
+        "oneYear": 13.62,
+        "threeYears": 38.0086,
+        "fiveYears": 26.66
+      },
+      "fundSize": 7790.03
+    },
+    {
+      "id": "fund-ca9411",
+      "name": "AMTD景順目標現在退休基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3346,10 +5646,10 @@
       "fundSize": 13.21
     },
     {
-      "id": "fund-7b6b91",
-      "name": "Invesco Capital Stable Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-430a89",
+      "name": "景順資本穩定基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3366,10 +5666,50 @@
       "fundSize": 926.67
     },
     {
-      "id": "fund-14c791",
-      "name": "BEA (MPF) Stable Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-587295",
+      "name": "中國人壽美國股票基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2592,
+        "oneMonth": 1.1233,
+        "threeMonths": 3.37,
+        "sixMonths": 7.31,
+        "oneYear": 13.48,
+        "threeYears": 83.154,
+        "fiveYears": 57.29
+      },
+      "fundSize": 270.05
+    },
+    {
+      "id": "fund-3e0ad0",
+      "name": "中港動態資產配置基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "混合資產基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2585,
+        "oneMonth": 1.12,
+        "threeMonths": 3.36,
+        "sixMonths": 9.02,
+        "oneYear": 13.44,
+        "threeYears": 19.6533,
+        "fiveYears": -4.96
+      },
+      "fundSize": 1280.24
+    },
+    {
+      "id": "fund-f05009",
+      "name": "東亞 (強積金) 平穩基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3386,10 +5726,30 @@
       "fundSize": 1908.34
     },
     {
-      "id": "fund-d63804",
-      "name": "BEA (Industry Scheme) Stable Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-306fe0",
+      "name": "北美股票基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
+      "category": "股票基金",
+      "riskLevel": 6,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.2479,
+        "oneMonth": 1.0742,
+        "threeMonths": 3.2225,
+        "sixMonths": 6.46,
+        "oneYear": 12.89,
+        "threeYears": 68.6154,
+        "fiveYears": 75.62
+      },
+      "fundSize": 12447.18
+    },
+    {
+      "id": "fund-ffba85",
+      "name": "東亞 (行業計劃) 平穩基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3406,10 +5766,10 @@
       "fundSize": 3048.36
     },
     {
-      "id": "fund-6ea66e",
-      "name": "AMTD Allianz Choice Capital Stable Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-bb9596",
+      "name": "AMTD 安聯精選穩定資本基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3426,10 +5786,10 @@
       "fundSize": 44.69
     },
     {
-      "id": "fund-af2b83",
-      "name": "Allianz Capital Stable Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-cf7d40",
+      "name": "安聯穩定資本基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3446,10 +5806,10 @@
       "fundSize": 234.08
     },
     {
-      "id": "fund-f34503",
-      "name": "Allianz Capital Stable Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-afa170",
+      "name": "安聯穩定資本基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3466,10 +5826,10 @@
       "fundSize": 236.51
     },
     {
-      "id": "fund-02fa9b",
-      "name": "Stable Fund",
+      "id": "fund-269e39",
+      "name": "平穩基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3486,10 +5846,10 @@
       "fundSize": 1545.89
     },
     {
-      "id": "fund-02fa9b",
-      "name": "Stable Fund",
+      "id": "fund-269e39",
+      "name": "平穩基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3506,10 +5866,10 @@
       "fundSize": 5257.03
     },
     {
-      "id": "fund-165c32",
-      "name": "Capital Stable Portfolio",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-f6f52f",
+      "name": "穩定資本組合",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3526,10 +5886,10 @@
       "fundSize": 4755.51
     },
     {
-      "id": "fund-8f9f20",
-      "name": "Allianz Capital Stable Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-2d1224",
+      "name": "安聯穩定資本基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3546,10 +5906,10 @@
       "fundSize": 19.12
     },
     {
-      "id": "fund-6fc758",
-      "name": "BCT (Pro) E30 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-257cd4",
+      "name": "BCT E30 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3566,10 +5926,10 @@
       "fundSize": 2086.82
     },
     {
-      "id": "fund-046f39",
-      "name": "BCT (Industry) E30 Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-39dc73",
+      "name": "BCT（行業）E30 混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3586,10 +5946,10 @@
       "fundSize": 490.26
     },
     {
-      "id": "fund-830452",
-      "name": "Fidelity SaveEasy 2025 Fund",
+      "id": "fund-c27655",
+      "name": "富達「儲蓄易」2025基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -3606,10 +5966,10 @@
       "fundSize": 397.7
     },
     {
-      "id": "fund-48c082",
-      "name": "AMTD Allianz Choice Dynamic Allocation Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-4eabef",
+      "name": "AMTD 安聯精選靈活資產基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3626,10 +5986,10 @@
       "fundSize": 31.54
     },
     {
-      "id": "fund-3c6dd6",
-      "name": "Allianz Flexi Balanced Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-105c59",
+      "name": "安聯靈活均衡基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3646,10 +6006,10 @@
       "fundSize": 187.21
     },
     {
-      "id": "fund-db85f8",
-      "name": "Allianz Flexi Balanced Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-680953",
+      "name": "安聯靈活均衡基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3666,10 +6026,10 @@
       "fundSize": 187.67
     },
     {
-      "id": "fund-ff1281",
-      "name": "Sun Life MPF Stable Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-8edbc7",
+      "name": "永明強積金平穩基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3686,10 +6046,10 @@
       "fundSize": 6269.89
     },
     {
-      "id": "fund-6d1600",
-      "name": "BCT (Pro) Flexi Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-17ae05",
+      "name": "BCT靈活混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3706,10 +6066,10 @@
       "fundSize": 1606.69
     },
     {
-      "id": "fund-f7cd78",
-      "name": "BCT (Pro) SaveEasy 2025 Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-9b6556",
+      "name": "BCT儲蓄易2025 基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -3726,10 +6086,10 @@
       "fundSize": 817.04
     },
     {
-      "id": "fund-352ed3",
-      "name": "Allianz Flexi Balanced Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-4634c8",
+      "name": "安聯靈活均衡基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3746,10 +6106,10 @@
       "fundSize": 13.95
     },
     {
-      "id": "fund-b7b791",
-      "name": "Sun Life MPF Stable Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-d6e1d1",
+      "name": "永明強積金平穩基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3766,10 +6126,10 @@
       "fundSize": 1012.45
     },
     {
-      "id": "fund-9f401d",
-      "name": "Capital Stable Fund",
+      "id": "fund-4e651f",
+      "name": "資本穩定基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3786,10 +6146,10 @@
       "fundSize": 2070.09
     },
     {
-      "id": "fund-c45016",
-      "name": "BCT (Industry) Flexi Mixed Asset Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-ad4b52",
+      "name": "BCT（行業）靈活混合資產基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -3806,10 +6166,10 @@
       "fundSize": 203.56
     },
     {
-      "id": "fund-ffd165",
-      "name": "Haitong Age 65 Plus Fund - Class A",
+      "id": "fund-15d9ee",
+      "name": "海通65歲後基金 - A類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3826,10 +6186,10 @@
       "fundSize": 5.51
     },
     {
-      "id": "fund-77a83f",
-      "name": "Haitong Age 65 Plus Fund - Class T",
+      "id": "fund-b2617f",
+      "name": "海通65歲後基金 - T類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3846,10 +6206,10 @@
       "fundSize": 5.97
     },
     {
-      "id": "fund-87590c",
-      "name": "Guaranteed Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-e4a121",
+      "name": "保證基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "保證基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3866,10 +6226,10 @@
       "fundSize": 293.7
     },
     {
-      "id": "fund-19d734",
-      "name": "RetireEasy Fund",
+      "id": "fund-c16123",
+      "name": "退休易基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3886,10 +6246,10 @@
       "fundSize": 345.16
     },
     {
-      "id": "fund-d5502c",
-      "name": "Manulife MPF Stable Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-956a48",
+      "name": "宏利 MPF 穩健基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "保證基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3906,10 +6266,10 @@
       "fundSize": 18521.01
     },
     {
-      "id": "fund-e40137",
-      "name": "Manulife MPF Retirement Income Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-37942a",
+      "name": "宏利 MPF 退休收益基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3926,10 +6286,10 @@
       "fundSize": 2212.71
     },
     {
-      "id": "fund-ff9327",
-      "name": "Principal Age 65 Plus Fund - Class N",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-963b9e",
+      "name": "信安65歲後基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3946,10 +6306,10 @@
       "fundSize": 3285.19
     },
     {
-      "id": "fund-63d8c8",
-      "name": "Principal Age 65 Plus Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-d5b9ee",
+      "name": "信安65 歲後基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3966,10 +6326,10 @@
       "fundSize": 475.27
     },
     {
-      "id": "fund-63d8c8",
-      "name": "Principal Age 65 Plus Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-d5b9ee",
+      "name": "信安65 歲後基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -3986,10 +6346,10 @@
       "fundSize": 46.82
     },
     {
-      "id": "fund-9bdd3c",
-      "name": "BCOM Guaranteed  (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-3e0105",
+      "name": "交通銀行保證回報成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "保證基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4006,10 +6366,10 @@
       "fundSize": 905.8
     },
     {
-      "id": "fund-61d6de",
-      "name": "Manulife MPF RMB Bond Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-e26b4b",
+      "name": "宏利 MPF 人民幣債券基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4026,10 +6386,10 @@
       "fundSize": 2855.24
     },
     {
-      "id": "fund-e50e12",
-      "name": "Manulife MPF North American Equity Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-923018",
+      "name": "宏利 MPF 北美股票基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "股票基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -4046,10 +6406,10 @@
       "fundSize": 41464.18
     },
     {
-      "id": "fund-0376d6",
-      "name": "Invesco Age 65 Plus Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-2949de",
+      "name": "景順65歲後基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4066,10 +6426,10 @@
       "fundSize": 800.65
     },
     {
-      "id": "fund-e89c98",
-      "name": "Invesco Age 65 Plus Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-e9fbe8",
+      "name": "景順65歲後基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4086,10 +6446,10 @@
       "fundSize": 644.16
     },
     {
-      "id": "fund-e80330",
-      "name": "BCT (Pro) Age 65 Plus Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-3cec9f",
+      "name": "BCT65歲後基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4106,10 +6466,10 @@
       "fundSize": 1336.01
     },
     {
-      "id": "fund-dff149",
-      "name": "BCOM Age 65 Plus Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-34fbf9",
+      "name": "交通銀行65歲後基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4126,10 +6486,10 @@
       "fundSize": 310.99
     },
     {
-      "id": "fund-90113d",
-      "name": "China Life Age 65 Plus Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-5a9a2f",
+      "name": "中國人壽65歲後基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4146,10 +6506,10 @@
       "fundSize": 209.97
     },
     {
-      "id": "fund-59abb4",
-      "name": "Age 65 Plus Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-570af9",
+      "name": "65 歲後基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4166,10 +6526,10 @@
       "fundSize": 152.35
     },
     {
-      "id": "fund-49538c",
-      "name": "BCT (Industry) Age 65 Plus Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-76f72b",
+      "name": "BCT（行業）65歲後基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4186,10 +6546,10 @@
       "fundSize": 486.06
     },
     {
-      "id": "fund-4af257",
-      "name": "Principal International Bond Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-ea49c8",
+      "name": "信安國際債券基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4206,10 +6566,10 @@
       "fundSize": 61.4
     },
     {
-      "id": "fund-58fcbb",
-      "name": "Principal International Bond Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-15d3d5",
+      "name": "信安國際債券基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4226,10 +6586,10 @@
       "fundSize": 1157.01
     },
     {
-      "id": "fund-18b67b",
-      "name": "Global Bond Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-a0293d",
+      "name": "環球債券基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4246,10 +6606,10 @@
       "fundSize": 170.99
     },
     {
-      "id": "fund-384a52",
-      "name": "AMTD Invesco Age 65 Plus Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-4cd559",
+      "name": "AMTD景順 65 歲後基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4266,10 +6626,10 @@
       "fundSize": 28.16
     },
     {
-      "id": "fund-6a6c97",
-      "name": "Allianz MPF Age 65 Plus Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-420eb3",
+      "name": "安聯強積金65歲後基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4286,10 +6646,10 @@
       "fundSize": 5.8
     },
     {
-      "id": "fund-0bfb3f",
-      "name": "Allianz MPF Age 65 Plus Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-821812",
+      "name": "安聯強積金65歲後基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4306,10 +6666,10 @@
       "fundSize": 131.31
     },
     {
-      "id": "fund-304327",
-      "name": "Allianz MPF Age 65 Plus Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-7b4e70",
+      "name": "安聯強積金65歲後基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4326,10 +6686,10 @@
       "fundSize": 144.09
     },
     {
-      "id": "fund-e26742",
-      "name": "Invesco RMB Bond Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-407a38",
+      "name": "景順人民幣債券基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4346,10 +6706,10 @@
       "fundSize": 243.31
     },
     {
-      "id": "fund-3ed30f",
-      "name": "Invesco RMB Bond Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-0c27e1",
+      "name": "景順人民幣債券基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4366,10 +6726,10 @@
       "fundSize": 170.49
     },
     {
-      "id": "fund-de53ff",
-      "name": "BCT (Industry) RMB Bond Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-e20d0d",
+      "name": "BCT（行業）人民幣債券基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4386,10 +6746,10 @@
       "fundSize": 212.28
     },
     {
-      "id": "fund-9b02c9",
-      "name": "BCT (Pro) RMB Bond Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-a637ec",
+      "name": "BCT人民幣債券基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4406,10 +6766,10 @@
       "fundSize": 973.31
     },
     {
-      "id": "fund-381c25",
-      "name": "RMB Bond Fund",
+      "id": "fund-1777db",
+      "name": "人民幣債券基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4426,10 +6786,70 @@
       "fundSize": 587.54
     },
     {
-      "id": "fund-59abb4",
-      "name": "Age 65 Plus Fund",
+      "id": "fund-833eef",
+      "name": "恒生中國企業指數基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.1377,
+        "oneMonth": 0.5967,
+        "threeMonths": 1.79,
+        "sixMonths": 12.585,
+        "oneYear": 7.16,
+        "threeYears": 43.3017,
+        "fiveYears": -11.35
+      },
+      "fundSize": 1587.42
+    },
+    {
+      "id": "fund-833eef",
+      "name": "恒生中國企業指數基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.1375,
+        "oneMonth": 0.5958,
+        "threeMonths": 1.7875,
+        "sixMonths": 12.585,
+        "oneYear": 7.15,
+        "threeYears": 43.3017,
+        "fiveYears": -11.36
+      },
+      "fundSize": 4179.38
+    },
+    {
+      "id": "fund-2c2277",
+      "name": "東亞中國追蹤指數基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.1367,
+        "oneMonth": 0.5925,
+        "threeMonths": 1.7775,
+        "sixMonths": 12.295,
+        "oneYear": 7.11,
+        "threeYears": 41.3635,
+        "fiveYears": -12.82
+      },
+      "fundSize": 175.21
+    },
+    {
+      "id": "fund-6a00df",
+      "name": "65歲後基金",
+      "provider": "HSBC",
+      "scheme": "滙豐強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4446,10 +6866,10 @@
       "fundSize": 10286.27
     },
     {
-      "id": "fund-59abb4",
-      "name": "Age 65 Plus Fund",
+      "id": "fund-570af9",
+      "name": "65 歲後基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4466,10 +6886,30 @@
       "fundSize": 2200.66
     },
     {
-      "id": "fund-f6a4c5",
-      "name": "BEA Age 65 Plus Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-2c2277",
+      "name": "東亞中國追蹤指數基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
+      "category": "股票基金",
+      "riskLevel": 7,
+      "nav": 10.0,
+      "currency": "HKD",
+      "returns": {
+        "oneWeek": 0.1354,
+        "oneMonth": 0.5867,
+        "threeMonths": 1.76,
+        "sixMonths": 12.245,
+        "oneYear": 7.04,
+        "threeYears": 40.9306,
+        "fiveYears": -13.2
+      },
+      "fundSize": 174.09
+    },
+    {
+      "id": "fund-aaf39c",
+      "name": "東亞65歲後基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4486,10 +6926,10 @@
       "fundSize": 12.38
     },
     {
-      "id": "fund-fe665d",
-      "name": "BEA (MPF) Age 65 Plus Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-c02337",
+      "name": "東亞 (強積金) 65歲後基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4506,10 +6946,10 @@
       "fundSize": 1035.93
     },
     {
-      "id": "fund-54f4f7",
-      "name": "BEA (Industry Scheme) Age 65 Plus Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-743582",
+      "name": "東亞 (行業計劃) 65歲後基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4526,10 +6966,10 @@
       "fundSize": 1128.3
     },
     {
-      "id": "fund-6ec2da",
-      "name": "AMTD Invesco Global Bond Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-d92fc1",
+      "name": "AMTD景順環球債券基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4546,10 +6986,10 @@
       "fundSize": 46.25
     },
     {
-      "id": "fund-0af489",
-      "name": "Schroder MPF Age 65 Plus Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-28ca6b",
+      "name": "施羅德強積金65歲後基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4566,10 +7006,10 @@
       "fundSize": 394.06
     },
     {
-      "id": "fund-95ddb3",
-      "name": "Manulife MPF Hong Kong Bond Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-6e7f03",
+      "name": "宏利 MPF 香港債券基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4586,10 +7026,10 @@
       "fundSize": 3977.11
     },
     {
-      "id": "fund-bac960",
-      "name": "My Choice Age 65 Plus Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-d642ee",
+      "name": "我的65歲後基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4606,10 +7046,10 @@
       "fundSize": 83.21
     },
     {
-      "id": "fund-a6663e",
-      "name": "Sun Life MPF Age 65 Plus Fund",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-4a3ca1",
+      "name": "永明強積金65歲後基金",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4626,10 +7066,10 @@
       "fundSize": 3922.74
     },
     {
-      "id": "fund-57f7a3",
-      "name": "Invesco Global Bond Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-574591",
+      "name": "景順環球債券基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4646,10 +7086,10 @@
       "fundSize": 582.81
     },
     {
-      "id": "fund-c8d15e",
-      "name": "BCOM Global Bond (CF) Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-e1ed08",
+      "name": "交通銀行環球債券成分基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4666,10 +7106,10 @@
       "fundSize": 279.64
     },
     {
-      "id": "fund-9396d8",
-      "name": "Invesco Global Bond Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-0e10c5",
+      "name": "景順環球債券基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4686,10 +7126,10 @@
       "fundSize": 514.85
     },
     {
-      "id": "fund-59abb4",
-      "name": "Age 65 Plus Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-6a00df",
+      "name": "65歲後基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4706,10 +7146,10 @@
       "fundSize": 2661.03
     },
     {
-      "id": "fund-c10779",
-      "name": "BOC-Prudential Age 65 Plus Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-4e0310",
+      "name": "中銀保誠65歲後基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4726,10 +7166,10 @@
       "fundSize": 2067.85
     },
     {
-      "id": "fund-d80129",
-      "name": "Principal Asian Bond Fund - Class N",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-eb2c68",
+      "name": "信安亞洲債券基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4746,10 +7186,10 @@
       "fundSize": 263.16
     },
     {
-      "id": "fund-380969",
-      "name": "Manulife MPF Age 65 Plus Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-37073b",
+      "name": "宏利 MPF 65歲後基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4766,10 +7206,10 @@
       "fundSize": 8856.35
     },
     {
-      "id": "fund-18b67b",
-      "name": "Global Bond Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-a0293d",
+      "name": "環球債券基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4786,10 +7226,10 @@
       "fundSize": 3535.86
     },
     {
-      "id": "fund-63e6e7",
-      "name": "Asian Bond Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-1384cd",
+      "name": "亞洲債券基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4806,10 +7246,10 @@
       "fundSize": 1947.15
     },
     {
-      "id": "fund-63e6e7",
-      "name": "Asian Bond Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-1384cd",
+      "name": "亞洲債券基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "債券基金",
       "riskLevel": 5,
       "nav": 10.0,
@@ -4826,10 +7266,10 @@
       "fundSize": 328.75
     },
     {
-      "id": "fund-4342a4",
-      "name": "Manulife MPF International Bond Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-3bc98c",
+      "name": "宏利 MPF 國際債券基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4846,10 +7286,10 @@
       "fundSize": 7179.83
     },
     {
-      "id": "fund-5c9669",
-      "name": "Principal Dynamic Global Bond Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-101794",
+      "name": "信安動力環球債券基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4866,10 +7306,10 @@
       "fundSize": 461.44
     },
     {
-      "id": "fund-035aa7",
-      "name": "Principal Hong Kong Bond Fund - Class N",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-d1432d",
+      "name": "信安香港債券基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -4886,10 +7326,10 @@
       "fundSize": 681.32
     },
     {
-      "id": "fund-18b67b",
-      "name": "Global Bond Fund",
+      "id": "fund-a0293d",
+      "name": "環球債券基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4906,10 +7346,10 @@
       "fundSize": 1833.29
     },
     {
-      "id": "fund-18b67b",
-      "name": "Global Bond Fund",
+      "id": "fund-a0293d",
+      "name": "環球債券基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4926,10 +7366,10 @@
       "fundSize": 6831.82
     },
     {
-      "id": "fund-b05168",
-      "name": "China Life Joyful Retirement Guaranteed Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-e60ede",
+      "name": "中國人壽樂安心保證基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "保證基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4946,10 +7386,10 @@
       "fundSize": 1452.46
     },
     {
-      "id": "fund-5c9669",
-      "name": "Principal Dynamic Global Bond Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-101794",
+      "name": "信安動力環球債券基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4966,10 +7406,10 @@
       "fundSize": 80.23
     },
     {
-      "id": "fund-59abb4",
-      "name": "Age 65 Plus Fund",
+      "id": "fund-6a00df",
+      "name": "65歲後基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "混合資產基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -4986,10 +7426,10 @@
       "fundSize": 1071.41
     },
     {
-      "id": "fund-b24a07",
-      "name": "Manulife MPF Sustainable Pacific Asia Bond Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-9b4e76",
+      "name": "宏利 MPF 可持續亞太債券基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5006,10 +7446,10 @@
       "fundSize": 1802.96
     },
     {
-      "id": "fund-2c3a55",
-      "name": "Hong Kong Bond Fund",
+      "id": "fund-51f404",
+      "name": "香港債券基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5026,10 +7466,10 @@
       "fundSize": 1324.26
     },
     {
-      "id": "fund-d5f815",
-      "name": "BCT (Pro) Global Bond Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-7cd301",
+      "name": "BCT環球債券基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5046,10 +7486,10 @@
       "fundSize": 1967.32
     },
     {
-      "id": "fund-7ed965",
-      "name": "Manulife Career Average Guaranteed Fund - SHKP",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-63f28c",
+      "name": "宏利在職平均回報保證基金 - 新地",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "保證基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5066,10 +7506,10 @@
       "fundSize": 571.54
     },
     {
-      "id": "fund-64e7a4",
-      "name": "BCT (Industry) Global Bond Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-633567",
+      "name": "BCT（行業）環球債券基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5086,10 +7526,10 @@
       "fundSize": 167.34
     },
     {
-      "id": "fund-f06b6a",
-      "name": "BOC-Prudential Bond Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-b00a99",
+      "name": "中銀保誠債券基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5106,10 +7546,10 @@
       "fundSize": 3194.08
     },
     {
-      "id": "fund-d4be5b",
-      "name": "BOC-Prudential MPF RMB & HKD Money Market Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-59c57e",
+      "name": "中銀保誠強積金人民幣及港元貨幣市場基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5126,10 +7566,10 @@
       "fundSize": 1421.68
     },
     {
-      "id": "fund-d4c9db",
-      "name": "Principal Dynamic Asian Bond Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-55798b",
+      "name": "信安動力亞洲債券基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5146,10 +7586,10 @@
       "fundSize": 200.78
     },
     {
-      "id": "fund-8ed521",
-      "name": "BEA Global Bond Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-a7e416",
+      "name": "東亞環球債券基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5166,10 +7606,10 @@
       "fundSize": 8.67
     },
     {
-      "id": "fund-b6d0a9",
-      "name": "My Choice Global Bond Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-4282fd",
+      "name": "我的環球債券基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5186,10 +7626,10 @@
       "fundSize": 123.05
     },
     {
-      "id": "fund-df1258",
-      "name": "BEA (MPF) Global Bond Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-8c72f4",
+      "name": "東亞(強積金)環球債券基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5206,10 +7646,10 @@
       "fundSize": 360.97
     },
     {
-      "id": "fund-b2a96a",
-      "name": "Sun Life MPF Hong Kong Dollar Bond Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-d4f58d",
+      "name": "永明強積金港元債券基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5226,10 +7666,10 @@
       "fundSize": 774.02
     },
     {
-      "id": "fund-4208f4",
-      "name": "Sun Life MPF Hong Kong Dollar Bond Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-140081",
+      "name": "永明強積金港元債券基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5246,10 +7686,10 @@
       "fundSize": 4722.37
     },
     {
-      "id": "fund-fd3958",
-      "name": "My Choice HKD Bond Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-23da6c",
+      "name": "我的港元債券基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5266,10 +7706,10 @@
       "fundSize": 80.64
     },
     {
-      "id": "fund-6a0e61",
-      "name": "My Choice RMB & HKD Money Market Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-81044c",
+      "name": "我的人民幣及港元貨幣市場基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5286,10 +7726,10 @@
       "fundSize": 61.32
     },
     {
-      "id": "fund-9abfd2",
-      "name": "BCT (Pro) Hong Kong Dollar Bond Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-6fe489",
+      "name": "BCT港元債券基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "債券基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5306,10 +7746,10 @@
       "fundSize": 1392.45
     },
     {
-      "id": "fund-454064",
-      "name": "Sun Life MPF RMB and HKD Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-174070",
+      "name": "永明強積金人民幣及港元基金  - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5326,10 +7766,10 @@
       "fundSize": 1014.57
     },
     {
-      "id": "fund-21ea84",
-      "name": "Allianz RMB Money Market Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-318196",
+      "name": "安聯人民幣貨幣市場基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5346,10 +7786,10 @@
       "fundSize": 55.05
     },
     {
-      "id": "fund-6fce90",
-      "name": "Sun Life MPF RMB and HKD Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-fc1073",
+      "name": "永明強積金人民幣及港元基金  - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5366,10 +7806,10 @@
       "fundSize": 172.36
     },
     {
-      "id": "fund-b99f78",
-      "name": "Allianz RMB Money Market Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-1a90f6",
+      "name": "安聯人民幣貨幣市場基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5386,10 +7826,10 @@
       "fundSize": 2.0
     },
     {
-      "id": "fund-864a00",
-      "name": "Allianz RMB Money Market Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-7c77b4",
+      "name": "安聯人民幣貨幣市場基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5406,10 +7846,10 @@
       "fundSize": 65.95
     },
     {
-      "id": "fund-acfb0b",
-      "name": "Sun Life MPF Global Bond Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-4f7218",
+      "name": "永明強積金環球債券基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5426,10 +7866,10 @@
       "fundSize": 2763.72
     },
     {
-      "id": "fund-95c552",
-      "name": "World Bond Fund",
+      "id": "fund-47052b",
+      "name": "國際債券基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5446,10 +7886,10 @@
       "fundSize": 1463.75
     },
     {
-      "id": "fund-394441",
-      "name": "BEA (Industry Scheme) RMB & HKD Money Market Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-00a6ef",
+      "name": "東亞 (行業計劃) 人民幣及港幣貨幣市場基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5466,10 +7906,10 @@
       "fundSize": 249.43
     },
     {
-      "id": "fund-1618e4",
-      "name": "Sun Life MPF Global Bond Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-9a34cc",
+      "name": "永明強積金環球債券基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "債券基金",
       "riskLevel": 4,
       "nav": 10.0,
@@ -5486,10 +7926,10 @@
       "fundSize": 358.42
     },
     {
-      "id": "fund-cabd92",
-      "name": "BEA (MPF) RMB & HKD Money Market Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-da95b6",
+      "name": "東亞 (強積金) 人民幣及港幣貨幣市場基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "貨幣市場基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5506,10 +7946,10 @@
       "fundSize": 170.9
     },
     {
-      "id": "fund-ef12bf",
-      "name": "BCT (Pro) Asian Income Retirement Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-d2921e",
+      "name": "BCT亞洲收益退休基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "混合資產基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5526,10 +7966,10 @@
       "fundSize": 493.48
     },
     {
-      "id": "fund-0eba52",
-      "name": "Principal HK Dollar Savings Fund - Class D",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-468768",
+      "name": "信安港元儲蓄基金 - D類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "貨幣市場基金",
       "riskLevel": 2,
       "nav": 10.0,
@@ -5546,10 +7986,10 @@
       "fundSize": 181.97
     },
     {
-      "id": "fund-98d4bf",
-      "name": "Principal HK Dollar Savings Fund - Class I",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-defb42",
+      "name": "信安港元儲蓄基金 - I類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "貨幣市場基金",
       "riskLevel": 2,
       "nav": 10.0,
@@ -5566,10 +8006,10 @@
       "fundSize": 2286.73
     },
     {
-      "id": "fund-87590c",
-      "name": "Guaranteed Fund",
+      "id": "fund-e4a121",
+      "name": "保證基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "保證基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5586,10 +8026,10 @@
       "fundSize": 3392.84
     },
     {
-      "id": "fund-87590c",
-      "name": "Guaranteed Fund",
+      "id": "fund-e4a121",
+      "name": "保證基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "保證基金",
       "riskLevel": 3,
       "nav": 10.0,
@@ -5606,10 +8046,10 @@
       "fundSize": 11079.57
     },
     {
-      "id": "fund-dedce9",
-      "name": "Principal Cash Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-dd39ef",
+      "name": "信安流動基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "貨幣市場基金",
       "riskLevel": 2,
       "nav": 10.0,
@@ -5626,10 +8066,10 @@
       "fundSize": 623.45
     },
     {
-      "id": "fund-e7e8bc",
-      "name": "Manulife MPF Conservative Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-cea620",
+      "name": "宏利 MPF 保守基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5646,10 +8086,10 @@
       "fundSize": 22136.81
     },
     {
-      "id": "fund-15ed5b",
-      "name": "MPF Conservative Fund",
+      "id": "fund-f6949c",
+      "name": "強積金保守基金",
       "provider": "HSBC",
-      "scheme": "Hang Seng Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "恒生強積金智選計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5666,10 +8106,10 @@
       "fundSize": 13196.43
     },
     {
-      "id": "fund-15ed5b",
-      "name": "MPF Conservative Fund",
+      "id": "fund-f6949c",
+      "name": "強積金保守基金",
       "provider": "HSBC",
-      "scheme": "HSBC Mandatory Provident Fund - SuperTrust Plus",
+      "scheme": "滙豐強積金智選計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5686,10 +8126,10 @@
       "fundSize": 39303.35
     },
     {
-      "id": "fund-80a4b4",
-      "name": "Haitong MPF Conservative Fund - Class A",
+      "id": "fund-c136bf",
+      "name": "海通強積金保守基金 - A類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5706,10 +8146,10 @@
       "fundSize": 32.6
     },
     {
-      "id": "fund-028377",
-      "name": "Haitong MPF Conservative Fund - Class T",
+      "id": "fund-7f302e",
+      "name": "海通強積金保守基金 - T類別",
       "provider": "HSBC",
-      "scheme": "Haitong MPF Retirement Fund",
+      "scheme": "海通MPF退休金",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5726,10 +8166,10 @@
       "fundSize": 67.42
     },
     {
-      "id": "fund-500b48",
-      "name": "BOC-Prudential MPF Conservative Fund",
-      "provider": "BOCIP",
-      "scheme": "BOC-Prudential Easy-Choice Mandatory Provident Fund Scheme",
+      "id": "fund-1dbe7f",
+      "name": "中銀保誠強積金保守基金",
+      "provider": "中銀保誠",
+      "scheme": "中銀保誠簡易強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5746,10 +8186,10 @@
       "fundSize": 14705.16
     },
     {
-      "id": "fund-6ba91e",
-      "name": "China Life MPF Conservative Fund",
-      "provider": "China Life",
-      "scheme": "China Life MPF Master Trust Scheme",
+      "id": "fund-a30563",
+      "name": "中國人壽強積金保守基金",
+      "provider": "中國人壽",
+      "scheme": "中國人壽強積金集成信託計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5766,10 +8206,10 @@
       "fundSize": 622.49
     },
     {
-      "id": "fund-92c33d",
-      "name": "Invesco MPF Conservative Fund",
-      "provider": "SCT",
-      "scheme": "SHKP MPF Employer Sponsored Scheme",
+      "id": "fund-f11361",
+      "name": "景順強積金保守基金",
+      "provider": "渣打信托",
+      "scheme": "新地強積金僱主營辦計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5786,10 +8226,10 @@
       "fundSize": 769.19
     },
     {
-      "id": "fund-8a47e1",
-      "name": "Invesco MPF Conservative Fund - Unit Class A",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-e53124",
+      "name": "景順強積金保守基金 - 單位類別A",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5806,10 +8246,10 @@
       "fundSize": 1427.01
     },
     {
-      "id": "fund-428915",
-      "name": "Invesco MPF Conservative Fund - Unit Class H",
-      "provider": "BCT",
-      "scheme": "BCT Strategic MPF Scheme",
+      "id": "fund-9eb9ea",
+      "name": "景順強積金保守基金 - 單位類別H",
+      "provider": "銀聯信託",
+      "scheme": "BCT強積金策略計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5826,10 +8266,10 @@
       "fundSize": 1464.58
     },
     {
-      "id": "fund-ffa5c7",
-      "name": "Principal MPF Conservative Fund - Class N",
-      "provider": "PRIN",
-      "scheme": "Principal MPF Scheme Series 800",
+      "id": "fund-640127",
+      "name": "信安強積金保守基金 - N類單位",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金計劃800系列",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5846,10 +8286,10 @@
       "fundSize": 5693.42
     },
     {
-      "id": "fund-96fc54",
-      "name": "My Choice MPF Conservative Fund",
-      "provider": "BOCIP",
-      "scheme": "My Choice Mandatory Provident Fund Scheme",
+      "id": "fund-81e7be",
+      "name": "我的強積金保守基金",
+      "provider": "中銀保誠",
+      "scheme": "我的強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5866,10 +8306,10 @@
       "fundSize": 423.74
     },
     {
-      "id": "fund-15ed5b",
-      "name": "MPF Conservative Fund",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-f6949c",
+      "name": "強積金保守基金",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5886,10 +8326,10 @@
       "fundSize": 10925.89
     },
     {
-      "id": "fund-f9f54b",
-      "name": "Principal - MPF Conservative Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Smart Plan",
+      "id": "fund-692993",
+      "name": "信安 - 強積金保守基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—明智之選",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5906,10 +8346,10 @@
       "fundSize": 3847.67
     },
     {
-      "id": "fund-f9f54b",
-      "name": "Principal - MPF Conservative Fund",
-      "provider": "PRIN",
-      "scheme": "Principal MPF - Simple Plan",
+      "id": "fund-692993",
+      "name": "信安 - 強積金保守基金",
+      "provider": "信安（亞洲）",
+      "scheme": "信安強積金—易富之選",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5926,10 +8366,10 @@
       "fundSize": 313.46
     },
     {
-      "id": "fund-bcb9f2",
-      "name": "Sun Life MPF Conservative Fund - Class B",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-4f8879",
+      "name": "永明強積金保守基金 - B類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5946,10 +8386,10 @@
       "fundSize": 21397.18
     },
     {
-      "id": "fund-15ed5b",
-      "name": "MPF Conservative Fund",
+      "id": "fund-f6949c",
+      "name": "強積金保守基金",
       "provider": "HSBC",
-      "scheme": "Fidelity Retirement Master Trust",
+      "scheme": "富達退休集成信託",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5966,10 +8406,10 @@
       "fundSize": 7028.48
     },
     {
-      "id": "fund-4e29cf",
-      "name": "Sun Life MPF Conservative Fund - Class A",
-      "provider": "Sun Life",
-      "scheme": "Sun Life Rainbow MPF Scheme",
+      "id": "fund-e9b2da",
+      "name": "永明強積金保守基金 - A類",
+      "provider": "永明",
+      "scheme": "永明彩虹強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -5986,10 +8426,10 @@
       "fundSize": 2409.98
     },
     {
-      "id": "fund-30b02f",
-      "name": "BCT (Industry) MPF Conservative Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Industry Choice",
+      "id": "fund-e3ef85",
+      "name": "BCT（行業）強積金保守基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT（強積金）行業計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6006,10 +8446,10 @@
       "fundSize": 1812.73
     },
     {
-      "id": "fund-810dde",
-      "name": "BCT (Pro) MPF Conservative Fund",
-      "provider": "BCT",
-      "scheme": "BCT (MPF) Pro Choice",
+      "id": "fund-b1cf1d",
+      "name": "BCT強積金保守基金",
+      "provider": "銀聯信託",
+      "scheme": "BCT積金之選",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6026,10 +8466,10 @@
       "fundSize": 11029.0
     },
     {
-      "id": "fund-957007",
-      "name": "BCOM MPF Conservative Fund",
-      "provider": "BCOM",
-      "scheme": "BCOM Joyful Retirement MPF Scheme",
+      "id": "fund-0c114a",
+      "name": "交通銀行強積金保守基金",
+      "provider": "交通",
+      "scheme": "交通銀行愉盈退休強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6046,10 +8486,10 @@
       "fundSize": 1772.77
     },
     {
-      "id": "fund-15ed5b",
-      "name": "MPF Conservative Fund",
-      "provider": "YF Life",
-      "scheme": "MASS Mandatory Provident Fund Scheme",
+      "id": "fund-f6949c",
+      "name": "強積金保守基金",
+      "provider": "萬通",
+      "scheme": "萬全強制性公積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6066,10 +8506,10 @@
       "fundSize": 658.1
     },
     {
-      "id": "fund-be66de",
-      "name": "BEA (MPF) Conservative Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Master Trust Scheme",
+      "id": "fund-9e2854",
+      "name": "東亞 (強積金) 保守基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）集成信託計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6086,10 +8526,10 @@
       "fundSize": 1735.68
     },
     {
-      "id": "fund-56c89e",
-      "name": "AMTD Invesco MPF Conservative Fund",
-      "provider": "BCT",
-      "scheme": "AMTD MPF Scheme",
+      "id": "fund-b4ee87",
+      "name": "AMTD景順強積金保守基金",
+      "provider": "銀聯信託",
+      "scheme": "AMTD強積金計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6106,10 +8546,10 @@
       "fundSize": 156.73
     },
     {
-      "id": "fund-f385a6",
-      "name": "BEA (Industry Scheme) MPF Conservative Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Industry Scheme",
+      "id": "fund-ff6eb1",
+      "name": "東亞 (行業計劃) 強積金保守基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）行業計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6126,10 +8566,10 @@
       "fundSize": 3911.56
     },
     {
-      "id": "fund-4d9022",
-      "name": "BEA MPF Conservative Fund",
-      "provider": "BEA",
-      "scheme": "BEA (MPF) Value Scheme",
+      "id": "fund-c67edb",
+      "name": "東亞強積金保守基金",
+      "provider": "東亞",
+      "scheme": "東亞（強積金）享惠計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6146,10 +8586,10 @@
       "fundSize": 29.17
     },
     {
-      "id": "fund-738c78",
-      "name": "Allianz MPF Conservative Fund - Class T",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-372b79",
+      "name": "安聯強積金保守基金 - 單位T",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6166,10 +8606,10 @@
       "fundSize": 553.33
     },
     {
-      "id": "fund-8b09c1",
-      "name": "Allianz MPF Conservative Fund - Class A",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-36e4d7",
+      "name": "安聯強積金保守基金 - 單位A",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6186,10 +8626,10 @@
       "fundSize": 21.81
     },
     {
-      "id": "fund-430be4",
-      "name": "Allianz MPF Conservative Fund - Class B",
-      "provider": "BCT",
-      "scheme": "Manulife RetireChoice (MPF) Scheme",
+      "id": "fund-ad28ad",
+      "name": "安聯強積金保守基金 - 單位B",
+      "provider": "銀聯信託",
+      "scheme": "宏利退休精選（強積金）計劃",
       "category": "貨幣市場基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6206,10 +8646,10 @@
       "fundSize": 528.03
     },
     {
-      "id": "fund-57dc57",
-      "name": "Guaranteed Portfolio",
-      "provider": "AIAT",
-      "scheme": "AIA MPF - Prime Value Choice",
+      "id": "fund-54bebb",
+      "name": "保證組合",
+      "provider": "友邦信託",
+      "scheme": "友邦強積金優選計劃",
       "category": "保證基金",
       "riskLevel": 1,
       "nav": 10.0,
@@ -6226,10 +8666,10 @@
       "fundSize": 10490.74
     },
     {
-      "id": "fund-64a1b7",
-      "name": "Manulife MPF Interest Fund",
-      "provider": "Manulife",
-      "scheme": "Manulife Global Select (MPF) Scheme",
+      "id": "fund-7cd25f",
+      "name": "宏利 MPF 利息基金",
+      "provider": "宏利",
+      "scheme": "宏利環球精選（強積金）計劃",
       "category": "保證基金",
       "riskLevel": 1,
       "nav": 10.0,

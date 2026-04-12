@@ -8,11 +8,11 @@ interface PeriodTabsProps {
 }
 
 const PERIODS: SortPeriod[] = [
-  "year2025",
-  "year2024",
-  "year2023",
-  "threeYears",
-  "fiveYears",
+  "ytd",
+  "oneYear",
+  "sixMonths",
+  "threeMonths",
+  "oneMonth",
 ];
 
 export default function PeriodTabs({ activePeriod, onChange }: PeriodTabsProps) {

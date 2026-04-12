@@ -13,7 +13,7 @@ interface FundCardProps {
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 // Always show these 3 periods in the mini-stats row
-const MINI_PERIODS: SortPeriod[] = ["year2025", "year2024", "fiveYears"];
+const MINI_PERIODS: SortPeriod[] = ["oneMonth", "sixMonths", "oneYear"];
 
 function getRankStyle(rank: number): { bg: string; color: string } {
   if (rank === 1) return { bg: "#fbbf24", color: "#000" };
@@ -71,7 +71,7 @@ export default function FundCard({
           {rank}
         </div>
 
-        {/* Name + provider */}
+        {/* Name + provider + price */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 leading-snug">
             {medal && (
@@ -81,9 +81,21 @@ export default function FundCard({
               {fund.name}
             </h3>
           </div>
-          <p className="text-xs truncate mt-0.5" style={{ color: "#888" }}>
-            {fund.provider}
-          </p>
+          <div className="flex items-center gap-2 mt-0.5">
+            {fund.provider && (
+              <p className="text-xs truncate" style={{ color: "#888" }}>
+                {fund.provider}
+              </p>
+            )}
+            {fund.price > 0 && (
+              <span
+                className="text-[11px] tabular-nums flex-shrink-0"
+                style={{ color: "#666" }}
+              >
+                ${fund.price.toFixed(4)}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Main return (big) */}
@@ -116,10 +128,10 @@ export default function FundCard({
         />
       </div>
 
-      {/* ─── Row 3: mini stats (1週 / 1月 / 1年) ─── */}
+      {/* ─── Row 3: mini stats (1M / 6M / 1Y) ─── */}
       <div className="mt-2 flex items-center gap-4 flex-wrap">
         {MINI_PERIODS.map((p) => {
-          const val = fund.returns[p];
+          const val = fund.returns[p] ?? 0;
           const pos = val >= 0;
           const isActive = p === activePeriod;
           return (

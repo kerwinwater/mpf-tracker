@@ -27,215 +27,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: "[TEMP] Probe aastocks.com MPF data"
-        run: |
-          python3 - <<'PYEOF'
-          import requests, re
-
-          UA  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
-          URL = "http://www.aastocks.com/tc/mpf/search.aspx?tab=1&s=3&o=1&sp=&t=1&r=1"
-          HDR = {
-              "User-Agent": UA,
-              "Accept": "text/html,application/xhtml+xml,*/*;q=0.9",
-              "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
-              "Accept-Encoding": "gzip, deflate",
-              "Connection": "keep-alive",
-          }
-          s = requests.Session()
-          s.headers.update(HDR)
-
-          # ── 1. Basic GET ───────────────────────────────────────
-          print("=" * 56)
-          print("1) GET main URL")
-          print("=" * 56)
-          try:
-              r = s.get(URL, timeout=20, allow_redirects=True)
-              print(f"Status   : {r.status_code}")
-              print(f"Final URL: {r.url}")
-              print(f"Encoding : {r.encoding}")
-              print(f"Size     : {len(r.content):,} bytes / {len(r.text):,} chars")
-              print(f"Server   : {r.headers.get('Server','?')}")
-              print(f"Content  : {r.headers.get('Content-Type','?')}")
-              html = r.text
-          except Exception as e:
-              print(f"ERROR: {e}")
-              html = ""
-
-          if not html:
-              print("No HTML returned, stopping.")
-              exit(0)
-
-          # ── 2. Fund data scan ──────────────────────────────────
-          print("\n" + "=" * 56)
-          print("2) Fund data scan")
-          print("=" * 56)
-          tables = re.findall(r'<table[^>]*>', html, re.I)
-          print(f"<table> tags   : {len(tables)}")
-          rows = re.findall(r'<tr[^>]*>', html, re.I)
-          print(f"<tr> tags      : {len(rows)}")
-          cells = re.findall(r'<td[^>]*>(.*?)</td>', html, re.S | re.I)
-          print(f"<td> tags      : {len(cells)}")
-          pct = re.findall(r'[-+]?\d+\.\d+\s*%', html)
-          print(f"% values found : {len(pct)} | samples: {pct[:8]}")
-          prices = re.findall(r'\b\d{1,3}\.\d{4}\b', html)
-          print(f"4-dec prices   : {len(prices)} | samples: {prices[:8]}")
-
-          # ── 3. First 1000 chars of body ────────────────────────
-          print("\n" + "=" * 56)
-          print("3) First 1000 chars of HTML")
-          print("=" * 56)
-          print(html[:1000])
-
-          # ── 4. Sample table rows ───────────────────────────────
-          print("\n" + "=" * 56)
-          print("4) First 5 <tr> contents (stripped)")
-          print("=" * 56)
-          tr_contents = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.S | re.I)
-          for i, tr in enumerate(tr_contents[:5]):
-              tds = re.findall(r'<td[^>]*>(.*?)</td>', tr, re.S | re.I)
-              clean = [re.sub(r'<[^>]+>', '', td).strip() for td in tds]
-              print(f"  Row {i+1}: {clean[:8]}")
-
-          # ── 5. ASP.NET ViewState / __EVENTVALIDATION ───────────
-          print("\n" + "=" * 56)
-          print("5) ASP.NET form fields")
-          print("=" * 56)
-          vs = re.search(r'__VIEWSTATE[^>]*value="([^"]{0,60})', html)
-          ev = re.search(r'__EVENTVALIDATION[^>]*value="([^"]{0,60})', html)
-          vs_val = ("found (" + vs.group(1)[:30] + "...)") if vs else "NOT found"
-          print(f"__VIEWSTATE      : {vs_val}")
-          print(f"__EVENTVALIDATION: {'found' if ev else 'NOT found'}")
-          forms = re.findall(r'<form[^>]*action=["\']([^"\']+)["\']', html, re.I)
-          print(f"Form actions     : {forms}")
-
-          # ── 6. Pagination / total count ────────────────────────
-          print("\n" + "=" * 56)
-          print("6) Pagination / record count hints")
-          print("=" * 56)
-          counts = re.findall(r'共\s*\d+\s*[隻個條筆]|total\s*:?\s*\d+|page\s*\d+\s*of\s*\d+', html, re.I)
-          print(f"Count hints: {counts[:5]}")
-          pages = re.findall(r'page=(\d+)|p=(\d+)|PageIndex=(\d+)', html, re.I)
-          print(f"Page params: {pages[:10]}")
-
-          # ── 7. Try page 2 (check if pagination works) ──────────
-          print("\n" + "=" * 56)
-          print("7) Try different sort/page params")
-          print("=" * 56)
-          for test_url in [
-              "http://www.aastocks.com/tc/mpf/search.aspx?tab=1&s=3&o=1&sp=&t=1&r=1&p=2",
-              "http://www.aastocks.com/tc/mpf/search.aspx?tab=1&s=3&o=2&sp=&t=1&r=1",
-              "http://www.aastocks.com/en/mpf/search.aspx?tab=1&s=3&o=1&sp=&t=1&r=1",
-          ]:
-              try:
-                  r2 = s.get(test_url, timeout=15)
-                  same = r2.text[:500] == html[:500]
-                  print(f"  {test_url.split('?')[1][:40]} -> {r2.status_code} {len(r2.text):,}chars {'(same)' if same else '** DIFFERENT **'}")
-              except Exception as e:
-                  print(f"  ERROR: {e}")
-          PYEOF
-
-      - name: Analyse MPFA app API endpoints
-        run: |
-          UA="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
-          UA_DESKTOP="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
-
-          echo "============================================"
-          echo "1) Probe known API-style endpoint patterns"
-          echo "============================================"
-          for url in \
-            "https://mfp.mpfa.org.hk/api/funds" \
-            "https://mfp.mpfa.org.hk/api/v1/funds" \
-            "https://mfp.mpfa.org.hk/api/v1/fundlist" \
-            "https://mfp.mpfa.org.hk/api/v1/performance" \
-            "https://mfp.mpfa.org.hk/app/api/funds" \
-            "https://mfp.mpfa.org.hk/mobile/api" \
-            "https://mfp.mpfa.org.hk/tch/api/funds.json" \
-            "https://mfp.mpfa.org.hk/eng/api/funds" \
-            "https://api.mpfa.org.hk/mfp/funds" \
-            "https://api.mpfa.org.hk/v1/funds" \
-            "https://mfp.mpfa.org.hk/tch/getSchemeInfo.do" \
-            "https://mfp.mpfa.org.hk/tch/getFundInfo.do" \
-            "https://mfp.mpfa.org.hk/tch/getFundPerformance.do" \
-            "https://mfp.mpfa.org.hk/tch/mpp_fund_list.do" \
-            "https://mfp.mpfa.org.hk/tch/fund_performance.do" \
-            "https://mfp.mpfa.org.hk/tch/mfp_api.do"; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" -A "$UA_DESKTOP" --max-time 10 "$url")
-            echo "HTTP $status  $url"
-          done
-
-          echo ""
-          echo "============================================"
-          echo "2) Extract JS bundle URLs from mpp_list.jsp"
-          echo "============================================"
-          curl -s -A "$UA_DESKTOP" --max-time 20 \
-            "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
-            -o /tmp/mpp_list.html
-          echo "--- <script src> tags ---"
-          grep -oP 'src="[^"]*\.js[^"]*"' /tmp/mpp_list.html | head -20 || echo "(none)"
-          echo "--- XHR / fetch / ajax calls in inline JS ---"
-          grep -oP '(?:fetch|XMLHttpRequest|ajax|axios|get|post)\s*\(\s*['"'"'"][^'"'"'"]{5,80}['"'"'"]' \
-            /tmp/mpp_list.html | head -20 || echo "(none)"
-          echo "--- URLs containing api / json / data in inline script ---"
-          grep -oP '['"'"'"][^'"'"'"]*(?:api|\.json|/data/|/service/)[^'"'"'"]*['"'"'"]' \
-            /tmp/mpp_list.html | head -20 || echo "(none)"
-
-          echo ""
-          echo "============================================"
-          echo "3) Fetch & grep JS bundles for API patterns"
-          echo "============================================"
-          python3 - <<'PYEOF'
-          import subprocess, re, urllib.request
-          # Get JS script URLs from the page
-          with open('/tmp/mpp_list.html') as f:
-              html = f.read()
-          js_urls = re.findall(r'src=["\']([^"\']*\.js[^"\']*)["\']', html)
-          base = "https://mfp.mpfa.org.hk"
-          found_apis = set()
-          for js_url in js_urls[:10]:
-              if not js_url.startswith('http'):
-                  js_url = base + ('/' if not js_url.startswith('/') else '') + js_url
-              print(f"Fetching JS: {js_url}")
-              try:
-                  req = urllib.request.Request(js_url, headers={
-                      'User-Agent': 'Mozilla/5.0 Chrome/122.0.0.0 Safari/537.36'
-                  })
-                  js = urllib.request.urlopen(req, timeout=10).read().decode('utf-8', errors='ignore')
-                  # Find API-like strings
-                  apis = re.findall(
-                      r'["\']/((?:api|tch|eng)/[^"\'<>\s]{3,80})["\']', js
-                  )
-                  for a in apis:
-                      found_apis.add(a)
-                  # Find fetch/axios/$.ajax calls
-                  calls = re.findall(
-                      r'(?:fetch|axios\.get|axios\.post|\$\.ajax|XMLHttpRequest)[^;]{0,200}', js
-                  )
-                  for c in calls[:5]:
-                      print(f"  XHR call: {c[:120]}")
-              except Exception as e:
-                  print(f"  Error: {e}")
-          print("\n--- All API-like paths found in JS ---")
-          for a in sorted(found_apis):
-              print(f"  /{a}")
-          PYEOF
-
-          echo ""
-          echo "============================================"
-          echo "4) Try with mobile User-Agent (App headers)"
-          echo "============================================"
-          for url in \
-            "https://mfp.mpfa.org.hk/tch/mpp_list.jsp" \
-            "https://mfp.mpfa.org.hk/tch/cf_detail.jsp?cf_id=100"; do
-            echo "--- $url ---"
-            curl -s -A "$UA" \
-              -H "Accept: application/json, text/plain, */*" \
-              -H "X-Requested-With: XMLHttpRequest" \
-              --max-time 15 "$url" | head -c 500
-            echo ""
-          done
-
-      - name: Fetch MPFA fund data
-        run: python3 scripts/fetch_mpfa.py --debug-html public/data/debug_page.txt
+      - name: Fetch MPF fund data from aastocks.com
+        run: python3 scripts/fetch_aastocks.py
 
       - name: Show result
         run: |
@@ -243,21 +36,27 @@ jobs:
           import json
           with open('public/data/funds.json') as f:
               d = json.load(f)
-          print('totalFunds :', len(d.get('funds',[])))
-          print('lastUpdated:', d.get('lastUpdatedHKT', 'N/A'))
-          print('note       :', d.get('note', ''))
+          print('totalFunds    :', len(d.get('funds', [])))
+          print('lastUpdatedHKT:', d.get('lastUpdatedHKT', 'N/A'))
           print()
-          print('Top 5 funds (2025 / 2024 / 2023 / 3Y / 5Y):')
+          print('Top 5 funds (1Y / 6M / 3M / 1M / YTD):')
           for f in d['funds'][:5]:
               r = f['returns']
-              print(f'  {f[\"name\"][:35]:35s} | 2025:{r[\"year2025\"]:6.2f}% 2024:{r[\"year2024\"]:6.2f}% 2023:{r[\"year2023\"]:6.2f}% 3Y:{r[\"threeYears\"]:6.2f}% 5Y:{r[\"fiveYears\"]:6.2f}%')
+              print(
+                  f'  {f[\"name\"][:35]:35s}'
+                  f' | 1Y:{r[\"oneYear\"]:6.2f}%'
+                  f' 6M:{r[\"sixMonths\"]:6.2f}%'
+                  f' 3M:{r[\"threeMonths\"]:6.2f}%'
+                  f' 1M:{r[\"oneMonth\"]:6.2f}%'
+                  f' YTD:{r[\"ytd\"]:6.2f}%'
+              )
           "
 
       - name: Commit and push if data changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/funds.json public/data/debug_page.txt 2>/dev/null || true
+          git add public/data/funds.json
           if git diff --staged --quiet; then
             echo "No data changes, skipping commit"
           else

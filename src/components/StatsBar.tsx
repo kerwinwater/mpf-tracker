@@ -1,4 +1,5 @@
-import { Fund, SortPeriod, PERIOD_LABELS } from "@/types/fund";
+import { Fund, SortPeriod } from "@/types/fund";
+import { getTier, TIER_TEXT } from "@/lib/tier";
 
 interface StatsBarProps {
   funds: Fund[];
@@ -10,70 +11,94 @@ export default function StatsBar({ funds, period }: StatsBarProps) {
 
   const returns = funds.map((f) => f.returns[period] ?? 0);
   const avgReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
-  const rising = returns.filter((r) => r > 0).length;
+  const rising  = returns.filter((r) => r > 0).length;
   const falling = returns.filter((r) => r < 0).length;
   const topFund = funds[0];
+  const topReturn = topFund.returns[period] ?? 0;
 
-  const periodLabel = PERIOD_LABELS[period];
-
+  // §2.3 卡片樣式
   const cardStyle = {
-    backgroundColor: "#1a1d27",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "0.75rem",
-    padding: "0.75rem",
+    backgroundColor: "#111827",
+    border: "0.5px solid #1f2937",
+    borderRadius: "10px",
+    padding: "12px",
     textAlign: "center" as const,
   };
 
   return (
     <div className="grid grid-cols-3 gap-3">
-      {/* 最高回報 */}
+
+      {/* 🥇 頭馬回報 */}
       <div style={cardStyle}>
-        <div className="text-xs mb-1" style={{ color: "#888" }}>
-          {periodLabel}最高
+        <div style={{ fontSize: 11, color: "#9ca3af", marginBottom: 6 }}>
+          🥇 頭馬回報
         </div>
-        <div className="text-base font-bold tabular-nums" style={{ color: "#4ade80" }}>
-          +{(topFund.returns[period] ?? 0).toFixed(2)}%
+        <div
+          style={{
+            fontSize: 18,
+            fontWeight: 500,
+            fontVariantNumeric: "tabular-nums",
+            color: TIER_TEXT[getTier(topReturn)],
+            lineHeight: 1.1,
+          }}
+        >
+          {topReturn >= 0 ? "+" : ""}
+          {topReturn.toFixed(2)}%
         </div>
-        <div className="text-xs truncate mt-0.5" style={{ color: "#666" }}>
-          {topFund.name.length > 8 ? topFund.name.slice(0, 8) + "…" : topFund.name}
+        <div
+          className="truncate mt-1"
+          style={{ fontSize: 10, color: "#6b7280" }}
+          title={topFund.name}
+        >
+          {topFund.name.length > 10 ? topFund.name.slice(0, 10) + "…" : topFund.name}
         </div>
       </div>
 
-      {/* 升跌比例 */}
+      {/* 📊 升跌比 */}
       <div style={cardStyle}>
-        <div className="text-xs mb-1" style={{ color: "#888" }}>
-          升跌比
+        <div style={{ fontSize: 11, color: "#9ca3af", marginBottom: 6 }}>
+          📊 升跌比
         </div>
-        <div className="flex items-center justify-center gap-1.5">
-          <span className="text-sm font-bold tabular-nums" style={{ color: "#4ade80" }}>
+        <div className="flex items-center justify-center gap-1.5" style={{ lineHeight: 1.1 }}>
+          <span
+            style={{ fontSize: 18, fontWeight: 500, fontVariantNumeric: "tabular-nums", color: "#22c55e" }}
+          >
             {rising}↑
           </span>
-          <span style={{ color: "#444" }}>/</span>
-          <span className="text-sm font-bold tabular-nums" style={{ color: "#f87171" }}>
+          <span style={{ color: "#374151", fontSize: 14 }}>/</span>
+          <span
+            style={{ fontSize: 18, fontWeight: 500, fontVariantNumeric: "tabular-nums", color: "#ef4444" }}
+          >
             {falling}↓
           </span>
         </div>
-        <div className="text-xs mt-0.5" style={{ color: "#666" }}>
-          共 {funds.length} 隻
+        <div style={{ fontSize: 10, color: "#6b7280", marginTop: 4 }}>
+          全場 {funds.length} 隻
         </div>
       </div>
 
-      {/* 平均回報 */}
+      {/* ⚖️ 全場平均 */}
       <div style={cardStyle}>
-        <div className="text-xs mb-1" style={{ color: "#888" }}>
-          {periodLabel}平均
+        <div style={{ fontSize: 11, color: "#9ca3af", marginBottom: 6 }}>
+          ⚖️ 全場平均
         </div>
         <div
-          className="text-base font-bold tabular-nums"
-          style={{ color: avgReturn >= 0 ? "#4ade80" : "#f87171" }}
+          style={{
+            fontSize: 18,
+            fontWeight: 500,
+            fontVariantNumeric: "tabular-nums",
+            color: TIER_TEXT[getTier(avgReturn)],
+            lineHeight: 1.1,
+          }}
         >
           {avgReturn >= 0 ? "+" : ""}
           {avgReturn.toFixed(2)}%
         </div>
-        <div className="text-xs mt-0.5" style={{ color: "#666" }}>
-          全市場均值
+        <div style={{ fontSize: 10, color: "#6b7280", marginTop: 4 }}>
+          場均回報
         </div>
       </div>
+
     </div>
   );
 }

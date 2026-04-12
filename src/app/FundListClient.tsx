@@ -333,7 +333,7 @@ export default function FundListClient() {
           >
             <p className="text-xs leading-relaxed" style={{ color: "#9a8a60" }}>
               <span className="text-yellow-400 font-medium">⚠️ 免責聲明：</span>
-              {fundsData.note}
+              以上資料轉載至積金局，資料更新時間以積金局公布為準。基金價格為最新資料，僅作參考之用。
               <br />
               本網站僅供參考，不構成任何投資建議。強積金投資涉及風險，基金過往表現並不代表將來表現。
               如需查閱官方數據，請訪問{" "}

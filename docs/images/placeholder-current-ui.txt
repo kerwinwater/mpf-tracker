@@ -1,0 +1,3 @@
+placeholder — 請手動上傳目前網站截圖（www.mpfrace.com 首頁）
+建議尺寸：1280×800px，PNG 格式
+檔名建議：current-ui.png

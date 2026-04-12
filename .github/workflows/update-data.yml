@@ -27,6 +27,111 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: "[TEMP] Probe HSBC MPF unit prices page"
+        run: |
+          python3 - <<'PYEOF'
+          import requests, re
+
+          UA  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
+          BASE = "https://www.hsbc.com.hk/zh-hk/mpf/tool/unit-prices/"
+          HDR = {
+              "User-Agent": UA,
+              "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
+              "Accept-Language": "zh-HK,zh;q=0.9,en;q=0.8",
+              "Referer": BASE,
+          }
+          s = requests.Session()
+          s.headers.update(HDR)
+
+          # ── 1. GET (no date) ───────────────────────────────────
+          print("=" * 52)
+          print("1) GET (no date)")
+          print("=" * 52)
+          r = s.get(BASE, timeout=20)
+          print(f"Status: {r.status_code}  Size: {len(r.text):,} chars")
+          print(f"Final URL: {r.url}")
+          print("--- First 800 chars ---")
+          print(r.text[:800])
+
+          # ── 2. Form analysis ───────────────────────────────────
+          print("\n" + "=" * 52)
+          print("2) Form actions + hidden inputs")
+          print("=" * 52)
+          forms = re.findall(r'<form[^>]*>(.*?)</form>', r.text, re.S | re.I)
+          if forms:
+              for i, body in enumerate(forms[:5]):
+                  action = re.search(r'action=["\']([^"\']+)["\']', body, re.I)
+                  print(f"[Form {i+1}] action={action.group(1) if action else '(none)'}")
+                  for inp in re.findall(r'<input[^>]+>', body, re.I)[:8]:
+                      print(f"  {inp[:160]}")
+          else:
+              print("(no <form> tags found)")
+
+          # ── 3. API / XHR patterns in page source ──────────────
+          print("\n" + "=" * 52)
+          print("3) API / XHR patterns in page source")
+          print("=" * 52)
+          for hit in re.findall(r'(?:fetch|axios|XMLHttpRequest|\.get\s*\(|\.post\s*\()\([^)]{0,200}', r.text)[:10]:
+              print(" XHR:", hit.strip()[:160])
+          for p in set(re.findall(r'["\']/((?:api|rest|services|mpf|data)[^"\'<>\s]{3,80})["\']', r.text)):
+              print(" PATH:", p)
+
+          # ── 4. Script tags ─────────────────────────────────────
+          print("\n" + "=" * 52)
+          print("4) External <script> tags")
+          print("=" * 52)
+          for sc in re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', r.text, re.I)[:10]:
+              print(" ", sc)
+
+          # ── 5. Price data scan ─────────────────────────────────
+          print("\n" + "=" * 52)
+          print("5) Price data scan")
+          print("=" * 52)
+          prices = re.findall(r'\d+\.\d{4}', r.text)
+          print(f"4-decimal numbers: {len(prices)}", prices[:8] if prices else "")
+          print(f"<table> tags: {len(re.findall(r'<table', r.text, re.I))}")
+          kws = re.findall(r'(?:equity|bond|balanced|growth|stable|MPF|保守|增長|穩健|均衡)', r.text, re.I)
+          print(f"Fund keywords: {len(kws)}")
+
+          # ── 6. POST with date params ───────────────────────────
+          print("\n" + "=" * 52)
+          print("6) POST with date parameters")
+          print("=" * 52)
+          for params in [
+              {"date": "2026-04-09"},
+              {"date": "09/04/2026"},
+              {"month": "04", "year": "2026"},
+              {"priceDate": "2026-04-09"},
+              {"selectedDate": "09-04-2026"},
+          ]:
+              try:
+                  r2 = s.post(BASE, data=params, timeout=15)
+                  diff = r2.text[:300] != r.text[:300]
+                  print(f"  POST {params} -> {r2.status_code} size={len(r2.text):,} {'** DIFFERENT **' if diff else '(same as GET)'}")
+                  if diff:
+                      print("  ---", r2.text[:500])
+              except Exception as e:
+                  print(f"  POST {params} -> ERROR: {e}")
+
+          # ── 7. GET with date query params ──────────────────────
+          print("\n" + "=" * 52)
+          print("7) GET with date query params")
+          print("=" * 52)
+          for qp in [
+              "?date=2026-04-09",
+              "?date=09%2F04%2F2026",
+              "?priceDate=2026-04-09",
+              "?month=04&year=2026",
+              "?lang=zh-HK&date=2026-04-09",
+          ]:
+              try:
+                  r3 = s.get(BASE + qp, timeout=15)
+                  diff = r3.text[:300] != r.text[:300]
+                  print(f"  GET {qp} -> {r3.status_code} size={len(r3.text):,} {'** DIFFERENT **' if diff else '(same)'}")
+              except Exception as e:
+                  print(f"  GET {qp} -> ERROR: {e}")
+          PYEOF
+
       - name: Analyse MPFA app API endpoints
         run: |
           UA="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"

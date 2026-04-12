@@ -102,7 +102,8 @@ jobs:
           print("=" * 56)
           vs = re.search(r'__VIEWSTATE[^>]*value="([^"]{0,60})', html)
           ev = re.search(r'__EVENTVALIDATION[^>]*value="([^"]{0,60})', html)
-          print(f"__VIEWSTATE      : {'found ('+vs.group(1)[:30]+"...")' if vs else 'NOT found'}")
+          vs_val = ("found (" + vs.group(1)[:30] + "...)") if vs else "NOT found"
+          print(f"__VIEWSTATE      : {vs_val}")
           print(f"__EVENTVALIDATION: {'found' if ev else 'NOT found'}")
           forms = re.findall(r'<form[^>]*action=["\']([^"\']+)["\']', html, re.I)
           print(f"Form actions     : {forms}")

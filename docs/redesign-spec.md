@@ -257,3 +257,57 @@
 - [ ] 6. 新增底部圖例（第 4.6 節）
 - [ ] 7. 加入進度條載入動畫（第 5 節）
 - [ ] 8. 響應式驗證（第 6 節）
+
+---
+
+## v2 — Racing Theme（賽馬主題 UI）
+
+### 主題概念
+
+以「賽馬場」視覺語言重構整個頁面，深色模式為核心，霓虹漸層色為強調，讓基金回報排名如同賽馬直播般即時、緊張。
+
+### Design Tokens
+
+| Token | 值 |
+|-------|----|
+| 頁面主背景 | `#0a0f14` |
+| 卡片背景 | `#0f1720` |
+| 深卡片背景 | `#1a2430` |
+| 邊框 | `rgba(148,163,184,0.08)` |
+| 主文字 | `#e6edf3` |
+| 次要文字 | `#b4c0cc` |
+| 輔助文字 | `#7d8a97` |
+| Tier Lead | `#4ade80`（進度條漸層 `#14532d→#22c55e→#86efac`） |
+| Tier Mid | `#22d3ee`（進度條漸層 `#0e7490→#22d3ee→#a5f3fc`） |
+| Tier Mild | `#60a5fa`（進度條漸層 `#1e3a8a→#3b82f6`） |
+| Tier Down | `#f87171`（進度條漸層 `#7f1d1d→#ef4444`） |
+| 金牌 | `radial-gradient(circle at 30% 30%, #fde047, #ca8a04)` + glow |
+| 銀牌 | `linear-gradient(135deg, #e5e7eb, #9ca3af)` |
+| 銅牌 | `linear-gradient(135deg, #fdba74, #c2410c)` |
+| 圓角（卡片） | `12px` |
+| 圓角（區塊） | `16px` |
+| 圓角（chip） | `20px` |
+| 數字排版 | `font-variant-numeric: tabular-nums` |
+
+### Component 樹（`src/components/racing/`）
+
+| 檔案 | 職責 |
+|------|------|
+| `RankBadge.tsx` | 圓形排名徽章，1–3 名獎牌色，其餘深灰 |
+| `ReturnBadge.tsx` | 回報百分比文字，顏色依 Tier |
+| `HeroHeader.tsx` | 漸層標題、副標、MPFA 狀態點、更新時間 |
+| `RankBar.tsx` | 單行進度條：排名 + 名稱 + 受託人 + 進度條 + 回報 |
+| `LeaderPack.tsx` | Top 5 卡片區塊，標題「今季領先集團」 |
+| `StatCards.tsx` | 3 格統計卡：頭馬回報、升跌比、全場平均 |
+| `CategoryTabs.tsx` | 類別 chip 篩選，選中 chip 有霓虹 glow |
+| `ReturnLegend.tsx` | 四段 Tier 色塊圖例 |
+| `PeriodSelector.tsx` | 7 個時段 chip（1週/1月/3月/6月/1年/3年/5年） |
+| `FundList.tsx` | `@tanstack/react-virtual` 虛擬化列表，高度 600px |
+
+### 互動規格
+
+- **Period 切換**：`useState<Period>`，client-side sort，無網絡請求
+- **Category filter**：`useState<string>`，client-side filter
+- **FundList**：`useVirtualizer`，`estimateSize: 90px`，`overscan: 5`
+- **數據源**：server component (`page.tsx`) 讀取 `data/funds.json`，以 props 傳入 client component
+- **進度條寬度**：`max(returnPct / maxReturn * 100, 2)`（下限 2% 避免零長度）

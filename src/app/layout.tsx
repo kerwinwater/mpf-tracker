@@ -30,7 +30,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="theme-color" content="#0f1117" />
       </head>
-      <body className="min-h-screen" style={{ backgroundColor: "#0f1117" }}>
+      <body className="min-h-screen" style={{ backgroundColor: "#0a0f14", color: "#e6edf3" }}>
         {children}
       </body>
     </html>

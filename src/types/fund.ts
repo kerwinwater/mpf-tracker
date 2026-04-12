@@ -3,42 +3,41 @@
  */
 
 /** 基金回報數據（百分比） */
-export interface FundReturns {
-  oneYear:     number;   // 1 年回報
-  sixMonths:   number;   // 6 個月回報
-  threeMonths: number;   // 3 個月回報
+export type FundReturns = {
+  oneWeek:     number;   // 1 週回報
   oneMonth:    number;   // 1 個月回報
-  ytd:         number;   // 本年迄今回報
-}
+  threeMonths: number;   // 3 個月回報
+  sixMonths:   number;   // 6 個月回報
+  oneYear:     number;   // 1 年回報
+  threeYears:  number;   // 3 年回報
+  fiveYears:   number;   // 5 年回報
+};
+
+export type Period = keyof FundReturns;
 
 /** 單個 MPF 基金 */
-export interface Fund {
-  id:           string;
-  name:         string;        // 基金名稱（繁體中文）
-  provider:     string;        // 受託人
-  category:     string;        // 基金類別
-  price:        number;        // 單位價格（NAV）
-  expenseRatio: number;        // 開支比率（%）
-  returns:      FundReturns;
-}
+export type Fund = {
+  id:         string;
+  name:       string;        // 基金名稱（繁體中文）
+  provider:   string;        // 受託人
+  category:   string;        // 基金類別
+  riskLevel:  number;        // 風險等級 1-5
+  nav:        number;        // 單位資產淨值
+  currency:   string;        // "HKD"
+  fundSize:   number;        // 基金規模
+  launchYear: number;        // 成立年份
+  returns:    FundReturns;
+};
 
 /** 數據檔案結構 */
 export interface FundsData {
   lastUpdated:    string;      // ISO 8601 格式時間戳
   lastUpdatedHKT: string;
-  dataSource:     string;      // "aastocks"
+  dataSource:     string;
   note:           string;
   totalFunds:     number;
   funds:          Fund[];
 }
-
-/** 排序時段選項 */
-export type SortPeriod =
-  | "ytd"
-  | "oneYear"
-  | "sixMonths"
-  | "threeMonths"
-  | "oneMonth";
 
 /** 基金類別 */
 export const FUND_CATEGORIES = [
@@ -53,10 +52,12 @@ export const FUND_CATEGORIES = [
 ] as const;
 
 /** 時段標籤對照 */
-export const PERIOD_LABELS: Record<SortPeriod, string> = {
-  ytd:         "本年迄今",
-  oneYear:     "1年",
-  sixMonths:   "6個月",
-  threeMonths: "3個月",
+export const PERIOD_LABELS: Record<Period, string> = {
+  oneWeek:     "1週",
   oneMonth:    "1個月",
+  threeMonths: "3個月",
+  sixMonths:   "6個月",
+  oneYear:     "1年",
+  threeYears:  "3年",
+  fiveYears:   "5年",
 };

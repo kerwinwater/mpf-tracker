@@ -1,12 +1,27 @@
 {
-  "lastUpdated": "2026-10-02T00:42:46.045567+08:00",
-  "lastUpdatedHKT": "2026-10-02 00:42 HKT",
+  "lastUpdated": "2026-10-02T23:58:55.570611+08:00",
+  "lastUpdatedHKT": "2026-10-02 23:58 HKT",
   "totalFunds": 32,
   "dataSource": "aastocks",
   "note": "aastocks.com/tc/mpf — 數據轉載自積金局",
   "funds": [
     {
       "id": "aa_0001",
+      "name": "博雷頓",
+      "provider": "",
+      "category": "20.000 博雷頓 (01333.HK)",
+      "price": 3.88,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 24.069,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0002",
       "name": "善水科技",
       "provider": "",
       "category": "35.930 善水科技 (301190.SZ)",
@@ -21,7 +36,7 @@
       }
     },
     {
-      "id": "aa_0002",
+      "id": "aa_0003",
       "name": "康希諾",
       "provider": "",
       "category": "102.640 康希諾 (688185.SH)",
@@ -29,21 +44,6 @@
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 20.005,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0003",
-      "name": "深演智能",
-      "provider": "",
-      "category": "582.500 深演智能 (02723.HK)",
-      "price": 97.1,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 20.004,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -67,13 +67,13 @@
     },
     {
       "id": "aa_0005",
-      "name": "康希諾生物",
+      "name": "深演智能",
       "provider": "",
-      "category": "36.540",
-      "price": 5.44,
+      "category": "696.500",
+      "price": 114.0,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 17.492,
+        "oneYear": 19.571,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -82,13 +82,13 @@
     },
     {
       "id": "aa_0006",
-      "name": "昭衍新藥",
+      "name": "偉祿科技股份－舊",
       "provider": "",
-      "category": "30.800",
-      "price": 4.16,
+      "category": "3.435",
+      "price": 0.515,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 15.616,
+        "oneYear": 17.637,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -97,6 +97,21 @@
     },
     {
       "id": "aa_0007",
+      "name": "偉祿科技股份－新",
+      "provider": "",
+      "category": "3.500",
+      "price": 0.52,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 17.45,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0008",
       "name": "百普賽斯",
       "provider": "",
       "category": "141.070",
@@ -111,7 +126,7 @@
       }
     },
     {
-      "id": "aa_0008",
+      "id": "aa_0009",
       "name": "中紅醫療",
       "provider": "",
       "category": "20.300",
@@ -126,29 +141,14 @@
       }
     },
     {
-      "id": "aa_0009",
-      "name": "博雷頓",
-      "provider": "",
-      "category": "16.120",
-      "price": 1.77,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 12.334,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
       "id": "aa_0010",
-      "name": "劑泰科技－Ｐ",
+      "name": "中環新能源",
       "provider": "",
-      "category": "17.850",
-      "price": 1.86,
+      "category": "13.360",
+      "price": 1.51,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 11.632,
+        "oneYear": 12.743,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -157,21 +157,6 @@
     },
     {
       "id": "aa_0011",
-      "name": "勁方醫藥－Ｂ",
-      "provider": "",
-      "category": "33.000",
-      "price": 3.42,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 11.562,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0012",
       "name": "儒競科技",
       "provider": "",
       "category": "43.250",
@@ -186,7 +171,7 @@
       }
     },
     {
-      "id": "aa_0013",
+      "id": "aa_0012",
       "name": "鍵凱科技",
       "provider": "",
       "category": "106.410",
@@ -201,7 +186,7 @@
       }
     },
     {
-      "id": "aa_0014",
+      "id": "aa_0013",
       "name": "義翹神州",
       "provider": "",
       "category": "159.000",
@@ -216,22 +201,7 @@
       }
     },
     {
-      "id": "aa_0015",
-      "name": "今海醫療科技",
-      "provider": "",
-      "category": "4.850",
-      "price": 0.455,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.353,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0016",
+      "id": "aa_0014",
       "name": "江南化工",
       "provider": "",
       "category": "5.340",
@@ -246,22 +216,7 @@
       }
     },
     {
-      "id": "aa_0017",
-      "name": "恆瑞醫藥",
-      "provider": "",
-      "category": "50.200",
-      "price": 4.6,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.088,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0018",
+      "id": "aa_0015",
       "name": "古越龍山",
       "provider": "",
       "category": "12.270",
@@ -276,7 +231,7 @@
       }
     },
     {
-      "id": "aa_0019",
+      "id": "aa_0016",
       "name": "寧波東力",
       "provider": "",
       "category": "13.260",
@@ -291,7 +246,7 @@
       }
     },
     {
-      "id": "aa_0020",
+      "id": "aa_0017",
       "name": "九陽股份",
       "provider": "",
       "category": "12.500",
@@ -306,7 +261,7 @@
       }
     },
     {
-      "id": "aa_0021",
+      "id": "aa_0018",
       "name": "傳藝科技",
       "provider": "",
       "category": "16.900",
@@ -321,7 +276,7 @@
       }
     },
     {
-      "id": "aa_0022",
+      "id": "aa_0019",
       "name": "杭州熱電",
       "provider": "",
       "category": "19.210",
@@ -336,7 +291,7 @@
       }
     },
     {
-      "id": "aa_0023",
+      "id": "aa_0020",
       "name": "弘元綠能",
       "provider": "",
       "category": "15.150",
@@ -351,7 +306,7 @@
       }
     },
     {
-      "id": "aa_0024",
+      "id": "aa_0021",
       "name": "海南橡膠",
       "provider": "",
       "category": "6.370",
@@ -366,7 +321,7 @@
       }
     },
     {
-      "id": "aa_0025",
+      "id": "aa_0022",
       "name": "陸家嘴",
       "provider": "",
       "category": "10.110",
@@ -381,7 +336,7 @@
       }
     },
     {
-      "id": "aa_0026",
+      "id": "aa_0023",
       "name": "上海洗霸",
       "provider": "",
       "category": "44.740",
@@ -396,7 +351,7 @@
       }
     },
     {
-      "id": "aa_0027",
+      "id": "aa_0024",
       "name": "國網信通",
       "provider": "",
       "category": "15.390",
@@ -411,7 +366,7 @@
       }
     },
     {
-      "id": "aa_0028",
+      "id": "aa_0025",
       "name": "美諾華",
       "provider": "",
       "category": "28.590",
@@ -426,14 +381,59 @@
       }
     },
     {
-      "id": "aa_0029",
-      "name": "英矽智能",
+      "id": "aa_0026",
+      "name": "ASMPT",
       "provider": "",
-      "category": "60.100",
+      "category": "173.000",
+      "price": 13.0,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 8.125,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0027",
+      "name": "量化派",
+      "provider": "",
+      "category": "3.800",
+      "price": 0.275,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 7.801,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0028",
+      "name": "中科聞歌（五十）",
+      "provider": "",
+      "category": "68.550",
       "price": 4.7,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 8.484,
+        "oneYear": 7.361,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0029",
+      "name": "健康１６０",
+      "provider": "",
+      "category": "3.740",
+      "price": 0.25,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 7.163,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -442,13 +442,13 @@
     },
     {
       "id": "aa_0030",
-      "name": "金斯瑞生物科技",
+      "name": "真健康醫療－Ｂ",
       "provider": "",
-      "category": "44.860",
-      "price": 3.46,
+      "category": "279.600",
+      "price": 17.6,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 8.357,
+        "oneYear": 6.718,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,

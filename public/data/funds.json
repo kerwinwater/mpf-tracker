@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-10-02T23:58:55.570611+08:00",
-  "lastUpdatedHKT": "2026-10-02 23:58 HKT",
+  "lastUpdated": "2026-10-06T02:52:33.954942+08:00",
+  "lastUpdatedHKT": "2026-10-06 02:52 HKT",
   "totalFunds": 32,
   "dataSource": "aastocks",
   "note": "aastocks.com/tc/mpf — 數據轉載自積金局",
   "funds": [
     {
       "id": "aa_0001",
-      "name": "博雷頓",
+      "name": "傅里葉",
       "provider": "",
-      "category": "20.000 博雷頓 (01333.HK)",
-      "price": 3.88,
+      "category": "59.500 傅里葉 (03625.HK)",
+      "price": 11.0,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 24.069,
+        "oneYear": 22.68,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -67,13 +67,13 @@
     },
     {
       "id": "aa_0005",
-      "name": "深演智能",
+      "name": "凱樂士科技",
       "provider": "",
-      "category": "696.500",
-      "price": 114.0,
+      "category": "23.500",
+      "price": 3.06,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 19.571,
+        "oneYear": 14.971,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -82,36 +82,6 @@
     },
     {
       "id": "aa_0006",
-      "name": "偉祿科技股份－舊",
-      "provider": "",
-      "category": "3.435",
-      "price": 0.515,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 17.637,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0007",
-      "name": "偉祿科技股份－新",
-      "provider": "",
-      "category": "3.500",
-      "price": 0.52,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 17.45,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0008",
       "name": "百普賽斯",
       "provider": "",
       "category": "141.070",
@@ -126,7 +96,7 @@
       }
     },
     {
-      "id": "aa_0009",
+      "id": "aa_0007",
       "name": "中紅醫療",
       "provider": "",
       "category": "20.300",
@@ -141,14 +111,44 @@
       }
     },
     {
-      "id": "aa_0010",
-      "name": "中環新能源",
+      "id": "aa_0008",
+      "name": "亮晴控股",
       "provider": "",
-      "category": "13.360",
-      "price": 1.51,
+      "category": "30.000",
+      "price": 3.4,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 12.743,
+        "oneYear": 12.782,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0009",
+      "name": "偉祿科技股份－新",
+      "provider": "",
+      "category": "3.940",
+      "price": 0.44,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 12.571,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0010",
+      "name": "建滔積層板",
+      "provider": "",
+      "category": "55.300",
+      "price": 5.9,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 11.943,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -382,13 +382,13 @@
     },
     {
       "id": "aa_0026",
-      "name": "ASMPT",
+      "name": "景旺電子",
       "provider": "",
-      "category": "173.000",
-      "price": 13.0,
+      "category": "81.250",
+      "price": 6.85,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 8.125,
+        "oneYear": 9.207,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -397,10 +397,25 @@
     },
     {
       "id": "aa_0027",
-      "name": "量化派",
+      "name": "建滔集團",
       "provider": "",
-      "category": "3.800",
-      "price": 0.275,
+      "category": "61.550",
+      "price": 4.75,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 8.363,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0028",
+      "name": "劍橋科技",
+      "provider": "",
+      "category": "121.600",
+      "price": 8.8,
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 7.801,
@@ -411,29 +426,14 @@
       }
     },
     {
-      "id": "aa_0028",
-      "name": "中科聞歌（五十）",
-      "provider": "",
-      "category": "68.550",
-      "price": 4.7,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 7.361,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
       "id": "aa_0029",
-      "name": "健康１６０",
+      "name": "偉祿科技股份－舊",
       "provider": "",
-      "category": "3.740",
-      "price": 0.25,
+      "category": "3.700",
+      "price": 0.265,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.163,
+        "oneYear": 7.715,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -442,13 +442,13 @@
     },
     {
       "id": "aa_0030",
-      "name": "真健康醫療－Ｂ",
+      "name": "深演智能",
       "provider": "",
-      "category": "279.600",
-      "price": 17.6,
+      "category": "747.000",
+      "price": 50.5,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 6.718,
+        "oneYear": 7.251,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,

@@ -1,27 +1,12 @@
 {
-  "lastUpdated": "2026-10-06T02:52:33.954942+08:00",
-  "lastUpdatedHKT": "2026-10-06 02:52 HKT",
+  "lastUpdated": "2026-10-07T00:18:00.654142+08:00",
+  "lastUpdatedHKT": "2026-10-07 00:18 HKT",
   "totalFunds": 32,
   "dataSource": "aastocks",
   "note": "aastocks.com/tc/mpf — 數據轉載自積金局",
   "funds": [
     {
       "id": "aa_0001",
-      "name": "傅里葉",
-      "provider": "",
-      "category": "59.500 傅里葉 (03625.HK)",
-      "price": 11.0,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 22.68,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0002",
       "name": "善水科技",
       "provider": "",
       "category": "35.930 善水科技 (301190.SZ)",
@@ -36,7 +21,7 @@
       }
     },
     {
-      "id": "aa_0003",
+      "id": "aa_0002",
       "name": "康希諾",
       "provider": "",
       "category": "102.640 康希諾 (688185.SH)",
@@ -51,7 +36,7 @@
       }
     },
     {
-      "id": "aa_0004",
+      "id": "aa_0003",
       "name": "松原安全",
       "provider": "",
       "category": "15.130",
@@ -66,14 +51,29 @@
       }
     },
     {
-      "id": "aa_0005",
-      "name": "凱樂士科技",
+      "id": "aa_0004",
+      "name": "白鴿在線",
       "provider": "",
-      "category": "23.500",
-      "price": 3.06,
+      "category": "64.800 白鴿在線 (02672.HK)",
+      "price": 8.8,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 14.971,
+        "oneYear": 15.714,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0005",
+      "name": "百普賽斯",
+      "provider": "",
+      "category": "141.070",
+      "price": 18.07,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 14.691,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -82,13 +82,13 @@
     },
     {
       "id": "aa_0006",
-      "name": "百普賽斯",
+      "name": "康希諾生物",
       "provider": "",
-      "category": "141.070",
-      "price": 18.07,
+      "category": "40.600",
+      "price": 5.0,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 14.691,
+        "oneYear": 14.045,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -112,13 +112,13 @@
     },
     {
       "id": "aa_0008",
-      "name": "亮晴控股",
+      "name": "偉祿科技股份－舊",
       "provider": "",
-      "category": "30.000",
-      "price": 3.4,
+      "category": "4.150",
+      "price": 0.45,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 12.782,
+        "oneYear": 12.162,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -127,13 +127,13 @@
     },
     {
       "id": "aa_0009",
-      "name": "偉祿科技股份－新",
+      "name": "歌禮製藥－Ｂ",
       "provider": "",
-      "category": "3.940",
-      "price": 0.44,
+      "category": "9.115",
+      "price": 0.965,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 12.571,
+        "oneYear": 11.84,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -142,13 +142,13 @@
     },
     {
       "id": "aa_0010",
-      "name": "建滔積層板",
+      "name": "百奧賽圖－Ｂ",
       "provider": "",
-      "category": "55.300",
-      "price": 5.9,
+      "category": "79.700",
+      "price": 8.2,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 11.943,
+        "oneYear": 11.469,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -172,6 +172,21 @@
     },
     {
       "id": "aa_0012",
+      "name": "首鋼朗澤",
+      "provider": "",
+      "category": "12.450",
+      "price": 1.25,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 11.161,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0013",
       "name": "鍵凱科技",
       "provider": "",
       "category": "106.410",
@@ -186,7 +201,7 @@
       }
     },
     {
-      "id": "aa_0013",
+      "id": "aa_0014",
       "name": "義翹神州",
       "provider": "",
       "category": "159.000",
@@ -201,7 +216,7 @@
       }
     },
     {
-      "id": "aa_0014",
+      "id": "aa_0015",
       "name": "江南化工",
       "provider": "",
       "category": "5.340",
@@ -216,7 +231,7 @@
       }
     },
     {
-      "id": "aa_0015",
+      "id": "aa_0016",
       "name": "古越龍山",
       "provider": "",
       "category": "12.270",
@@ -231,7 +246,7 @@
       }
     },
     {
-      "id": "aa_0016",
+      "id": "aa_0017",
       "name": "寧波東力",
       "provider": "",
       "category": "13.260",
@@ -246,7 +261,7 @@
       }
     },
     {
-      "id": "aa_0017",
+      "id": "aa_0018",
       "name": "九陽股份",
       "provider": "",
       "category": "12.500",
@@ -261,7 +276,7 @@
       }
     },
     {
-      "id": "aa_0018",
+      "id": "aa_0019",
       "name": "傳藝科技",
       "provider": "",
       "category": "16.900",
@@ -276,7 +291,7 @@
       }
     },
     {
-      "id": "aa_0019",
+      "id": "aa_0020",
       "name": "杭州熱電",
       "provider": "",
       "category": "19.210",
@@ -291,7 +306,7 @@
       }
     },
     {
-      "id": "aa_0020",
+      "id": "aa_0021",
       "name": "弘元綠能",
       "provider": "",
       "category": "15.150",
@@ -306,7 +321,7 @@
       }
     },
     {
-      "id": "aa_0021",
+      "id": "aa_0022",
       "name": "海南橡膠",
       "provider": "",
       "category": "6.370",
@@ -321,7 +336,7 @@
       }
     },
     {
-      "id": "aa_0022",
+      "id": "aa_0023",
       "name": "陸家嘴",
       "provider": "",
       "category": "10.110",
@@ -336,7 +351,7 @@
       }
     },
     {
-      "id": "aa_0023",
+      "id": "aa_0024",
       "name": "上海洗霸",
       "provider": "",
       "category": "44.740",
@@ -351,7 +366,7 @@
       }
     },
     {
-      "id": "aa_0024",
+      "id": "aa_0025",
       "name": "國網信通",
       "provider": "",
       "category": "15.390",
@@ -366,7 +381,7 @@
       }
     },
     {
-      "id": "aa_0025",
+      "id": "aa_0026",
       "name": "美諾華",
       "provider": "",
       "category": "28.590",
@@ -381,29 +396,14 @@
       }
     },
     {
-      "id": "aa_0026",
-      "name": "景旺電子",
-      "provider": "",
-      "category": "81.250",
-      "price": 6.85,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 9.207,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
       "id": "aa_0027",
-      "name": "建滔集團",
+      "name": "亞盛醫藥",
       "provider": "",
-      "category": "61.550",
-      "price": 4.75,
+      "category": "30.780",
+      "price": 2.74,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 8.363,
+        "oneYear": 9.772,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -412,13 +412,13 @@
     },
     {
       "id": "aa_0028",
-      "name": "劍橋科技",
+      "name": "再鼎醫藥",
       "provider": "",
-      "category": "121.600",
-      "price": 8.8,
+      "category": "20.800",
+      "price": 1.73,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.801,
+        "oneYear": 9.072,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -427,13 +427,13 @@
     },
     {
       "id": "aa_0029",
-      "name": "偉祿科技股份－舊",
+      "name": "奇瑞汽車",
       "provider": "",
-      "category": "3.700",
-      "price": 0.265,
+      "category": "26.340",
+      "price": 1.94,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.715,
+        "oneYear": 7.951,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -442,13 +442,13 @@
     },
     {
       "id": "aa_0030",
-      "name": "深演智能",
+      "name": "金斯瑞生物科技",
       "provider": "",
-      "category": "747.000",
-      "price": 50.5,
+      "category": "49.140",
+      "price": 3.5,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.251,
+        "oneYear": 7.669,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,

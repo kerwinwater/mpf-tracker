@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-10-14T01:10:35.415951+08:00",
-  "lastUpdatedHKT": "2026-10-14 01:10 HKT",
+  "lastUpdated": "2026-10-14T22:43:25.654073+08:00",
+  "lastUpdatedHKT": "2026-10-14 22:43 HKT",
   "totalFunds": 32,
   "dataSource": "aastocks",
   "note": "aastocks.com/tc/mpf — 數據轉載自積金局",
   "funds": [
     {
       "id": "aa_0001",
-      "name": "建新股份",
+      "name": "溜溜梅",
       "provider": "",
-      "category": "8.630 建新股份 (300107.SZ)",
-      "price": 1.44,
+      "category": "155.100 溜溜梅 (06658.HK)",
+      "price": 27.8,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 20.028,
+        "oneYear": 21.838,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -22,13 +22,13 @@
     },
     {
       "id": "aa_0002",
-      "name": "西普尼",
+      "name": "萊美藥業",
       "provider": "",
-      "category": "52.500 西普尼 (02583.HK)",
-      "price": 7.66,
+      "category": "7.900 萊美藥業 (300006.SZ)",
+      "price": 1.32,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 17.083,
+        "oneYear": 20.061,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -37,13 +37,13 @@
     },
     {
       "id": "aa_0003",
-      "name": "光智科技",
+      "name": "滿坤科技",
       "provider": "",
-      "category": "301.220",
-      "price": 37.16,
+      "category": "75.000",
+      "price": 11.61,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 14.073,
+        "oneYear": 18.315,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -52,13 +52,13 @@
     },
     {
       "id": "aa_0004",
-      "name": "金沃股份",
+      "name": "博泰車聯",
       "provider": "",
-      "category": "35.160",
-      "price": 4.28,
+      "category": "62.050",
+      "price": 7.85,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 13.86,
+        "oneYear": 14.483,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -67,13 +67,13 @@
     },
     {
       "id": "aa_0005",
-      "name": "凱倫股份",
+      "name": "樂鑫科技",
       "provider": "",
-      "category": "15.520",
-      "price": 1.84,
+      "category": "122.460 樂鑫科技 (688018.SH)",
+      "price": 15.04,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 13.45,
+        "oneYear": 14.001,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -82,13 +82,13 @@
     },
     {
       "id": "aa_0006",
-      "name": "國科軍工",
+      "name": "邁信林",
       "provider": "",
-      "category": "43.660 國科軍工 (688543.SH)",
-      "price": 4.76,
+      "category": "39.120",
+      "price": 4.3,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 12.237,
+        "oneYear": 12.349,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -97,13 +97,13 @@
     },
     {
       "id": "aa_0007",
-      "name": "本川智能",
+      "name": "久之洋",
       "provider": "",
-      "category": "84.000",
-      "price": 8.38,
+      "category": "36.930",
+      "price": 3.93,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 11.082,
+        "oneYear": 11.909,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -112,13 +112,13 @@
     },
     {
       "id": "aa_0008",
-      "name": "滿坤科技",
+      "name": "中恆集團",
       "provider": "",
-      "category": "63.390",
-      "price": 6.25,
+      "category": "2.480",
+      "price": 0.23,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.938,
+        "oneYear": 10.222,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -127,100 +127,10 @@
     },
     {
       "id": "aa_0009",
-      "name": "江龍船艇",
+      "name": "電魂網絡",
       "provider": "",
-      "category": "14.080",
-      "price": 1.29,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.086,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0010",
-      "name": "凱美特氣",
-      "provider": "",
-      "category": "14.250",
-      "price": 1.3,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.039,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0011",
-      "name": "雪人集團",
-      "provider": "",
-      "category": "14.590",
-      "price": 1.33,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.03,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0012",
-      "name": "天府文旅",
-      "provider": "",
-      "category": "3.840",
-      "price": 0.35,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.029,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0013",
-      "name": "東百集團",
-      "provider": "",
-      "category": "12.300",
-      "price": 1.12,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.018,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0014",
-      "name": "和順石油",
-      "provider": "",
-      "category": "37.900",
-      "price": 3.45,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.015,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0015",
-      "name": "航發科技",
-      "provider": "",
-      "category": "38.780",
-      "price": 3.53,
+      "category": "16.150",
+      "price": 1.47,
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 10.014,
@@ -231,14 +141,14 @@
       }
     },
     {
-      "id": "aa_0016",
-      "name": "中馬傳動",
+      "id": "aa_0010",
+      "name": "松霖科技",
       "provider": "",
-      "category": "15.720",
-      "price": 1.43,
+      "category": "24.610",
+      "price": 2.24,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.007,
+        "oneYear": 10.013,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -246,11 +156,11 @@
       }
     },
     {
-      "id": "aa_0017",
-      "name": "長白山",
+      "id": "aa_0011",
+      "name": "航發科技",
       "provider": "",
-      "category": "45.850",
-      "price": 4.17,
+      "category": "42.660",
+      "price": 3.88,
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 10.005,
@@ -261,14 +171,104 @@
       }
     },
     {
-      "id": "aa_0018",
-      "name": "大連聖亞",
+      "id": "aa_0012",
+      "name": "掌閱科技",
       "provider": "",
-      "category": "49.830",
-      "price": 4.53,
+      "category": "29.920",
+      "price": 2.72,
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0013",
+      "name": "韶能股份",
+      "provider": "",
+      "category": "6.820",
+      "price": 0.62,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0014",
+      "name": "超聲電子",
+      "provider": "",
+      "category": "24.550",
+      "price": 2.23,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.991,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0015",
+      "name": "引力傳媒",
+      "provider": "",
+      "category": "21.910",
+      "price": 1.99,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.99,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0016",
+      "name": "寶鼎科技",
+      "provider": "",
+      "category": "45.800",
+      "price": 4.16,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.99,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0017",
+      "name": "中國科傳",
+      "provider": "",
+      "category": "26.110",
+      "price": 2.37,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.983,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0018",
+      "name": "新華文軒",
+      "provider": "",
+      "category": "23.250",
+      "price": 2.11,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.981,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -277,13 +277,13 @@
     },
     {
       "id": "aa_0019",
-      "name": "海欣股份",
+      "name": "七 匹 狼",
       "provider": "",
-      "category": "9.460",
-      "price": 0.86,
+      "category": "10.580",
+      "price": 0.96,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.0,
+        "oneYear": 9.979,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -292,13 +292,13 @@
     },
     {
       "id": "aa_0020",
-      "name": "龍版傳媒",
+      "name": "三維化學",
       "provider": "",
-      "category": "19.600",
-      "price": 1.78,
+      "category": "6.860",
+      "price": 0.62,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.989,
+        "oneYear": 9.936,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -307,13 +307,13 @@
     },
     {
       "id": "aa_0021",
-      "name": "銅峰電子",
+      "name": "亞香股份",
       "provider": "",
-      "category": "9.030",
-      "price": 0.82,
+      "category": "33.100",
+      "price": 2.99,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.988,
+        "oneYear": 9.93,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -322,13 +322,13 @@
     },
     {
       "id": "aa_0022",
-      "name": "中國東方教育",
+      "name": "天數智芯",
       "provider": "",
-      "category": "4.075",
-      "price": 0.365,
+      "category": "92.400",
+      "price": 7.5,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.838,
+        "oneYear": 8.834,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -337,13 +337,13 @@
     },
     {
       "id": "aa_0023",
-      "name": "裕元集團",
+      "name": "英派藥業－Ｂ",
       "provider": "",
-      "category": "13.880",
-      "price": 0.9,
+      "category": "13.320",
+      "price": 1.04,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 6.934,
+        "oneYear": 8.469,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -352,13 +352,13 @@
     },
     {
       "id": "aa_0024",
-      "name": "先健科技",
+      "name": "中紅醫療",
       "provider": "",
-      "category": "1.515",
-      "price": 0.095,
+      "category": "23.000",
+      "price": 1.67,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 6.69,
+        "oneYear": 7.829,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -367,13 +367,13 @@
     },
     {
       "id": "aa_0025",
-      "name": "首鋼朗澤",
+      "name": "華潤建材科技",
       "provider": "",
-      "category": "14.700",
-      "price": 0.83,
+      "category": "1.035",
+      "price": 0.075,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 5.984,
+        "oneYear": 7.813,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -382,13 +382,13 @@
     },
     {
       "id": "aa_0026",
-      "name": "海光芯正",
+      "name": "亮晴控股",
       "provider": "",
-      "category": "107.100",
-      "price": 5.4,
+      "category": "29.400",
+      "price": 2.12,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 5.31,
+        "oneYear": 7.771,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -397,13 +397,13 @@
     },
     {
       "id": "aa_0027",
-      "name": "金蝶國際",
+      "name": "海西新藥",
       "provider": "",
-      "category": "8.525",
-      "price": 0.42,
+      "category": "165.100",
+      "price": 11.2,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 5.182,
+        "oneYear": 7.277,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -412,13 +412,13 @@
     },
     {
       "id": "aa_0028",
-      "name": "雲鋒金融",
+      "name": "創維集團",
       "provider": "",
-      "category": "2.155",
-      "price": 0.105,
+      "category": "3.245",
+      "price": 0.215,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 5.122,
+        "oneYear": 7.096,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -427,13 +427,13 @@
     },
     {
       "id": "aa_0029",
-      "name": "春立醫療",
+      "name": "美團－Ｗ",
       "provider": "",
-      "category": "7.490",
-      "price": 0.355,
+      "category": "77.100",
+      "price": 4.8,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 4.975,
+        "oneYear": 6.639,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -442,13 +442,13 @@
     },
     {
       "id": "aa_0030",
-      "name": "華潤建材科技",
+      "name": "天星醫療",
       "provider": "",
-      "category": "0.960",
-      "price": 0.045,
+      "category": "67.200",
+      "price": 3.75,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 4.918,
+        "oneYear": 5.91,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -472,7 +472,7 @@
     },
     {
       "id": "aa_0032",
-      "name": "深股通活躍股票/ETF 最大%升幅 最大%跌幅 最大成交額 名稱 現價 升跌 升跌% 建新股份 8.630 建新股份 (300107.SZ) +1.440 +20.028% 光智科技 301.220 +37.160 +14.073% 金沃股份 35.160 +4.280 +13.860% 凱倫股份 15.520 +1.840 +13.450% 本川智能 84.000 +8.380 +11.082% 滿坤科技 63.390 +6.250 +10.938% 江龍船艇 14.080 +1.290 +10.086% 凱美特氣 14.250 +1.300 +10.039% 雪人集團 14.590 +1.330 +10.030% 天府文旅 3.840 +0.350 +10.029% 最後更新：2026/10/13 15:01",
+      "name": "深股通活躍股票/ETF 最大%升幅 最大%跌幅 最大成交額 名稱 現價 升跌 升跌% 萊美藥業 7.900 萊美藥業 (300006.SZ) +1.320 +20.061% 滿坤科技 75.000 +11.610 +18.315% 久之洋 36.930 +3.930 +11.909% 韶能股份 6.820 +0.620 +10.000% 超聲電子 24.550 +2.230 +9.991% 寶鼎科技 45.800 +4.160 +9.990% 七 匹 狼 10.580 +0.960 +9.979% 三維化學 6.860 +0.620 +9.936% 亞香股份 33.100 +2.990 +9.930% 中紅醫療 23.000 +1.670 +7.829% 最後更新：2026/10/14 15:01",
       "provider": "",
       "category": "名稱",
       "price": 0.0,

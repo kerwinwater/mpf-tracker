@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-10-21T22:42:31.209921+08:00",
-  "lastUpdatedHKT": "2026-10-21 22:42 HKT",
-  "totalFunds": 32,
+  "lastUpdated": "2026-10-22T22:42:45.262759+08:00",
+  "lastUpdatedHKT": "2026-10-22 22:42 HKT",
+  "totalFunds": 31,
   "dataSource": "aastocks",
   "note": "aastocks.com/tc/mpf — 數據轉載自積金局",
   "funds": [
     {
       "id": "aa_0001",
-      "name": "雲英谷科技",
+      "name": "腦動極光－Ｂ",
       "provider": "",
-      "category": "18.990 雲英谷科技 (03310.HK)",
-      "price": 3.19,
+      "category": "0.960 腦動極光－Ｂ (06681.HK)",
+      "price": 0.205,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 20.19,
+        "oneYear": 27.152,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -22,13 +22,13 @@
     },
     {
       "id": "aa_0002",
-      "name": "利亞德",
+      "name": "兆威機電",
       "provider": "",
-      "category": "5.630 利亞德 (300296.SZ)",
-      "price": 0.94,
+      "category": "34.180",
+      "price": 6.0,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 20.043,
+        "oneYear": 21.292,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -37,13 +37,13 @@
     },
     {
       "id": "aa_0003",
-      "name": "萊美藥業",
+      "name": "雲漢芯城",
       "provider": "",
-      "category": "9.300",
-      "price": 1.55,
+      "category": "110.350 雲漢芯城 (301563.SZ)",
+      "price": 15.35,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 20.0,
+        "oneYear": 16.158,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -52,13 +52,13 @@
     },
     {
       "id": "aa_0004",
-      "name": "致尚科技",
+      "name": "安培龍",
       "provider": "",
-      "category": "209.720",
-      "price": 30.66,
+      "category": "61.130",
+      "price": 7.79,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 17.123,
+        "oneYear": 14.604,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -67,13 +67,13 @@
     },
     {
       "id": "aa_0005",
-      "name": "腦動極光－Ｂ",
+      "name": "北新路橋",
       "provider": "",
-      "category": "0.755",
-      "price": 0.11,
+      "category": "3.390",
+      "price": 0.31,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 17.054,
+        "oneYear": 10.065,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -82,13 +82,13 @@
     },
     {
       "id": "aa_0006",
-      "name": "仙工智能",
+      "name": "海量數據",
       "provider": "",
-      "category": "61.850",
-      "price": 8.65,
+      "category": "16.920 海量數據 (603138.SH)",
+      "price": 1.54,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 16.259,
+        "oneYear": 10.013,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -97,190 +97,10 @@
     },
     {
       "id": "aa_0007",
-      "name": "萊特光電",
-      "provider": "",
-      "category": "35.390 萊特光電 (688150.SH)",
-      "price": 4.16,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 13.321,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0008",
-      "name": "光峰科技",
-      "provider": "",
-      "category": "11.130",
-      "price": 1.26,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 12.766,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0009",
-      "name": "海天瑞聲",
-      "provider": "",
-      "category": "115.600",
-      "price": 12.11,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 11.702,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0010",
-      "name": "白鴿在線",
-      "provider": "",
-      "category": "71.000",
-      "price": 7.0,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.938,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0011",
-      "name": "滴普科技",
-      "provider": "",
-      "category": "17.350",
-      "price": 1.62,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.299,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0012",
-      "name": "菱電電控",
-      "provider": "",
-      "category": "100.000",
-      "price": 9.29,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.241,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0013",
-      "name": "中恆集團",
-      "provider": "",
-      "category": "2.380",
-      "price": 0.22,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.185,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0014",
-      "name": "東方海洋",
-      "provider": "",
-      "category": "2.390",
-      "price": 0.22,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.138,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0015",
       "name": "海洋王",
       "provider": "",
-      "category": "10.190",
-      "price": 0.93,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.043,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0016",
-      "name": "九陽股份",
-      "provider": "",
-      "category": "22.620",
-      "price": 2.06,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.019,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0017",
-      "name": "海量數據",
-      "provider": "",
-      "category": "15.380",
-      "price": 1.4,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.014,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0018",
-      "name": "南威軟件",
-      "provider": "",
-      "category": "9.780",
-      "price": 0.89,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 10.011,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0019",
-      "name": "通宇通訊",
-      "provider": "",
-      "category": "32.090",
-      "price": 2.92,
+      "category": "11.210",
+      "price": 1.02,
       "expenseRatio": 0.0,
       "returns": {
         "oneYear": 10.01,
@@ -291,14 +111,194 @@
       }
     },
     {
-      "id": "aa_0020",
-      "name": "利通電子",
+      "id": "aa_0008",
+      "name": "湖南天雁",
       "provider": "",
-      "category": "92.030",
-      "price": 8.37,
+      "category": "7.590",
+      "price": 0.69,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.005,
+        "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0009",
+      "name": "科拓股份",
+      "provider": "",
+      "category": "55.000",
+      "price": 5.0,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0010",
+      "name": "山河智能",
+      "provider": "",
+      "category": "7.260",
+      "price": 0.66,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0011",
+      "name": "芯瑞達",
+      "provider": "",
+      "category": "23.430",
+      "price": 2.13,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 10.0,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0012",
+      "name": "鳴志電器",
+      "provider": "",
+      "category": "54.470",
+      "price": 4.95,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.996,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0013",
+      "name": "大洋電機",
+      "provider": "",
+      "category": "7.060",
+      "price": 0.64,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.969,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0014",
+      "name": "襄陽軸承",
+      "provider": "",
+      "category": "12.030",
+      "price": 1.09,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.963,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0015",
+      "name": "多倫科技",
+      "provider": "",
+      "category": "7.400",
+      "price": 0.67,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.955,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0016",
+      "name": "華天科技",
+      "provider": "",
+      "category": "15.550",
+      "price": 1.3,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 9.123,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0017",
+      "name": "山東墨龍",
+      "provider": "",
+      "category": "4.065",
+      "price": 0.285,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 7.54,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0018",
+      "name": "華微電子",
+      "provider": "",
+      "category": "9.760",
+      "price": 0.52,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 5.628,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0019",
+      "name": "晶科科技",
+      "provider": "",
+      "category": "3.710",
+      "price": 0.19,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 5.398,
+        "sixMonths": 0.0,
+        "threeMonths": 0.0,
+        "oneMonth": 0.0,
+        "ytd": 0.0
+      }
+    },
+    {
+      "id": "aa_0020",
+      "name": "福萊新材",
+      "provider": "",
+      "category": "34.680",
+      "price": 1.77,
+      "expenseRatio": 0.0,
+      "returns": {
+        "oneYear": 5.378,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -307,13 +307,13 @@
     },
     {
       "id": "aa_0021",
-      "name": "文投控股",
+      "name": "亞普股份",
       "provider": "",
-      "category": "1.870",
-      "price": 0.17,
+      "category": "15.300",
+      "price": 0.78,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.0,
+        "oneYear": 5.372,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -322,13 +322,13 @@
     },
     {
       "id": "aa_0022",
-      "name": "雪人集團",
+      "name": "杭齒前進",
       "provider": "",
-      "category": "15.180",
-      "price": 1.38,
+      "category": "13.940",
+      "price": 0.71,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 10.0,
+        "oneYear": 5.367,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -337,13 +337,13 @@
     },
     {
       "id": "aa_0023",
-      "name": "移遠通信",
+      "name": "浙江榮泰",
       "provider": "",
-      "category": "83.720",
-      "price": 7.61,
+      "category": "53.900",
+      "price": 2.42,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.999,
+        "oneYear": 4.701,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -352,13 +352,13 @@
     },
     {
       "id": "aa_0024",
-      "name": "潤建股份",
+      "name": "馭勢科技",
       "provider": "",
-      "category": "56.140",
-      "price": 5.1,
+      "category": "33.420",
+      "price": 1.04,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.992,
+        "oneYear": 3.212,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -367,13 +367,13 @@
     },
     {
       "id": "aa_0025",
-      "name": "順灝股份",
+      "name": "中煙香港",
       "provider": "",
-      "category": "8.480",
-      "price": 0.77,
+      "category": "25.220",
+      "price": 0.58,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 9.987,
+        "oneYear": 2.354,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -382,13 +382,13 @@
     },
     {
       "id": "aa_0026",
-      "name": "瀾起科技",
+      "name": "中環新能源",
       "provider": "",
-      "category": "221.200",
-      "price": 18.2,
+      "category": "8.550",
+      "price": 0.195,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 8.966,
+        "oneYear": 2.334,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -397,13 +397,13 @@
     },
     {
       "id": "aa_0027",
-      "name": "海致科技集團",
+      "name": "白鴿在線",
       "provider": "",
-      "category": "33.760",
-      "price": 2.4,
+      "category": "72.300",
+      "price": 1.3,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.653,
+        "oneYear": 1.831,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -412,13 +412,13 @@
     },
     {
       "id": "aa_0028",
-      "name": "樂普生物",
+      "name": "達勢股份",
       "provider": "",
-      "category": "4.180",
-      "price": 0.295,
+      "category": "31.880",
+      "price": 0.32,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.593,
+        "oneYear": 1.014,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -427,13 +427,13 @@
     },
     {
       "id": "aa_0029",
-      "name": "拓璞數控",
+      "name": "丹諾醫藥－Ｂ",
       "provider": "",
-      "category": "19.820",
-      "price": 1.34,
+      "category": "101.700",
+      "price": 1.0,
       "expenseRatio": 0.0,
       "returns": {
-        "oneYear": 7.251,
+        "oneYear": 0.993,
         "sixMonths": 0.0,
         "threeMonths": 0.0,
         "oneMonth": 0.0,
@@ -442,21 +442,6 @@
     },
     {
       "id": "aa_0030",
-      "name": "雲頂新耀",
-      "provider": "",
-      "category": "36.060",
-      "price": 2.26,
-      "expenseRatio": 0.0,
-      "returns": {
-        "oneYear": 6.686,
-        "sixMonths": 0.0,
-        "threeMonths": 0.0,
-        "oneMonth": 0.0,
-        "ytd": 0.0
-      }
-    },
-    {
-      "id": "aa_0031",
       "name": "名稱",
       "provider": "",
       "category": "現價",
@@ -471,8 +456,8 @@
       }
     },
     {
-      "id": "aa_0032",
-      "name": "深股通活躍股票/ETF 最大%升幅 最大%跌幅 最大成交額 名稱 現價 升跌 升跌% 利亞德 5.630 利亞德 (300296.SZ) +0.940 +20.043% 萊美藥業 9.300 +1.550 +20.000% 致尚科技 209.720 +30.660 +17.123% 東方海洋 2.390 +0.220 +10.138% 海洋王 10.190 +0.930 +10.043% 九陽股份 22.620 +2.060 +10.019% 通宇通訊 32.090 +2.920 +10.010% 雪人集團 15.180 +1.380 +10.000% 潤建股份 56.140 +5.100 +9.992% 順灝股份 8.480 +0.770 +9.987% 最後更新：2026/10/21 15:01",
+      "id": "aa_0031",
+      "name": "深股通活躍股票/ETF 最大%升幅 最大%跌幅 最大成交額 名稱 現價 升跌 升跌% 雲漢芯城 110.350 雲漢芯城 (301563.SZ) +15.350 +16.158% 安培龍 61.130 +7.790 +14.604% 北新路橋 3.390 +0.310 +10.065% 海洋王 11.210 +1.020 +10.010% 山河智能 7.260 +0.660 +10.000% 芯瑞達 23.430 +2.130 +10.000% 兆威機電 83.390 +7.580 +9.999% 大洋電機 7.060 +0.640 +9.969% 襄陽軸承 12.030 +1.090 +9.963% 華天科技 15.550 +1.300 +9.123% 最後更新：2026/10/22 15:01",
       "provider": "",
       "category": "名稱",
       "price": 0.0,
